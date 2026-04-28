@@ -1,0 +1,25 @@
+# Virtual environment
+.venv/
+__pycache__/
+*.pyc
+
+# Data files (large binary + generated outputs)
+data/sp21_standards.json
+data/faiss_index.bin
+data/bm25_index.pkl
+data/graph_map.json
+data/metadata_store.json
+data/whitelist.txt
+data/embedding_config.json
+data/*.json
+data/*.pkl
+
+# Huggingface cache
+.hf_home/
+
+# Temp files
+.tmp/
+build_out.txt
+
+# Bootstrap
+get-pip.py
