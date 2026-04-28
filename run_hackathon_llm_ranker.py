@@ -140,6 +140,140 @@ def validation_gate(candidate_ids): return [c for c in candidate_ids if c in g("
 def llm_rank(query, candidate_ids, top_k=OUTPUT_K):
     """
     Content-Match Ranking (E6): Extract query keywords via LLM,
+    score candidates by keyword/bigram matching. Best strategy from experiments.
+    """
+    standards = g("standards")
+    id_to_std = {standard_key(s): s for s in standards}
+
+    cand_display = []
+    for i, cid in enumerate(candidate_ids, 1):
+        if cid not in id_to_std: continue
+        s = id_to_std[cid]
+        sid = s["id"].strip()
+        part = s.get("part", "")
+        display_id = f"IS {sid.replace('IS ', '')}" + (f" (Part {part})" if part else "")
+        title = s.get("title", "")[:60]
+        content = s.get("content", "")[:400].replace("\n", " ").strip()
+        cand_display.append((i, cid, display_id, title, content))
+
+    # Extract keywords from query
+    kw_prompt = (f"Extract the 3-5 most important technical terms from this BIS query.\n"
+                 f"Query: {query}\nTerms:")
+    kw_resp = lm_complete(kw_prompt, max_tokens=32, temperature=0.05)
+    kw_terms = [t.strip().upper() for t in re.split(r'[,\n]', kw_resp)
+                if len(t.strip()) > 2 and not any(c.isdigit() for c in t)]
+
+    scores = {}
+    for i, cid, did, title, content in cand_display:
+        text = f"{did} {title} {content}".upper()
+        match_count = sum(1 for kw in kw_terms if kw in text)
+        bigram_matches = 0
+        for j in range(len(kw_terms) - 1):
+            if kw_terms[j] and kw_terms[j+1]:
+                if kw_terms[j] + ' ' + kw_terms[j+1] in text:
+                    bigram_matches += 1
+        title_bonus = 1 if title.upper() in query.upper() else 0
+        scores[cid] = match_count + bigram_matches * 2 + title_bonus + 0.01 * (len(cand_display) - i)
+
+    fusion_order = {cid: idx for idx, (_, cid, _, _, _) in enumerate(cand_display)}
+    ranked = sorted(cand_display, key=lambda x: (-scores.get(x[1], 0), fusion_order[x[1]]))
+    return [cid for _, cid, _, _, _ in ranked[:top_k]]
+
+
+# ---- IMPROVED MULTI-QUERY RETRIEVAL ----
+# Static BIS domain synonym dictionary for query expansion
+BIS_SYNONYMS = {
+    # Cement types
+    "cement": ["ordinary portland cement", "OPC", "binding material", "hydraulic cement"],
+    "portland cement": ["OPC", "ordinary portland cement"],
+    "ordinary portland cement": ["OPC", "33 grade cement", "43 grade cement", "53 grade cement"],
+    "slag cement": ["Portland slag cement", "PSC", "blast furnace slag cement"],
+    "pozzolana": ["Portland pozzolana cement", "PPC", "fly ash cement", "calcined clay pozzolana"],
+    "white cement": ["white Portland cement"],
+    "supersulphated": ["supersulphated cement", "SSC"],
+    "masonry cement": ["cement for masonry", "mortar cement"],
+    # Aggregates
+    "sand": ["fine aggregate", "river sand", "crushed sand"],
+    "aggregate": ["fine aggregate", "coarse aggregate", "crushed stone"],
+    "fine aggregate": ["sand", "river sand", "crushed sand"],
+    "coarse aggregate": ["crushed stone", "aggregates"],
+    # Concrete
+    "concrete": ["mass concrete", "structural concrete", "precast concrete"],
+    "precast": ["precast concrete", "pre-cast concrete"],
+    "masonry": ["brick masonry", "stone masonry"],
+    "blocks": ["concrete blocks", "masonry blocks", "hollow blocks"],
+    "pipes": ["concrete pipes", "pressure pipes"],
+    "sheets": ["corrugated sheets", "roofing sheets"],
+    "asbestos": ["asbestos cement", "AC sheets"],
+    "corrugated": ["corrugated sheets", "semi-corrugated"],
+    # Materials
+    "steel": ["reinforcement", "TMT bars", "deformed bars"],
+    # Standards
+    "standard": ["BIS standard", "IS code", "Indian Standard"],
+    "specification": ["IS code", "BIS standard"],
+    # Processes
+    "manufacture": ["manufacturing", "production"],
+    "testing": ["test methods"],
+    "composition": ["chemical composition"],
+}
+
+def expand_query_static(query):
+    """Expand query with BIS domain synonyms."""
+    q_lower = query.lower()
+    expanded = []
+    seen = set()
+    # Try word-level and some multi-word matches
+    words = q_lower.replace(",", " ").replace(".", " ").split()
+    for word in words:
+        if word in seen:
+            continue
+        if word in BIS_SYNONYMS:
+            for syn in BIS_SYNONYMS[word]:
+                if syn not in seen:
+                    expanded.append(syn)
+                    seen.add(syn)
+            seen.add(word)
+        else:
+            seen.add(word)
+    # Also check for multi-word phrases
+    for phrase, synonyms in BIS_SYNONYMS.items():
+        if phrase in q_lower:
+            for syn in synonyms:
+                if syn not in seen:
+                    expanded.append(syn)
+                    seen.add(syn)
+    return " ".join(expanded)
+
+def retrieve_multi(query, fuse_k=10):
+    """
+    Additive multi-query retrieval:
+    - Use original query ranking as-is (no dilution)
+    - Supplement with keyword-only dense search to recover missed candidates
+    Key improvement: expanded keywords surface candidates that original phrasing missed.
+    """
+    expanded_terms = pre_retrieval_expand(query)
+    curated_syn = expand_query_static(query)
+    kw_query = f"{expanded_terms} {curated_syn}".strip()
+
+    # Original query ranking (unchanged)
+    dense_orig = retrieve_dense(query, TOP_DENSE)
+    sparse_orig = retrieve_sparse(query, TOP_BM25)
+    pool_orig = list({cid for cid,_ in dense_orig} | {cid for cid,_ in sparse_orig})
+    fused_orig = rrf_fusion(dense_orig, sparse_orig, pool_orig)
+    orig_top_ids = [cid for cid,_ in fused_orig[:FUSION_K]]
+
+    # Keyword-only dense search to supplement pool
+    kw_dense = retrieve_dense(kw_query, TOP_DENSE)
+
+    # Supplement: add kw candidates not already in original top
+    kw_supplement = [cid for cid,_ in kw_dense if cid not in orig_top_ids]
+
+    # Final: original top-K + up to 3 kw-supplement candidates
+    final_ids = orig_top_ids + kw_supplement[:3]
+
+    return [(cid, 0.0) for cid in final_ids[:fuse_k]]
+    """
+    Content-Match Ranking (E6): Extract query keywords via LLM,
     score candidates by keyword/bigram matching. Best strategy from experiments:
     MRR=1.0 across 3/3 consistent runs, 0.75s latency.
     """
@@ -190,22 +324,14 @@ def llm_rank(query, candidate_ids, top_k=OUTPUT_K):
 # ---- Main pipeline ----
 def format_output_hackathon(query_id, query, expected=None):
     start = time.perf_counter()
-
-    expanded_terms = pre_retrieval_expand(query)
     t0 = time.perf_counter()
-    print(f"    Expanded: '{expanded_terms}'" if expanded_terms else "    No expansion")
 
-    dense_results = retrieve_dense(query)
+    # Multi-query retrieval: original + expanded queries merged
+    fused_top_k = retrieve_multi(query, FUSION_K)
+    fused = fused_top_k  # for fallback fill
     t1 = time.perf_counter()
-    sparse_query = f"{query} {expanded_terms}".strip()
-    sparse_results = retrieve_sparse(sparse_query)
-    t2 = time.perf_counter()
 
-    candidate_pool = list({cid for cid,_ in dense_results} | {cid for cid,_ in sparse_results})
-    fused = rrf_fusion(dense_results, sparse_results, candidate_pool)
-    fused_top_k = [cid for cid,_ in fused[:FUSION_K]]
-    t3 = time.perf_counter()
-
+    # Paraphrase-triggered re-ranking
     paraphrase = paraphrase_trigger(query)
     if paraphrase:
         pd = retrieve_dense(paraphrase, 30)
@@ -213,9 +339,9 @@ def format_output_hackathon(query_id, query, expected=None):
         for r,c in enumerate(fused_top_k, 1): merged[c] += 1.0/(RRF_K+r)
         for r,(c,_) in enumerate(pd, 1): merged[c] += 1.0/(RRF_K+r)
         fused_top_k = [c for c,_ in sorted(merged.items(), key=lambda x:x[1], reverse=True)[:FUSION_K]]
-    t4 = time.perf_counter()
+    t2 = time.perf_counter()
 
-    # LLM RANKING instead of Flag
+    # LLM CONTENT-MATCH RANKING
     ranked = llm_rank(query, fused_top_k, OUTPUT_K)
     t_llm = time.perf_counter()
 
@@ -228,11 +354,10 @@ def format_output_hackathon(query_id, query, expected=None):
     final_top3 = validated[:OUTPUT_K]
     retrieved_ids = list(final_top3)
     retrieved_with_years = apply_year_mapping(retrieved_ids, expected or [])
-    t5 = time.perf_counter()
 
     total = time.perf_counter() - start
-    llm_ms = int((t_llm - t4) * 1000)
-    print(f"    [TIMING] expand={int((t0-start)*1000)}ms dense={int((t1-t0)*1000)}ms fuse={int((t3-t2)*1000)}ms para+fuse={int((t4-t3)*1000)}ms llm_rank={llm_ms}ms total={int(total*1000)}ms")
+    llm_ms = int((t_llm - t2) * 1000)
+    print(f"    [TIMING] multi_ret={int((t1-t0)*1000)}ms para={int((t2-t1)*1000)}ms llm_rank={llm_ms}ms total={int(total*1000)}ms")
 
     result = {"id": query_id, "retrieved_standards": retrieved_with_years, "latency_seconds": round(total, 2)}
     if expected is not None:
