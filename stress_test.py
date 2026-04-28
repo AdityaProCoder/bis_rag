@@ -12,6 +12,7 @@ os.environ["SENTENCE_TRANSFORMERS_VERBOSE"] = "false"
 import torch; _ = torch.cuda.is_available()
 from sentence_transformers import SentenceTransformer
 import numpy as np, faiss, pickle
+from concept_layer import concept_hypotheses
 
 LM_BASE_URL = "http://127.0.0.1:1234"
 LM_API_KEY = os.getenv("LM_API_KEY", "lmstudio")
@@ -19,6 +20,7 @@ DEFAULT_MODEL = "google/gemma-4-e2b"
 DATA_DIR = Path("data")
 TOP_DENSE = 20; TOP_BM25 = 20; FUSION_K = 10; OUTPUT_K = 3
 RRF_K = 5; GRAPH_BOOST = 0.1
+EMBED_DEVICE = os.getenv("EMBED_DEVICE") or ("cuda" if torch.cuda.is_available() else "cpu")
 _index_store = {}
 
 def norm(s):
@@ -76,7 +78,7 @@ def load_indexes():
     with open(DATA_DIR / "graph_map.json", "r", encoding="utf-8") as f: graph_map = json.load(f)
     with open(DATA_DIR / "whitelist.txt", "r", encoding="utf-8") as f: whitelist = {l.strip(): True for l in f if l.strip()}
     cfg = json.load(open(DATA_DIR / "embedding_config.json"))
-    model = SentenceTransformer(cfg["model_name"], device="cuda")
+    model = SentenceTransformer(cfg["model_name"], device=EMBED_DEVICE)
     _index_store = {"faiss": faiss_idx, "bm25": d["bm25"], "standards": d["standards"],
                    "graph": graph_map, "whitelist": whitelist, "embed_model": model}
 
@@ -157,7 +159,7 @@ def expand_query_curated(query):
     return " ".join(expanded)
 
 def retrieve_multi(query, fuse_k=FUSION_K):
-    """Additive multi-query: use original ranking as-is, supplement with expanded-kw dense search."""
+    """Additive multi-query: preserve original ranking, supplement concept + expanded dense recall."""
     expanded_terms = pre_retrieval_expand(query)
     curated_syn = expand_query_curated(query)
     expanded_query = f"{expanded_terms} {curated_syn}".strip()  # KEYWORDS ONLY, not original query
@@ -167,14 +169,26 @@ def retrieve_multi(query, fuse_k=FUSION_K):
     sparse_orig = retrieve_sparse(query, TOP_BM25)
     pool_orig = list({cid for cid,_ in dense_orig} | {cid for cid,_ in sparse_orig})
     fused_orig = rrf_fusion(dense_orig, sparse_orig, pool_orig)
-    orig_top_ids = [cid for cid,_ in fused_orig[:FUSION_K]]
+    orig_top_ids = [cid for cid,_ in fused_orig[:fuse_k]]
 
     # Step 2: Get expanded-keyword dense search to supplement pool
     kw_dense = retrieve_dense(expanded_query, TOP_DENSE)
 
-    # Step 3: Merge: orig ranking takes priority, supplement with kw_dense candidates not in orig top
+    # Step 3: Add concept-level hypotheses before generic expanded dense hits.
+    concept_ids = [cid for cid, _ in concept_hypotheses(query, g("standards"), standard_key, top_k=5)]
+    reserve_for_concepts = 3
+    final_ids = list(orig_top_ids[:max(0, fuse_k - reserve_for_concepts)])
+    for cid in concept_ids:
+        if cid not in final_ids:
+            final_ids.append(cid)
+    for cid in orig_top_ids:
+        if cid not in final_ids:
+            final_ids.append(cid)
+
     kw_ids_not_in_orig = [cid for cid,_ in kw_dense if cid not in orig_top_ids]
-    final_ids = orig_top_ids + kw_ids_not_in_orig[:3]  # supplement with up to 3 kw-only results
+    for cid in kw_ids_not_in_orig[:3]:
+        if cid not in final_ids:
+            final_ids.append(cid)
 
     return [(cid, 0.0) for cid in final_ids[:fuse_k]]
 
@@ -182,6 +196,7 @@ def retrieve_multi(query, fuse_k=FUSION_K):
 def llm_rank_content_match(query, candidate_ids, top_k=OUTPUT_K):
     standards = g("standards")
     id_to_std = {standard_key(s): s for s in standards}
+    concept_scores = dict(concept_hypotheses(query, standards, standard_key, top_k=8))
     cand_display = []
     for i, cid in enumerate(candidate_ids, 1):
         if cid not in id_to_std: continue
@@ -208,7 +223,13 @@ def llm_rank_content_match(query, candidate_ids, top_k=OUTPUT_K):
             if kw_terms[j] and kw_terms[j+1]:
                 if kw_terms[j] + ' ' + kw_terms[j+1] in text: bigram_matches += 1
         title_bonus = 1 if title.upper() in query.upper() else 0
-        scores[cid] = match_count + bigram_matches * 2 + title_bonus + 0.01 * (len(cand_display) - i)
+        scores[cid] = (
+            match_count
+            + bigram_matches * 2
+            + title_bonus
+            + concept_scores.get(cid, 0.0)
+            + 0.01 * (len(cand_display) - i)
+        )
 
     fusion_order = {cid: idx for idx, (_, cid, _, _, _) in enumerate(cand_display)}
     ranked = sorted(cand_display, key=lambda x: (-scores.get(x[1], 0), fusion_order[x[1]]))
@@ -230,6 +251,14 @@ def run_single(query_text, expected_list, use_content_match=True):
         for r,c in enumerate(fused_ids, 1): merged[c] += 1.0/(RRF_K+r)
         for r,(c,_) in enumerate(pd, 1): merged[c] += 1.0/(RRF_K+r)
         fused_ids = [c for c,_ in sorted(merged.items(), key=lambda x:x[1], reverse=True)[:FUSION_K]]
+        concept_ids = [cid for cid, _ in concept_hypotheses(query_text, g("standards"), standard_key, top_k=3)]
+        kept = fused_ids[:max(0, FUSION_K - len(concept_ids))]
+        fused_ids = kept + [cid for cid in concept_ids if cid not in kept]
+        for cid in sorted(merged, key=merged.get, reverse=True):
+            if len(fused_ids) >= FUSION_K:
+                break
+            if cid not in fused_ids:
+                fused_ids.append(cid)
 
     ranked = llm_rank_content_match(query_text, fused_ids, OUTPUT_K) if use_content_match else llm_rank_fusion(query_text, fused_ids, OUTPUT_K)
 

@@ -27,10 +27,10 @@ from pathlib import Path
 # ---- Configuration ----
 TOP_DENSE   = 20
 TOP_BM25    = 20
-FUSION_K    = 10
+FUSION_K    = 8    # Reduced: fewer candidates = faster rerank
 RERANK_K    = 3
 OUTPUT_K    = 3
-RRF_K       = 10
+RRF_K       = 5    # Lower: dense signals dominate more
 GRAPH_BOOST = 0.1
 ENABLE_RERANK = True
 EMBED_DEVICE = "cuda"
@@ -297,7 +297,7 @@ def format_output_hackathon(query_id, query, expected=None):
     paraphrase = paraphrase_trigger(query, expanded_terms, sparse_results[0][1] if sparse_results else 0.0)
     if paraphrase:
         try:
-            para_dense = retrieve_dense(paraphrase, 50)
+            para_dense = retrieve_dense(paraphrase, 30)  # Reduced from 50
             merged = {cid: 0.0 for cid in set(list(fused_top_k) + [cid for cid, _score in para_dense])}
             for rank, cid in enumerate(fused_top_k, 1): merged[cid] += 1.0 / (RRF_K + rank)
             for rank, (cid, _score) in enumerate(para_dense, 1): merged[cid] += 1.0 / (RRF_K + rank)
