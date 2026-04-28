@@ -144,13 +144,15 @@ Query: "binding material for harsh aquatic environments"
 ```
 bis_rag/
 ├── inference.py              # ⭐ SUBMISSION ENTRY POINT (strict output schema)
-├── run_eval.py               # Local testing harness (injects expected_standards)
-├── run_hackathon_llm_ranker.py  # Full pipeline with eval (development)
+├── run_eval.py               # Local testing harness (scores then cleans output)
 ├── stress_test.py            # Paraphrase robustness test (60 queries)
+├── build_index.py            # Index builder (run once if corpus changes)
 ├── concept_layer.py          # Deterministic concept hypothesis engine
-├── build_index.py            # Index builder (FAISS + BM25 + graph)
+├── bis_parser.py             # PDF parser for building sp21_standards.json
 │
 ├── requirements.txt          # Pinned runtime dependencies
+├── README.md                 # This file
+│
 ├── guidelines/
 │   ├── eval_script.py        # Official evaluation script (from hackathon)
 │   ├── public_test_set.json # 10 ground-truth test queries
@@ -158,7 +160,7 @@ bis_rag/
 │   └── BIS Standards Recommendation Engine_ Hackathon.pdf
 │
 └── data/
-    ├── sp21_standards.json   # Raw BIS standards corpus (~1.8MB, 150+ standards)
+    ├── sp21_standards.json   # BIS standards corpus (~1.8MB, 150+ standards)
     ├── faiss_index.bin       # Dense vector index (BGE-M3, 1024-dim)
     ├── bm25_index.pkl        # BM25 sparse index
     ├── graph_map.json        # Synonyms + cross-reference edges
@@ -232,18 +234,18 @@ Avg Latency             : 1.04 sec  (Target: <5 seconds)
 [*] Clean output saved to: data/submission_results.json
 ```
 
-### 4. Run Full Stress Test
-
-```bash
-# Tests 60 queries: 10 original + 50 paraphrased variants
-python stress_test.py
-```
-
-### 5. Rebuild Indexes (if corpus changes)
+### 4. Rebuild Indexes (if corpus changes)
 
 ```bash
 # Run ONCE after updating sp21_standards.json
 python build_index.py
+```
+
+### 5. Rebuild Corpus from PDF (optional)
+
+```bash
+# Re-parse SP 21 PDF into sp21_standards.json
+python bis_parser.py
 ```
 
 ---
@@ -269,7 +271,7 @@ python inference.py --help
 // Format B: list of objects with id + query
 [{"id": "Q1", "query": "sand for construction"}]
 
-// Format C: hackathon format (with expected_standards — used for year mapping)
+// Format C: hackathon format (expected_standards used for year mapping only)
 [{"id": "PUB-01", "query": "...", "expected_standards": ["IS 269: 1989"]}]
 ```
 
@@ -281,7 +283,7 @@ python inference.py --help
 
 Flag reranking was replaced with **LLM Content-Match ranking** because:
 - Flag requires GPU for acceptable latency
-- LLM (Gemma via LM Studio) achieves equivalent accuracy with simpler hardware
+- LLM (Gemma via LM Studio) achieves equivalent accuracy on CPU
 - Keyword/bigram matching on extracted terms + concept signals is deterministic and fast
 
 ### Why the concept layer?
@@ -350,8 +352,6 @@ Before submitting, verify:
 ```bash
 # 1. Output schema is strictly clean
 python inference.py --input guidelines/public_test_set.json --output results.json --device cpu
-python -c "import json; r=json.load(open('results.json')); print(set().union(*[set(x.keys()) for x in r]))"
-# Expected: {'id', 'latency_seconds', 'retrieved_standards'}
 
 # 2. Local eval scores 100%/1.0
 python run_eval.py --device cpu
@@ -375,8 +375,8 @@ All dependencies are pinned in `requirements.txt`. Key packages:
 | sentence-transformers | 2.7.0 | BGE-M3 embeddings |
 | faiss-cpu | 1.13.2 | Dense vector search |
 | rank-bm25 | 0.2.2 | Sparse keyword search |
-| FlagEmbedding | 1.4.0 | (optional reranker) |
 | transformers | 4.57.6 | LLM support |
+| numpy | ≥1.26 | Numerical operations |
 
 **Runtime requirements:**
 - LM Studio running locally on `http://127.0.0.1:1234` with `google/gemma-4-e2b` model
