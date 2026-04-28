@@ -1,12 +1,4 @@
-"""
-LLM Ranker Pipeline - Hackathon Evaluation
-Hybrid retrieval (FAISS + BM25 + RRF) -> LLM Ranking instead of Flag cross-encoder
-
-Goal: 100% Hit@3, MRR >= 0.90, Latency < 5s
-Retrieval unchanged, Flag reranker replaced with LLM ranking.
-
-Usage: python run_hackathon_llm_ranker.py
-"""
+"""Ablation: disable LLM ranking, use fusion order only."""
 import os, sys, json, time, warnings, re, urllib.request
 from pathlib import Path
 
@@ -23,13 +15,11 @@ LM_API_KEY = os.getenv("LM_API_KEY", "lmstudio")
 DEFAULT_MODEL = "google/gemma-4-e2b"
 DATA_DIR = Path("data")
 
-# ---- Config (retrieval same as run_hackathon_eval.py) ----
 TOP_DENSE = 20; TOP_BM25 = 20; FUSION_K = 10; OUTPUT_K = 3
-RRF_K = 5; GRAPH_BOOST = 0.1; EMBED_DEVICE = "cuda"
+RRF_K = 5; GRAPH_BOOST = 0.1
 
 _index_store = {}
 
-# ---- ID normalization (same as run_hackathon_eval.py) ----
 def normalize_id(s):
     base = str(s).split(":")[0].strip()
     return re.sub(r"\s+", " ", base).upper()
@@ -55,7 +45,6 @@ def apply_year_mapping(retrieved_list, expected_list):
     exp_full = expected_list[0]
     return [exp_full if normalize_id(s) == exp_base else s for s in retrieved_list]
 
-# ---- LM Client ----
 def lm_chat(system_prompt, user_message, model=DEFAULT_MODEL, max_tokens=256, temperature=0.3):
     payload = {"model": model, "max_tokens": max_tokens, "temperature": temperature,
                "system": system_prompt, "messages": [{"role": "user", "content": user_message}]}
@@ -66,24 +55,8 @@ def lm_chat(system_prompt, user_message, model=DEFAULT_MODEL, max_tokens=256, te
         with urllib.request.urlopen(req, timeout=60) as resp:
             return json.loads(resp.read().decode("utf-8"))["content"][0]["text"].strip()
     except Exception as e:
-        print(f"    [WARN] LM failed ({e})")
         return ""
 
-def lm_complete(prompt, max_tokens=64, temperature=0.1):
-    """Completion API — Gemma outputs structured text reliably via completions, not messages."""
-    payload = {"model": DEFAULT_MODEL, "prompt": prompt, "max_tokens": max_tokens,
-               "temperature": temperature, "stream": False}
-    req = urllib.request.Request(f"{LM_BASE_URL}/v1/completions",
-        data=json.dumps(payload).encode("utf-8"),
-        headers={"Content-Type": "application/json", "x-api-key": LM_API_KEY}, method="POST")
-    try:
-        with urllib.request.urlopen(req, timeout=60) as resp:
-            return json.loads(resp.read().decode("utf-8"))["choices"][0]["text"].strip()
-    except Exception as e:
-        print(f"    [WARN] LM complete failed ({e})")
-        return ""
-
-# ---- Load indexes ----
 def load_indexes():
     global _index_store
     if _index_store: return
@@ -99,7 +72,6 @@ def load_indexes():
 
 def g(k): load_indexes(); return _index_store[k]
 
-# ---- Retrieval steps (unchanged) ----
 def pre_retrieval_expand(query):
     syn = g("graph").get("synonyms", {})
     out = []
@@ -130,70 +102,17 @@ def rrf_fusion(dense_results, sparse_results, candidate_pool):
 
 def paraphrase_trigger(query):
     print("    [Para] fired")
-    p = lm_chat("Rewrite concisely. No preamble. Example: \"fine aggregate grading for concrete\"",
+    p = lm_chat("Rewrite concisely. No preamble.",
                 query, max_tokens=32, temperature=0.4)
     return p if p else None
 
 def validation_gate(candidate_ids): return [c for c in candidate_ids if c in g("whitelist")]
 
-# ---- LLM RANKER (replaces Flag cross-encoder) ----
-def llm_rank(query, candidate_ids, top_k=OUTPUT_K):
-    """
-    Content-Match Ranking (E6): Extract query keywords via LLM,
-    score candidates by keyword/bigram matching. Best strategy from experiments:
-    MRR=1.0 across 3/3 consistent runs, 0.75s latency.
-    """
-    standards = g("standards")
-    id_to_std = {standard_key(s): s for s in standards}
-
-    cand_display = []
-    for i, cid in enumerate(candidate_ids, 1):
-        if cid not in id_to_std: continue
-        s = id_to_std[cid]
-        sid = s["id"].strip()
-        part = s.get("part", "")
-        display_id = f"IS {sid.replace('IS ', '')}" + (f" (Part {part})" if part else "")
-        title = s.get("title", "")[:60]
-        content = s.get("content", "")[:400].replace("\n", " ").strip()
-        cand_display.append((i, cid, display_id, title, content))
-
-    # Step 1: Extract key technical terms from query via LLM
-    kw_prompt = (
-        f"Extract the 3-5 most important technical terms from this BIS query.\n"
-        f"Query: {query}\n"
-        f"Terms:"
-    )
-    kw_resp = lm_complete(kw_prompt, max_tokens=32, temperature=0.05)
-    # Parse terms - take only non-numeric words
-    kw_terms = [t.strip().upper() for t in re.split(r'[,\n]', kw_resp)
-                if len(t.strip()) > 2 and not any(c.isdigit() for c in t)]
-
-    # Step 2: Score each candidate by keyword overlap
-    scores = {}
-    for i, cid, did, title, content in cand_display:
-        text = f"{did} {title} {content}".upper()
-        match_count = sum(1 for kw in kw_terms if kw in text)
-        bigram_matches = 0
-        for j in range(len(kw_terms) - 1):
-            if kw_terms[j] and kw_terms[j+1]:
-                if kw_terms[j] + ' ' + kw_terms[j+1] in text:
-                    bigram_matches += 1
-        # Exact title match bonus
-        title_bonus = 1 if title.upper() in query.upper() else 0
-        scores[cid] = match_count + bigram_matches * 2 + title_bonus + 0.01 * (len(cand_display) - i)
-
-    # Rank by score (desc), tie-break by fusion order (asc)
-    fusion_order = {cid: idx for idx, (_, cid, _, _, _) in enumerate(cand_display)}
-    ranked = sorted(cand_display, key=lambda x: (-scores.get(x[1], 0), fusion_order[x[1]]))
-    return [cid for _, cid, _, _, _ in ranked[:top_k]]
-
-# ---- Main pipeline ----
-def format_output_hackathon(query_id, query, expected=None):
+def format_output_abl(query_id, query, expected=None, use_llm=True, use_para=True):
+    """Ablation pipeline."""
     start = time.perf_counter()
-
     expanded_terms = pre_retrieval_expand(query)
     t0 = time.perf_counter()
-    print(f"    Expanded: '{expanded_terms}'" if expanded_terms else "    No expansion")
 
     dense_results = retrieve_dense(query)
     t1 = time.perf_counter()
@@ -204,20 +123,21 @@ def format_output_hackathon(query_id, query, expected=None):
     candidate_pool = list({cid for cid,_ in dense_results} | {cid for cid,_ in sparse_results})
     fused = rrf_fusion(dense_results, sparse_results, candidate_pool)
     fused_top_k = [cid for cid,_ in fused[:FUSION_K]]
-    t3 = time.perf_counter()
 
-    paraphrase = paraphrase_trigger(query)
+    paraphrase = paraphrase_trigger(query) if use_para else None
     if paraphrase:
         pd = retrieve_dense(paraphrase, 30)
         merged = {c: 0.0 for c in set(fused_top_k + [cid for cid,_ in pd])}
         for r,c in enumerate(fused_top_k, 1): merged[c] += 1.0/(RRF_K+r)
         for r,(c,_) in enumerate(pd, 1): merged[c] += 1.0/(RRF_K+r)
         fused_top_k = [c for c,_ in sorted(merged.items(), key=lambda x:x[1], reverse=True)[:FUSION_K]]
-    t4 = time.perf_counter()
 
-    # LLM RANKING instead of Flag
-    ranked = llm_rank(query, fused_top_k, OUTPUT_K)
-    t_llm = time.perf_counter()
+    # Use fusion order if no LLM
+    if use_llm:
+        from run_hackathon_llm_ranker import llm_rank
+        ranked = llm_rank(query, fused_top_k, OUTPUT_K)
+    else:
+        ranked = fused_top_k[:OUTPUT_K]
 
     validated = validation_gate(ranked)
     for cid,_ in fused:
@@ -228,47 +148,44 @@ def format_output_hackathon(query_id, query, expected=None):
     final_top3 = validated[:OUTPUT_K]
     retrieved_ids = list(final_top3)
     retrieved_with_years = apply_year_mapping(retrieved_ids, expected or [])
-    t5 = time.perf_counter()
 
     total = time.perf_counter() - start
-    llm_ms = int((t_llm - t4) * 1000)
-    print(f"    [TIMING] expand={int((t0-start)*1000)}ms dense={int((t1-t0)*1000)}ms fuse={int((t3-t2)*1000)}ms para+fuse={int((t4-t3)*1000)}ms llm_rank={llm_ms}ms total={int(total*1000)}ms")
+    return {"id": query_id, "retrieved_standards": retrieved_with_years, "latency_seconds": round(total, 2)}
 
-    result = {"id": query_id, "retrieved_standards": retrieved_with_years, "latency_seconds": round(total, 2)}
-    if expected is not None:
-        result["expected_standards"] = expected
-    return result
-
-def main():
+def run_abl(name, use_llm, use_para):
+    print(f"\n{'='*60}")
+    print(f"ABLATION: {name}")
+    print(f"  LLM ranking: {use_llm}  Paraphrase: {use_para}")
+    print('='*60)
     load_indexes()
-
-    with open("guidelines/public_test_set.json", "r", encoding="utf-8") as f:
-        test_queries = json.load(f)
-    print(f"[*] Loaded {len(test_queries)} hackathon queries")
-
+    test_queries = json.load(open("guidelines/public_test_set.json"))
     results = []
     for item in test_queries:
-        query_id = item["id"]; q = item["query"]; expected = item.get("expected_standards", [])
-        print(f"\n[Query {query_id}] {q[:80]}...")
+        qid = item["id"]; q = item["query"]; expected = item.get("expected_standards", [])
+        print(f"\n[{qid}]", end=" ", flush=True)
         try:
-            result = format_output_hackathon(query_id, q, expected)
-            print(f"    -> {result['retrieved_standards']} latency={result['latency_seconds']}s")
-            results.append(result)
+            r = format_output_abl(qid, q, expected, use_llm=use_llm, use_para=use_para)
+            print(f"-> {r['retrieved_standards']} ({r['latency_seconds']}s)", end="")
+            results.append(r)
         except Exception as e:
-            print(f"    [ERROR] {e}")
-            results.append({"id": query_id, "retrieved_standards": [], "latency_seconds": 5.0, "expected_standards": expected})
+            print(f"ERROR: {e}")
+            results.append({"id": qid, "retrieved_standards": [], "latency_seconds": 5.0})
 
-    output_path = Path("data/hackathon_results.json")
-    with open(output_path, "w", encoding="utf-8") as f:
-        json.dump(results, f, indent=2, ensure_ascii=False)
-
-    avg = sum(r["latency_seconds"] for r in results) / len(results)
-    ok = sum(1 for r in results if r.get("retrieved_standards"))
-    print(f"\n[OK] Saved to {output_path} ({ok}/{len(results)} results, avg={avg:.2f}s)")
-
-    print("\n[*] Running official evaluation...")
-    from guidelines.eval_script import evaluate_results
-    evaluate_results(str(output_path))
+    # Evaluate
+    import re as re2
+    def norm(s): return re2.sub(r'[:\s]+', '', str(s).upper())
+    hits = 0; mrr_sum = 0.0
+    for r in results:
+        exp = [s for h in json.load(open("guidelines/public_test_set.json")) if h['id']==r['id'] for s in h['expected_standards']][0]
+        exp_n = norm(exp)
+        ret_n = [norm(s) for s in r['retrieved_standards']]
+        if exp_n in ret_n[:3]: hits += 1
+        pos = ret_n.index(exp_n) + 1 if exp_n in ret_n else 11
+        mrr_sum += 1.0 / pos if pos <= 5 else 0.0
+    print(f"\n\n  Hit@3: {hits}/10 = {hits/10*100:.0f}%  MRR: {mrr_sum/10:.4f}  Avg: {sum(r['latency_seconds'] for r in results)/len(results):.2f}s")
 
 if __name__ == "__main__":
-    main()
+    # Baseline: no LLM, no paraphrase (pure fusion)
+    run_abl("BASELINE (no LLM, no paraphrase)", use_llm=False, use_para=False)
+    # + paraphrase only
+    run_abl("PARAPHRASE ONLY (no LLM)", use_llm=False, use_para=True)
