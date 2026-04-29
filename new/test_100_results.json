@@ -1,0 +1,2211 @@
+{
+  "summary": {
+    "total": 100,
+    "hit_rate": 38.0,
+    "mrr": 0.29,
+    "avg_latency": 0.8957999999999999,
+    "hits": 38,
+    "misses": 62
+  },
+  "results": [
+    {
+      "id": "TEST-001",
+      "query": "We are a small enterprise manufacturing 33 Grade Ordinary Portland Cement. Which BIS standard covers the chemical and physical requirements for our product?",
+      "expected_standards": [
+        "IS 269: 1989"
+      ],
+      "retrieved_standards": [
+        "IS 269: 1989",
+        "IS 8112",
+        "IS 12269"
+      ],
+      "latency_seconds": 3.76
+    },
+    {
+      "id": "TEST-002",
+      "query": "I need to comply with the regulations for coarse and fine aggregates derived from natural sources intended for use in structural concrete.",
+      "expected_standards": [
+        "IS 383: 1970"
+      ],
+      "retrieved_standards": [
+        "IS 383: 1970",
+        "IS 2686",
+        "IS 1195"
+      ],
+      "latency_seconds": 1.08
+    },
+    {
+      "id": "TEST-003",
+      "query": "What is the official specification for manufacturing precast concrete pipes, both with and without reinforcement, for water mains?",
+      "expected_standards": [
+        "IS 458: 2003"
+      ],
+      "retrieved_standards": [
+        "IS 458: 2003",
+        "IS 14143",
+        "IS 784"
+      ],
+      "latency_seconds": 1.08
+    },
+    {
+      "id": "TEST-004",
+      "query": "Our company is shifting to manufacturing hollow and solid lightweight concrete masonry blocks. What standard outlines the dimensions and physical requirements?",
+      "expected_standards": [
+        "IS 2185 (Part 2): 1983"
+      ],
+      "retrieved_standards": [
+        "IS 2185 (Part 1)",
+        "IS 2185 (Part 2): 1983",
+        "IS 12440"
+      ],
+      "latency_seconds": 1.06
+    },
+    {
+      "id": "TEST-005",
+      "query": "We manufacture quicklime for construction purposes. What BIS standard covers the composition and physical requirements?",
+      "expected_standards": [
+        "IS 712"
+      ],
+      "retrieved_standards": [
+        "IS 13026",
+        "IS 9394",
+        "IS 269"
+      ],
+      "latency_seconds": 1.11
+    },
+    {
+      "id": "TEST-006",
+      "query": "I need specifications for hydraulic lime hydrate used in masonry mortars. Which standard applies?",
+      "expected_standards": [
+        "IS 3115"
+      ],
+      "retrieved_standards": [
+        "IS 3182",
+        "IS 3466",
+        "IS 10772"
+      ],
+      "latency_seconds": 0.91
+    },
+    {
+      "id": "TEST-007",
+      "query": "What standard covers natural stone for masonry construction in terms of strength and durability?",
+      "expected_standards": [
+        "IS 1127"
+      ],
+      "retrieved_standards": [
+        "IS 3620",
+        "IS 2116",
+        "IS 12440"
+      ],
+      "latency_seconds": 0.89
+    },
+    {
+      "id": "TEST-008",
+      "query": "I need sand specifications for use in masonry mortars. Which BIS standard applies?",
+      "expected_standards": [
+        "IS 2116"
+      ],
+      "retrieved_standards": [
+        "IS 2116",
+        "IS 1542",
+        "IS 3182"
+      ],
+      "latency_seconds": 1.0
+    },
+    {
+      "id": "TEST-009",
+      "query": "Our company produces plywood for general construction purposes. What standard covers the requirements?",
+      "expected_standards": [
+        "IS 1328"
+      ],
+      "retrieved_standards": [
+        "IS 13958",
+        "IS 14588",
+        "IS 14842"
+      ],
+      "latency_seconds": 1.0
+    },
+    {
+      "id": "TEST-010",
+      "query": "I need specifications for bamboo mat board for structural applications. Which BIS standard?",
+      "expected_standards": [
+        "IS 13958"
+      ],
+      "retrieved_standards": [
+        "IS 15476",
+        "IS 13958",
+        "IS 14588"
+      ],
+      "latency_seconds": 1.02
+    },
+    {
+      "id": "TEST-011",
+      "query": "We manufacture gypsum building plasters. What standard covers the physical requirements?",
+      "expected_standards": [
+        "IS 2095 (Part 1)"
+      ],
+      "retrieved_standards": [
+        "IS 2547 (Part 1)",
+        "IS 2547 (Part 2)",
+        "IS 2095 (Part 3)"
+      ],
+      "latency_seconds": 1.01
+    },
+    {
+      "id": "TEST-012",
+      "query": "What is the specification for premixed lightweight gypsum plasters?",
+      "expected_standards": [
+        "IS 2547 (Part 2)"
+      ],
+      "retrieved_standards": [
+        "IS 2547 (Part 2)",
+        "IS 2547 (Part 1)",
+        "IS 2095 (Part 3)"
+      ],
+      "latency_seconds": 0.69
+    },
+    {
+      "id": "TEST-013",
+      "query": "I need specifications for structural timber used in building construction. Which standard?",
+      "expected_standards": [
+        "IS 399"
+      ],
+      "retrieved_standards": [
+        "IS 3629",
+        "IS 10701",
+        "IS 4021"
+      ],
+      "latency_seconds": 0.78
+    },
+    {
+      "id": "TEST-014",
+      "query": "What standard covers the classification and grading of softwood timber?",
+      "expected_standards": [
+        "IS 4891"
+      ],
+      "retrieved_standards": [
+        "IS 12896",
+        "IS 1326",
+        "IS 399"
+      ],
+      "latency_seconds": 0.26
+    },
+    {
+      "id": "TEST-015",
+      "query": "Our company manufactures bitumen for road construction. What BIS standard applies?",
+      "expected_standards": [
+        "IS 73"
+      ],
+      "retrieved_standards": [
+        "IS 454",
+        "IS 215",
+        "IS 3117"
+      ],
+      "latency_seconds": 0.95
+    },
+    {
+      "id": "TEST-016",
+      "query": "I need specifications for cutback bitumen for road laying. Which standard?",
+      "expected_standards": [
+        "IS 215"
+      ],
+      "retrieved_standards": [
+        "IS 454",
+        "IS 3117",
+        "IS 8887"
+      ],
+      "latency_seconds": 0.79
+    },
+    {
+      "id": "TEST-017",
+      "query": "We produce ceramic unglazed floor tiles. What standard covers the requirements?",
+      "expected_standards": [
+        "IS 1128"
+      ],
+      "retrieved_standards": [
+        "IS 4457",
+        "IS 13753",
+        "IS 13756"
+      ],
+      "latency_seconds": 0.9
+    },
+    {
+      "id": "TEST-018",
+      "query": "What is the specification for clay roofing tiles used in residential buildings?",
+      "expected_standards": [
+        "IS 10388"
+      ],
+      "retrieved_standards": [
+        "IS 13317",
+        "IS 3951 (Part 1)",
+        "IS 654"
+      ],
+      "latency_seconds": 0.85
+    },
+    {
+      "id": "TEST-019",
+      "query": "Our company makes stoneware pipes for drainage. Which standard applies?",
+      "expected_standards": [
+        "IS 651"
+      ],
+      "retrieved_standards": [
+        "IS 651",
+        "IS 11925",
+        "IS 3006"
+      ],
+      "latency_seconds": 0.78
+    },
+    {
+      "id": "TEST-020",
+      "query": "I need bituminous waterproofing compound for roof treatment. Which BIS standard?",
+      "expected_standards": [
+        "IS 1580"
+      ],
+      "retrieved_standards": [
+        "IS 7193",
+        "IS 2645",
+        "IS 1580"
+      ],
+      "latency_seconds": 1.12
+    },
+    {
+      "id": "TEST-021",
+      "query": "What standard covers coal tar pitch for damp proofing?",
+      "expected_standards": [
+        "IS 212"
+      ],
+      "retrieved_standards": [
+        "IS 215",
+        "IS 216",
+        "IS 809"
+      ],
+      "latency_seconds": 0.81
+    },
+    {
+      "id": "TEST-022",
+      "query": "Our company manufactures CPVC pipes for hot and cold water supply. What standard applies?",
+      "expected_standards": [
+        "IS 15778"
+      ],
+      "retrieved_standards": [
+        "IS 9763",
+        "IS 10124 (Part 1)",
+        "IS 404 (Part 1)"
+      ],
+      "latency_seconds": 1.1
+    },
+    {
+      "id": "TEST-023",
+      "query": "I need specifications for marble dust panic doors for buildings. Which standard?",
+      "expected_standards": [
+        "IS 1795"
+      ],
+      "retrieved_standards": [
+        "IS 1130",
+        "IS 4021",
+        "IS 9106"
+      ],
+      "latency_seconds": 1.05
+    },
+    {
+      "id": "TEST-024",
+      "query": "What standard covers mild steel door handles for general use?",
+      "expected_standards": [
+        "IS 206"
+      ],
+      "retrieved_standards": [
+        "IS 208",
+        "IS 4948",
+        "IS 206"
+      ],
+      "latency_seconds": 0.93
+    },
+    {
+      "id": "TEST-025",
+      "query": "I need specifications for tower bolts used in doors and windows. Which BIS standard?",
+      "expected_standards": [
+        "IS 204"
+      ],
+      "retrieved_standards": [
+        "IS 12427",
+        "IS 204 (Part 2)",
+        "IS 204 (Part 1)"
+      ],
+      "latency_seconds": 0.96
+    },
+    {
+      "id": "TEST-026",
+      "query": "Our company produces blackboard for construction. What standard covers it?",
+      "expected_standards": [
+        "IS 5246"
+      ],
+      "retrieved_standards": [
+        "IS 5779",
+        "IS 814",
+        "IS 205"
+      ],
+      "latency_seconds": 0.95
+    },
+    {
+      "id": "TEST-027",
+      "query": "What is the specification for resinated wood for general construction?",
+      "expected_standards": [
+        "IS 3478"
+      ],
+      "retrieved_standards": [
+        "IS 14912",
+        "IS 3513 (Part 1)",
+        "IS 3513 (Part 3)"
+      ],
+      "latency_seconds": 0.68
+    },
+    {
+      "id": "TEST-028",
+      "query": "I need specifications for wooden flush doors for general construction. Which standard?",
+      "expected_standards": [
+        "IS 2202 (Part 1)"
+      ],
+      "retrieved_standards": [
+        "IS 2202 (Part 1)",
+        "IS 2191 (Part 1)",
+        "IS 2202 (Part 2)"
+      ],
+      "latency_seconds": 1.07
+    },
+    {
+      "id": "TEST-029",
+      "query": "What standard covers steel windows for buildings?",
+      "expected_standards": [
+        "IS 208"
+      ],
+      "retrieved_standards": [
+        "IS 7452",
+        "IS 1038",
+        "IS 1361"
+      ],
+      "latency_seconds": 0.92
+    },
+    {
+      "id": "TEST-030",
+      "query": "Our company manufactures mild steel bars for RCC. What BIS standard applies?",
+      "expected_standards": [
+        "IS 432 (Part 1)"
+      ],
+      "retrieved_standards": [
+        "IS 432 (Part 1)",
+        "IS 432 (Part II)",
+        "IS 9131"
+      ],
+      "latency_seconds": 1.02
+    },
+    {
+      "id": "TEST-031",
+      "query": "I need specifications for hard drawn steel wire for concrete reinforcement. Which standard?",
+      "expected_standards": [
+        "IS 1566"
+      ],
+      "retrieved_standards": [
+        "IS 1566",
+        "IS 432 (Part II)",
+        "IS 432 (Part 1)"
+      ],
+      "latency_seconds": 0.93
+    },
+    {
+      "id": "TEST-032",
+      "query": "What standard covers weldable structural steel for bridges?",
+      "expected_standards": [
+        "IS 804"
+      ],
+      "retrieved_standards": [
+        "IS 11587",
+        "IS 432 (Part 1)",
+        "IS 1148"
+      ],
+      "latency_seconds": 0.88
+    },
+    {
+      "id": "TEST-033",
+      "query": "We produce medium weight steel channels for structural use. What standard applies?",
+      "expected_standards": [
+        "IS 808"
+      ],
+      "retrieved_standards": [
+        "IS 1161",
+        "IS 432 (Part 1)",
+        "IS 808"
+      ],
+      "latency_seconds": 0.88
+    },
+    {
+      "id": "TEST-034",
+      "query": "Our company extrudes aluminium sections for building applications. What standard covers this?",
+      "expected_standards": [
+        "IS 2676"
+      ],
+      "retrieved_standards": [
+        "IS 1285",
+        "IS 5384",
+        "IS 3908"
+      ],
+      "latency_seconds": 0.86
+    },
+    {
+      "id": "TEST-035",
+      "query": "What specification applies to zinc alloy die castings for general engineering?",
+      "expected_standards": [
+        "IS 4098"
+      ],
+      "retrieved_standards": [
+        "IS 1823",
+        "IS 4948",
+        "IS 3847"
+      ],
+      "latency_seconds": 0.79
+    },
+    {
+      "id": "TEST-036",
+      "query": "I need specifications for equal leg angles used in structural applications. Which standard?",
+      "expected_standards": [
+        "IS 1363 (Part 2)"
+      ],
+      "retrieved_standards": [
+        "IS 3908",
+        "IS 3909",
+        "IS 808"
+      ],
+      "latency_seconds": 0.89
+    },
+    {
+      "id": "TEST-037",
+      "query": "What standard covers mushroom head screws for structural use?",
+      "expected_standards": [
+        "IS 1366"
+      ],
+      "retrieved_standards": [
+        "IS 5624",
+        "IS 1365",
+        "IS 1363 (Part 1)"
+      ],
+      "latency_seconds": 0.95
+    },
+    {
+      "id": "TEST-038",
+      "query": "Our company manufactures low carbon steel electrodes for arc welding. What standard?",
+      "expected_standards": [
+        "IS 1395"
+      ],
+      "retrieved_standards": [
+        "IS 8363",
+        "IS 1395",
+        "IS 6560"
+      ],
+      "latency_seconds": 0.95
+    },
+    {
+      "id": "TEST-039",
+      "query": "I need specifications for stainless steel electrodes for welding. Which standard applies?",
+      "expected_standards": [
+        "IS 814"
+      ],
+      "retrieved_standards": [
+        "IS 8363",
+        "IS 1395",
+        "IS 814"
+      ],
+      "latency_seconds": 0.92
+    },
+    {
+      "id": "TEST-040",
+      "query": "What standard covers high strength structural bolts for steel structures?",
+      "expected_standards": [
+        "IS 1929"
+      ],
+      "retrieved_standards": [
+        "IS 3757",
+        "IS 6639",
+        "IS 6623"
+      ],
+      "latency_seconds": 0.92
+    },
+    {
+      "id": "TEST-041",
+      "query": "I need specifications for foundation bolts. Which BIS standard?",
+      "expected_standards": [
+        "IS 5624"
+      ],
+      "retrieved_standards": [
+        "IS 5624",
+        "IS 3182",
+        "IS 3757"
+      ],
+      "latency_seconds": 0.73
+    },
+    {
+      "id": "TEST-042",
+      "query": "Our company manufactures steel wire ropes for engineering purposes. What standard applies?",
+      "expected_standards": [
+        "IS 2365"
+      ],
+      "retrieved_standards": [
+        "IS 2365",
+        "IS 280",
+        "IS 7887"
+      ],
+      "latency_seconds": 0.92
+    },
+    {
+      "id": "TEST-043",
+      "query": "What is the specification for binding wire used in construction?",
+      "expected_standards": [
+        "IS 725"
+      ],
+      "retrieved_standards": [
+        "IS 4621",
+        "IS 6003",
+        "IS 2140"
+      ],
+      "latency_seconds": 0.73
+    },
+    {
+      "id": "TEST-044",
+      "query": "I need specifications for wired glass used in safety glazing. Which standard?",
+      "expected_standards": [
+        "IS 2553 (Part 1)"
+      ],
+      "retrieved_standards": [
+        "IS 2553 (Part 1)",
+        "IS 5437",
+        "IS 2835"
+      ],
+      "latency_seconds": 1.03
+    },
+    {
+      "id": "TEST-045",
+      "query": "What standard covers hollow glass blocks for masonry?",
+      "expected_standards": [
+        "IS 3438"
+      ],
+      "retrieved_standards": [
+        "IS 2185 (Part 2)",
+        "IS 2185 (Part 1)",
+        "IS 3068"
+      ],
+      "latency_seconds": 0.81
+    },
+    {
+      "id": "TEST-046",
+      "query": "Our company produces wood filler for furniture. What standard covers this?",
+      "expected_standards": [
+        "IS 419"
+      ],
+      "retrieved_standards": [
+        "IS 423",
+        "IS 7316",
+        "IS 14616"
+      ],
+      "latency_seconds": 1.02
+    },
+    {
+      "id": "TEST-047",
+      "query": "I need specifications for mineral wool thermal insulation for buildings. Which standard?",
+      "expected_standards": [
+        "IS 3348"
+      ],
+      "retrieved_standards": [
+        "IS 8183",
+        "IS 9742",
+        "IS 3308"
+      ],
+      "latency_seconds": 0.93
+    },
+    {
+      "id": "TEST-048",
+      "query": "What standard covers expanded polystyrene for thermal insulation?",
+      "expected_standards": [
+        "IS 12406"
+      ],
+      "retrieved_standards": [
+        "IS 4671",
+        "IS 12436",
+        "IS 7509"
+      ],
+      "latency_seconds": 0.96
+    },
+    {
+      "id": "TEST-049",
+      "query": "Our company manufactures UPVC pipes for water supply. What standard applies?",
+      "expected_standards": [
+        "IS 4985"
+      ],
+      "retrieved_standards": [
+        "IS 14735",
+        "IS 4985",
+        "IS 13592"
+      ],
+      "latency_seconds": 0.93
+    },
+    {
+      "id": "TEST-050",
+      "query": "I need specifications for HDPE pipes for water transmission. Which standard?",
+      "expected_standards": [
+        "IS 4984"
+      ],
+      "retrieved_standards": [
+        "IS 8008 (Part 7)",
+        "IS 8360 (Part 1)",
+        "IS 8008 (Part 6)"
+      ],
+      "latency_seconds": 1.02
+    },
+    {
+      "id": "TEST-051",
+      "query": "What standard covers ABS pipes for chemical handling?",
+      "expected_standards": [
+        "IS 9578"
+      ],
+      "retrieved_standards": [
+        "IS 404 (Part 1)",
+        "IS 11925",
+        "IS 651"
+      ],
+      "latency_seconds": 0.99
+    },
+    {
+      "id": "TEST-052",
+      "query": "We produce PVC insulated cables for house wiring. What standard covers this?",
+      "expected_standards": [
+        "IS 694"
+      ],
+      "retrieved_standards": [
+        "IS 7098 (Part 1)",
+        "IS 9968 (Part 1)",
+        "IS 1554 (Part 1)"
+      ],
+      "latency_seconds": 0.95
+    },
+    {
+      "id": "TEST-053",
+      "query": "I need specifications for XLPE cables for power distribution. Which standard?",
+      "expected_standards": [
+        "IS 7098 (Part 1)"
+      ],
+      "retrieved_standards": [
+        "IS 7098 (Part 1)",
+        "IS 9968 (Part 1)",
+        "IS 694"
+      ],
+      "latency_seconds": 0.94
+    },
+    {
+      "id": "TEST-054",
+      "query": "Our company makes copper wiring for buildings. What standard applies?",
+      "expected_standards": [
+        "IS 1239 (Part 1)"
+      ],
+      "retrieved_standards": [
+        "IS 3837",
+        "IS 2412",
+        "IS 5898"
+      ],
+      "latency_seconds": 0.82
+    },
+    {
+      "id": "TEST-055",
+      "query": "What specification covers switch socket outlets for general use?",
+      "expected_standards": [
+        "IS 12988"
+      ],
+      "retrieved_standards": [
+        "IS 4615",
+        "IS 4160",
+        "IS 3854"
+      ],
+      "latency_seconds": 0.7
+    },
+    {
+      "id": "TEST-056",
+      "query": "I need general guidance on construction standards and codes of practice. What BIS standard applies?",
+      "expected_standards": [
+        "IS 4631"
+      ],
+      "retrieved_standards": [
+        "IS 14772",
+        "IS 4351",
+        "IS 14241"
+      ],
+      "latency_seconds": 0.89
+    },
+    {
+      "id": "TEST-057",
+      "query": "What standard covers the use of granite in building construction?",
+      "expected_standards": [
+        "IS 14223 (Part 1)"
+      ],
+      "retrieved_standards": [
+        "IS 9394",
+        "IS 14223 (Part 1)",
+        "IS 2180"
+      ],
+      "latency_seconds": 0.78
+    },
+    {
+      "id": "TEST-058",
+      "query": "What is the Indian Standard covering the manufacture, chemical, and physical requirements for Portland slag cement?",
+      "expected_standards": [
+        "IS 455: 1989"
+      ],
+      "retrieved_standards": [
+        "IS 8043",
+        "IS 455: 1989",
+        "IS 8112"
+      ],
+      "latency_seconds": 0.28
+    },
+    {
+      "id": "TEST-059",
+      "query": "We are setting up a plant to produce Portland pozzolana cement that is calcined clay based. What is the applicable standard?",
+      "expected_standards": [
+        "IS 1489 (Part 2): 1991"
+      ],
+      "retrieved_standards": [
+        "IS 1489 (Part 2): 1991",
+        "IS 1489 (Part 1)",
+        "IS 8112"
+      ],
+      "latency_seconds": 0.33
+    },
+    {
+      "id": "TEST-060",
+      "query": "Which standard applies to masonry cement used for general purposes where mortars for masonry are required, but not intended for structural concrete?",
+      "expected_standards": [
+        "IS 3466: 1988"
+      ],
+      "retrieved_standards": [
+        "IS 3466: 1988",
+        "IS 12330",
+        "IS 1489 (Part 2)"
+      ],
+      "latency_seconds": 0.37
+    },
+    {
+      "id": "TEST-061",
+      "query": "Looking for the standard that details the composition, manufacture, and testing of supersulphated cement, particularly for marine works or aggressive water conditions.",
+      "expected_standards": [
+        "IS 6909: 1990"
+      ],
+      "retrieved_standards": [
+        "IS 6452",
+        "IS 6909: 1990",
+        "IS 6598"
+      ],
+      "latency_seconds": 1.35
+    },
+    {
+      "id": "TEST-062",
+      "query": "Our company manufactures White Portland cement for architectural and decorative purposes. Which standard governs its physical and chemical requirements?",
+      "expected_standards": [
+        "IS 8042: 1989"
+      ],
+      "retrieved_standards": [
+        "IS 8042: 1989",
+        "IS 8043",
+        "IS 269"
+      ],
+      "latency_seconds": 0.3
+    },
+    {
+      "id": "TEST-063",
+      "query": "What standard covers high alumina cement for structural use in cold regions?",
+      "expected_standards": [
+        "IS 6452: 1989"
+      ],
+      "retrieved_standards": [
+        "IS 6452: 1989",
+        "IS 3466",
+        "IS 269"
+      ],
+      "latency_seconds": 0.27
+    },
+    {
+      "id": "TEST-064",
+      "query": "I need specifications for Portland pozzolana cement fly ash based. Which standard?",
+      "expected_standards": [
+        "IS 1489 (Part 1): 1991"
+      ],
+      "retrieved_standards": [
+        "IS 1489 (Part 1): 1991",
+        "IS 1489 (Part 2)",
+        "IS 8043"
+      ],
+      "latency_seconds": 0.35
+    },
+    {
+      "id": "TEST-065",
+      "query": "What is the standard for artificial lightweight aggregates for concrete masonry units?",
+      "expected_standards": [
+        "IS 9142: 1979"
+      ],
+      "retrieved_standards": [
+        "IS 9142: 1979",
+        "IS 2185 (Part 2)",
+        "IS 383"
+      ],
+      "latency_seconds": 0.89
+    },
+    {
+      "id": "TEST-066",
+      "query": "Our company produces pre-cast concrete kerbs. What standard applies?",
+      "expected_standards": [
+        "IS 5758"
+      ],
+      "retrieved_standards": [
+        "IS 5751",
+        "IS 2185 (Part 2)",
+        "IS 2185 (Part 3)"
+      ],
+      "latency_seconds": 0.89
+    },
+    {
+      "id": "TEST-067",
+      "query": "What standard covers the method of sampling of timber?",
+      "expected_standards": [
+        "IS 1121"
+      ],
+      "retrieved_standards": [
+        "IS 2095 (Part 3)",
+        "IS 14443",
+        "IS 12896"
+      ],
+      "latency_seconds": 0.67
+    },
+    {
+      "id": "TEST-068",
+      "query": "I need specifications for seasoning of timber. Which standard?",
+      "expected_standards": [
+        "IS 1144"
+      ],
+      "retrieved_standards": [
+        "IS 1326",
+        "IS 12896",
+        "IS 2372"
+      ],
+      "latency_seconds": 0.71
+    },
+    {
+      "id": "TEST-069",
+      "query": "What standard covers cold formed steel sections for structural use?",
+      "expected_standards": [
+        "IS 8112"
+      ],
+      "retrieved_standards": [
+        "IS 811",
+        "IS 11587",
+        "IS 1161"
+      ],
+      "latency_seconds": 0.77
+    },
+    {
+      "id": "TEST-070",
+      "query": "I need specifications for Thermo Mechanically Treated bars for reinforcement. Which standard?",
+      "expected_standards": [
+        "IS 1786"
+      ],
+      "retrieved_standards": [
+        "IS 432 (Part 1)",
+        "IS 3513 (Part 1)",
+        "IS 432 (Part II)"
+      ],
+      "latency_seconds": 0.98
+    },
+    {
+      "id": "TEST-071",
+      "query": "Our company manufactures UPVC swage fittings for water supply. What standard?",
+      "expected_standards": [
+        "IS 10124"
+      ],
+      "retrieved_standards": [
+        "IS 14735",
+        "IS 10124 (Part 4)",
+        "IS 10124 (Part 1)"
+      ],
+      "latency_seconds": 1.03
+    },
+    {
+      "id": "TEST-072",
+      "query": "What standard covers cast iron fittings for water pipes?",
+      "expected_standards": [
+        "IS 1538"
+      ],
+      "retrieved_standards": [
+        "IS 1538",
+        "IS 1230",
+        "IS 2501"
+      ],
+      "latency_seconds": 1.0
+    },
+    {
+      "id": "TEST-073",
+      "query": "What standard covers PVC insulated heavy duty cables for voltage up to 1100V?",
+      "expected_standards": [
+        "IS 1554 (Part 1)"
+      ],
+      "retrieved_standards": [
+        "IS 694",
+        "IS 9968 (Part 1)",
+        "IS 7098 (Part 1)"
+      ],
+      "latency_seconds": 1.12
+    },
+    {
+      "id": "TEST-074",
+      "query": "What standard covers GI corrugated sheets for roofing?",
+      "expected_standards": [
+        "IS 277"
+      ],
+      "retrieved_standards": [
+        "IS 15476",
+        "IS 9893",
+        "IS 459"
+      ],
+      "latency_seconds": 0.92
+    },
+    {
+      "id": "TEST-075",
+      "query": "I need specifications for semi-vitrified floor tiles. Which standard?",
+      "expected_standards": [
+        "IS 12307"
+      ],
+      "retrieved_standards": [
+        "IS 653",
+        "IS 13753",
+        "IS 1478"
+      ],
+      "latency_seconds": 0.99
+    },
+    {
+      "id": "TEST-076",
+      "query": "Our company produces cork board for thermal insulation. What standard applies?",
+      "expected_standards": [
+        "IS 3307"
+      ],
+      "retrieved_standards": [
+        "IS 11128",
+        "IS 3677",
+        "IS 9742"
+      ],
+      "latency_seconds": 1.01
+    },
+    {
+      "id": "TEST-077",
+      "query": "What specification covers glass wool for thermal insulation?",
+      "expected_standards": [
+        "IS 9842"
+      ],
+      "retrieved_standards": [
+        "IS 8183",
+        "IS 3677",
+        "IS 3308"
+      ],
+      "latency_seconds": 0.72
+    },
+    {
+      "id": "TEST-078",
+      "query": "I need specifications for flux cored wires for arc welding. Which standard?",
+      "expected_standards": [
+        "IS 6560"
+      ],
+      "retrieved_standards": [
+        "IS 7280",
+        "IS 5897",
+        "IS 6560"
+      ],
+      "latency_seconds": 0.87
+    },
+    {
+      "id": "TEST-079",
+      "query": "What standard covers mild steel filler rods for gas welding?",
+      "expected_standards": [
+        "IS 4948"
+      ],
+      "retrieved_standards": [
+        "IS 6560",
+        "IS 1278",
+        "IS 5898"
+      ],
+      "latency_seconds": 0.95
+    },
+    {
+      "id": "TEST-080",
+      "query": "What standard covers industrial bolts for structural applications?",
+      "expected_standards": [
+        "IS 2016"
+      ],
+      "retrieved_standards": [
+        "IS 3757",
+        "IS 6639",
+        "IS 6610"
+      ],
+      "latency_seconds": 1.03
+    },
+    {
+      "id": "TEST-081",
+      "query": "I need specifications for self drilling screws for steel framing. Which standard?",
+      "expected_standards": [
+        "IS 10238"
+      ],
+      "retrieved_standards": [
+        "IS 1363 (Part 1)",
+        "IS 1364 (Part 2)",
+        "IS 1363 (Part 2)"
+      ],
+      "latency_seconds": 1.02
+    },
+    {
+      "id": "TEST-082",
+      "query": "Our company manufactures float glass for building applications. What standard applies?",
+      "expected_standards": [
+        "IS 2835"
+      ],
+      "retrieved_standards": [
+        "IS 2553 (Part 1)",
+        "IS 9762",
+        "IS 9758"
+      ],
+      "latency_seconds": 0.99
+    },
+    {
+      "id": "TEST-083",
+      "query": "What standard covers tinted glass for glazing?",
+      "expected_standards": [
+        "IS 5437"
+      ],
+      "retrieved_standards": [
+        "IS 2553 (Part 1)",
+        "IS 5437",
+        "IS 3438"
+      ],
+      "latency_seconds": 0.83
+    },
+    {
+      "id": "TEST-084",
+      "query": "I need specifications for vinyl floor tiles. Which standard?",
+      "expected_standards": [
+        "IS 3462"
+      ],
+      "retrieved_standards": [
+        "IS 653",
+        "IS 1478",
+        "IS 1128"
+      ],
+      "latency_seconds": 0.8
+    },
+    {
+      "id": "TEST-085",
+      "query": "What standard covers epoxy floor finishes?",
+      "expected_standards": [
+        "IS 9197"
+      ],
+      "retrieved_standards": [
+        "IS 9197",
+        "IS 12994",
+        "IS 13620"
+      ],
+      "latency_seconds": 0.77
+    },
+    {
+      "id": "TEST-086",
+      "query": "Our company produces hot applied bitumen waterproofing compound. What standard?",
+      "expected_standards": [
+        "IS 2645"
+      ],
+      "retrieved_standards": [
+        "IS 7193",
+        "IS 2645",
+        "IS 809"
+      ],
+      "latency_seconds": 0.93
+    },
+    {
+      "id": "TEST-087",
+      "query": "I need specifications for polymer modified cementitious waterproofing mortar. Which standard?",
+      "expected_standards": [
+        "IS 13356"
+      ],
+      "retrieved_standards": [
+        "IS 2645",
+        "IS 7193",
+        "IS 8043"
+      ],
+      "latency_seconds": 0.91
+    },
+    {
+      "id": "TEST-088",
+      "query": "What standard covers PVC conduits for electrical installations?",
+      "expected_standards": [
+        "IS 9537 (Part 3)"
+      ],
+      "retrieved_standards": [
+        "IS 9537 (Part 1)",
+        "IS 9537 (Part II)",
+        "IS 9537 (Part 4)"
+      ],
+      "latency_seconds": 1.14
+    },
+    {
+      "id": "TEST-089",
+      "query": "I need specifications for polyethylene water storage tanks. Which standard?",
+      "expected_standards": [
+        "IS 12709"
+      ],
+      "retrieved_standards": [
+        "IS 12701",
+        "IS 8008 (Part 1)",
+        "IS 8360 (Part 1)"
+      ],
+      "latency_seconds": 0.32
+    },
+    {
+      "id": "TEST-090",
+      "query": "Our company manufactures sanitaryware. What standard covers the requirements?",
+      "expected_standards": [
+        "IS 772"
+      ],
+      "retrieved_standards": [
+        "IS 2556 (Part 1)",
+        "IS 771 (Part 1)",
+        "IS 771 (Part 2)"
+      ],
+      "latency_seconds": 0.8
+    },
+    {
+      "id": "TEST-091",
+      "query": "What standard applies to ball valves for water supply?",
+      "expected_standards": [
+        "IS 1700"
+      ],
+      "retrieved_standards": [
+        "IS 13049",
+        "IS 1701",
+        "IS 12234"
+      ],
+      "latency_seconds": 0.68
+    },
+    {
+      "id": "TEST-092",
+      "query": "I need specifications for bitumen emulsion for road maintenance. Which standard?",
+      "expected_standards": [
+        "IS 3117"
+      ],
+      "retrieved_standards": [
+        "IS 8887",
+        "IS 3117",
+        "IS 5317"
+      ],
+      "latency_seconds": 0.82
+    },
+    {
+      "id": "TEST-093",
+      "query": "What standard covers blown bitumen for industrial use?",
+      "expected_standards": [
+        "IS 454"
+      ],
+      "retrieved_standards": [
+        "IS 454",
+        "IS 702",
+        "IS 13026"
+      ],
+      "latency_seconds": 0.9
+    },
+    {
+      "id": "TEST-094",
+      "query": "Our company produces gypsum plasters for wall finishing. What standard applies?",
+      "expected_standards": [
+        "IS 2547 (Part 1)"
+      ],
+      "retrieved_standards": [
+        "IS 2095 (Part 3)",
+        "IS 2547 (Part 2)",
+        "IS 2547 (Part 1)"
+      ],
+      "latency_seconds": 0.94
+    },
+    {
+      "id": "TEST-095",
+      "query": "What specification covers anhydrite flooring gypsum?",
+      "expected_standards": [
+        "IS 2849"
+      ],
+      "retrieved_standards": [
+        "IS 1478",
+        "IS 2547 (Part 2)",
+        "IS 13317"
+      ],
+      "latency_seconds": 0.76
+    },
+    {
+      "id": "TEST-096",
+      "query": "I need specifications for monohydraulic lime for external plastering. Which standard?",
+      "expected_standards": [
+        "IS 3182"
+      ],
+      "retrieved_standards": [
+        "IS 3068",
+        "IS 4762",
+        "IS 2686"
+      ],
+      "latency_seconds": 0.9
+    },
+    {
+      "id": "TEST-097",
+      "query": "What standard covers stone for railway ballast?",
+      "expected_standards": [
+        "IS 9394"
+      ],
+      "retrieved_standards": [
+        "IS 3620",
+        "IS 10388",
+        "IS 6579"
+      ],
+      "latency_seconds": 0.69
+    },
+    {
+      "id": "TEST-098",
+      "query": "I need specifications for collapsible gates for buildings. Which standard?",
+      "expected_standards": [
+        "IS 5930"
+      ],
+      "retrieved_standards": [
+        "IS 10521",
+        "IS 2849",
+        "IS 13349"
+      ],
+      "latency_seconds": 1.05
+    },
+    {
+      "id": "TEST-099",
+      "query": "What standard covers rolling shutters for warehouses?",
+      "expected_standards": [
+        "IS 6315"
+      ],
+      "retrieved_standards": [
+        "IS 6248",
+        "IS 12896",
+        "IS 10451"
+      ],
+      "latency_seconds": 0.98
+    },
+    {
+      "id": "TEST-100",
+      "query": "Our company produces hinges for doors. What standard covers the requirements?",
+      "expected_standards": [
+        "IS 205"
+      ],
+      "retrieved_standards": [
+        "IS 206",
+        "IS 453",
+        "IS 12817"
+      ],
+      "latency_seconds": 0.9
+    }
+  ],
+  "miss_details": [
+    {
+      "id": "TEST-005",
+      "query": "We manufacture quicklime for construction purposes. What BIS standard covers the...",
+      "section": "building limes",
+      "expected": [
+        "IS 712"
+      ],
+      "retrieved": [
+        "IS 13026",
+        "IS 9394",
+        "IS 269"
+      ],
+      "mrr": 0.0
+    },
+    {
+      "id": "TEST-006",
+      "query": "I need specifications for hydraulic lime hydrate used in masonry mortars. Which ...",
+      "section": "building limes",
+      "expected": [
+        "IS 3115"
+      ],
+      "retrieved": [
+        "IS 3182",
+        "IS 3466",
+        "IS 10772"
+      ],
+      "mrr": 0.0
+    },
+    {
+      "id": "TEST-007",
+      "query": "What standard covers natural stone for masonry construction in terms of strength...",
+      "section": "stones",
+      "expected": [
+        "IS 1127"
+      ],
+      "retrieved": [
+        "IS 3620",
+        "IS 2116",
+        "IS 12440"
+      ],
+      "mrr": 0.0
+    },
+    {
+      "id": "TEST-009",
+      "query": "Our company produces plywood for general construction purposes. What standard co...",
+      "section": "wood products for building",
+      "expected": [
+        "IS 1328"
+      ],
+      "retrieved": [
+        "IS 13958",
+        "IS 14588",
+        "IS 14842"
+      ],
+      "mrr": 0.0
+    },
+    {
+      "id": "TEST-011",
+      "query": "We manufacture gypsum building plasters. What standard covers the physical requi...",
+      "section": "gypsum building materials",
+      "expected": [
+        "IS 2095 (Part 1)"
+      ],
+      "retrieved": [
+        "IS 2547 (Part 1)",
+        "IS 2547 (Part 2)",
+        "IS 2095 (Part 3)"
+      ],
+      "mrr": 0.0
+    },
+    {
+      "id": "TEST-013",
+      "query": "I need specifications for structural timber used in building construction. Which...",
+      "section": "timber",
+      "expected": [
+        "IS 399"
+      ],
+      "retrieved": [
+        "IS 3629",
+        "IS 10701",
+        "IS 4021"
+      ],
+      "mrr": 0.0
+    },
+    {
+      "id": "TEST-014",
+      "query": "What standard covers the classification and grading of softwood timber?",
+      "section": "timber",
+      "expected": [
+        "IS 4891"
+      ],
+      "retrieved": [
+        "IS 12896",
+        "IS 1326",
+        "IS 399"
+      ],
+      "mrr": 0.0
+    },
+    {
+      "id": "TEST-015",
+      "query": "Our company manufactures bitumen for road construction. What BIS standard applie...",
+      "section": "bitumen and tar products",
+      "expected": [
+        "IS 73"
+      ],
+      "retrieved": [
+        "IS 454",
+        "IS 215",
+        "IS 3117"
+      ],
+      "mrr": 0.0
+    },
+    {
+      "id": "TEST-016",
+      "query": "I need specifications for cutback bitumen for road laying. Which standard?",
+      "section": "bitumen and tar products",
+      "expected": [
+        "IS 215"
+      ],
+      "retrieved": [
+        "IS 454",
+        "IS 3117",
+        "IS 8887"
+      ],
+      "mrr": 0.0
+    },
+    {
+      "id": "TEST-017",
+      "query": "We produce ceramic unglazed floor tiles. What standard covers the requirements?",
+      "section": "floor wall roof coverings finishes",
+      "expected": [
+        "IS 1128"
+      ],
+      "retrieved": [
+        "IS 4457",
+        "IS 13753",
+        "IS 13756"
+      ],
+      "mrr": 0.0
+    },
+    {
+      "id": "TEST-018",
+      "query": "What is the specification for clay roofing tiles used in residential buildings?",
+      "section": "floor wall roof coverings finishes",
+      "expected": [
+        "IS 10388"
+      ],
+      "retrieved": [
+        "IS 13317",
+        "IS 3951 (Part 1)",
+        "IS 654"
+      ],
+      "mrr": 0.0
+    },
+    {
+      "id": "TEST-021",
+      "query": "What standard covers coal tar pitch for damp proofing?",
+      "section": "waterproofing damp proofing",
+      "expected": [
+        "IS 212"
+      ],
+      "retrieved": [
+        "IS 215",
+        "IS 216",
+        "IS 809"
+      ],
+      "mrr": 0.0
+    },
+    {
+      "id": "TEST-022",
+      "query": "Our company manufactures CPVC pipes for hot and cold water supply. What standard...",
+      "section": "sanitary appliances water fittings",
+      "expected": [
+        "IS 15778"
+      ],
+      "retrieved": [
+        "IS 9763",
+        "IS 10124 (Part 1)",
+        "IS 404 (Part 1)"
+      ],
+      "mrr": 0.0
+    },
+    {
+      "id": "TEST-023",
+      "query": "I need specifications for marble dust panic doors for buildings. Which standard?",
+      "section": "sanitary appliances water fittings",
+      "expected": [
+        "IS 1795"
+      ],
+      "retrieved": [
+        "IS 1130",
+        "IS 4021",
+        "IS 9106"
+      ],
+      "mrr": 0.0
+    },
+    {
+      "id": "TEST-025",
+      "query": "I need specifications for tower bolts used in doors and windows. Which BIS stand...",
+      "section": "builders hardware",
+      "expected": [
+        "IS 204"
+      ],
+      "retrieved": [
+        "IS 12427",
+        "IS 204 (Part 2)",
+        "IS 204 (Part 1)"
+      ],
+      "mrr": 0.0
+    },
+    {
+      "id": "TEST-026",
+      "query": "Our company produces blackboard for construction. What standard covers it?",
+      "section": "wood products",
+      "expected": [
+        "IS 5246"
+      ],
+      "retrieved": [
+        "IS 5779",
+        "IS 814",
+        "IS 205"
+      ],
+      "mrr": 0.0
+    },
+    {
+      "id": "TEST-027",
+      "query": "What is the specification for resinated wood for general construction?",
+      "section": "wood products",
+      "expected": [
+        "IS 3478"
+      ],
+      "retrieved": [
+        "IS 14912",
+        "IS 3513 (Part 1)",
+        "IS 3513 (Part 3)"
+      ],
+      "mrr": 0.0
+    },
+    {
+      "id": "TEST-029",
+      "query": "What standard covers steel windows for buildings?",
+      "section": "doors windows shutters",
+      "expected": [
+        "IS 208"
+      ],
+      "retrieved": [
+        "IS 7452",
+        "IS 1038",
+        "IS 1361"
+      ],
+      "mrr": 0.0
+    },
+    {
+      "id": "TEST-032",
+      "query": "What standard covers weldable structural steel for bridges?",
+      "section": "concrete reinforcement",
+      "expected": [
+        "IS 804"
+      ],
+      "retrieved": [
+        "IS 11587",
+        "IS 432 (Part 1)",
+        "IS 1148"
+      ],
+      "mrr": 0.0
+    },
+    {
+      "id": "TEST-034",
+      "query": "Our company extrudes aluminium sections for building applications. What standard...",
+      "section": "light metal alloys",
+      "expected": [
+        "IS 2676"
+      ],
+      "retrieved": [
+        "IS 1285",
+        "IS 5384",
+        "IS 3908"
+      ],
+      "mrr": 0.0
+    },
+    {
+      "id": "TEST-035",
+      "query": "What specification applies to zinc alloy die castings for general engineering?",
+      "section": "light metal alloys",
+      "expected": [
+        "IS 4098"
+      ],
+      "retrieved": [
+        "IS 1823",
+        "IS 4948",
+        "IS 3847"
+      ],
+      "mrr": 0.0
+    },
+    {
+      "id": "TEST-036",
+      "query": "I need specifications for equal leg angles used in structural applications. Whic...",
+      "section": "structural shapes",
+      "expected": [
+        "IS 1363 (Part 2)"
+      ],
+      "retrieved": [
+        "IS 3908",
+        "IS 3909",
+        "IS 808"
+      ],
+      "mrr": 0.0
+    },
+    {
+      "id": "TEST-037",
+      "query": "What standard covers mushroom head screws for structural use?",
+      "section": "structural shapes",
+      "expected": [
+        "IS 1366"
+      ],
+      "retrieved": [
+        "IS 5624",
+        "IS 1365",
+        "IS 1363 (Part 1)"
+      ],
+      "mrr": 0.0
+    },
+    {
+      "id": "TEST-040",
+      "query": "What standard covers high strength structural bolts for steel structures?",
+      "section": "threaded fasteners rivets",
+      "expected": [
+        "IS 1929"
+      ],
+      "retrieved": [
+        "IS 3757",
+        "IS 6639",
+        "IS 6623"
+      ],
+      "mrr": 0.0
+    },
+    {
+      "id": "TEST-043",
+      "query": "What is the specification for binding wire used in construction?",
+      "section": "wire ropes wire products",
+      "expected": [
+        "IS 725"
+      ],
+      "retrieved": [
+        "IS 4621",
+        "IS 6003",
+        "IS 2140"
+      ],
+      "mrr": 0.0
+    },
+    {
+      "id": "TEST-045",
+      "query": "What standard covers hollow glass blocks for masonry?",
+      "section": "glass",
+      "expected": [
+        "IS 3438"
+      ],
+      "retrieved": [
+        "IS 2185 (Part 2)",
+        "IS 2185 (Part 1)",
+        "IS 3068"
+      ],
+      "mrr": 0.0
+    },
+    {
+      "id": "TEST-046",
+      "query": "Our company produces wood filler for furniture. What standard covers this?",
+      "section": "fillers stoppers putties",
+      "expected": [
+        "IS 419"
+      ],
+      "retrieved": [
+        "IS 423",
+        "IS 7316",
+        "IS 14616"
+      ],
+      "mrr": 0.0
+    },
+    {
+      "id": "TEST-047",
+      "query": "I need specifications for mineral wool thermal insulation for buildings. Which s...",
+      "section": "thermal insulation materials",
+      "expected": [
+        "IS 3348"
+      ],
+      "retrieved": [
+        "IS 8183",
+        "IS 9742",
+        "IS 3308"
+      ],
+      "mrr": 0.0
+    },
+    {
+      "id": "TEST-048",
+      "query": "What standard covers expanded polystyrene for thermal insulation?",
+      "section": "thermal insulation materials",
+      "expected": [
+        "IS 12406"
+      ],
+      "retrieved": [
+        "IS 4671",
+        "IS 12436",
+        "IS 7509"
+      ],
+      "mrr": 0.0
+    },
+    {
+      "id": "TEST-050",
+      "query": "I need specifications for HDPE pipes for water transmission. Which standard?",
+      "section": "plastics",
+      "expected": [
+        "IS 4984"
+      ],
+      "retrieved": [
+        "IS 8008 (Part 7)",
+        "IS 8360 (Part 1)",
+        "IS 8008 (Part 6)"
+      ],
+      "mrr": 0.0
+    },
+    {
+      "id": "TEST-051",
+      "query": "What standard covers ABS pipes for chemical handling?",
+      "section": "plastics",
+      "expected": [
+        "IS 9578"
+      ],
+      "retrieved": [
+        "IS 404 (Part 1)",
+        "IS 11925",
+        "IS 651"
+      ],
+      "mrr": 0.0
+    },
+    {
+      "id": "TEST-052",
+      "query": "We produce PVC insulated cables for house wiring. What standard covers this?",
+      "section": "conductors cables",
+      "expected": [
+        "IS 694"
+      ],
+      "retrieved": [
+        "IS 7098 (Part 1)",
+        "IS 9968 (Part 1)",
+        "IS 1554 (Part 1)"
+      ],
+      "mrr": 0.0
+    },
+    {
+      "id": "TEST-054",
+      "query": "Our company makes copper wiring for buildings. What standard applies?",
+      "section": "wiring accessories",
+      "expected": [
+        "IS 1239 (Part 1)"
+      ],
+      "retrieved": [
+        "IS 3837",
+        "IS 2412",
+        "IS 5898"
+      ],
+      "mrr": 0.0
+    },
+    {
+      "id": "TEST-055",
+      "query": "What specification covers switch socket outlets for general use?",
+      "section": "wiring accessories",
+      "expected": [
+        "IS 12988"
+      ],
+      "retrieved": [
+        "IS 4615",
+        "IS 4160",
+        "IS 3854"
+      ],
+      "mrr": 0.0
+    },
+    {
+      "id": "TEST-056",
+      "query": "I need general guidance on construction standards and codes of practice. What BI...",
+      "section": "general",
+      "expected": [
+        "IS 4631"
+      ],
+      "retrieved": [
+        "IS 14772",
+        "IS 4351",
+        "IS 14241"
+      ],
+      "mrr": 0.0
+    },
+    {
+      "id": "TEST-066",
+      "query": "Our company produces pre-cast concrete kerbs. What standard applies?",
+      "section": "cement and concrete",
+      "expected": [
+        "IS 5758"
+      ],
+      "retrieved": [
+        "IS 5751",
+        "IS 2185 (Part 2)",
+        "IS 2185 (Part 3)"
+      ],
+      "mrr": 0.0
+    },
+    {
+      "id": "TEST-067",
+      "query": "What standard covers the method of sampling of timber?",
+      "section": "timber",
+      "expected": [
+        "IS 1121"
+      ],
+      "retrieved": [
+        "IS 2095 (Part 3)",
+        "IS 14443",
+        "IS 12896"
+      ],
+      "mrr": 0.0
+    },
+    {
+      "id": "TEST-068",
+      "query": "I need specifications for seasoning of timber. Which standard?",
+      "section": "timber",
+      "expected": [
+        "IS 1144"
+      ],
+      "retrieved": [
+        "IS 1326",
+        "IS 12896",
+        "IS 2372"
+      ],
+      "mrr": 0.0
+    },
+    {
+      "id": "TEST-069",
+      "query": "What standard covers cold formed steel sections for structural use?",
+      "section": "structural steels",
+      "expected": [
+        "IS 8112"
+      ],
+      "retrieved": [
+        "IS 811",
+        "IS 11587",
+        "IS 1161"
+      ],
+      "mrr": 0.0
+    },
+    {
+      "id": "TEST-070",
+      "query": "I need specifications for Thermo Mechanically Treated bars for reinforcement. Wh...",
+      "section": "concrete reinforcement",
+      "expected": [
+        "IS 1786"
+      ],
+      "retrieved": [
+        "IS 432 (Part 1)",
+        "IS 3513 (Part 1)",
+        "IS 432 (Part II)"
+      ],
+      "mrr": 0.0
+    },
+    {
+      "id": "TEST-071",
+      "query": "Our company manufactures UPVC swage fittings for water supply. What standard?",
+      "section": "plastics",
+      "expected": [
+        "IS 10124"
+      ],
+      "retrieved": [
+        "IS 14735",
+        "IS 10124 (Part 4)",
+        "IS 10124 (Part 1)"
+      ],
+      "mrr": 0.0
+    },
+    {
+      "id": "TEST-073",
+      "query": "What standard covers PVC insulated heavy duty cables for voltage up to 1100V?",
+      "section": "conductors cables",
+      "expected": [
+        "IS 1554 (Part 1)"
+      ],
+      "retrieved": [
+        "IS 694",
+        "IS 9968 (Part 1)",
+        "IS 7098 (Part 1)"
+      ],
+      "mrr": 0.0
+    },
+    {
+      "id": "TEST-074",
+      "query": "What standard covers GI corrugated sheets for roofing?",
+      "section": "floor wall roof coverings finishes",
+      "expected": [
+        "IS 277"
+      ],
+      "retrieved": [
+        "IS 15476",
+        "IS 9893",
+        "IS 459"
+      ],
+      "mrr": 0.0
+    },
+    {
+      "id": "TEST-075",
+      "query": "I need specifications for semi-vitrified floor tiles. Which standard?",
+      "section": "floor wall roof coverings finishes",
+      "expected": [
+        "IS 12307"
+      ],
+      "retrieved": [
+        "IS 653",
+        "IS 13753",
+        "IS 1478"
+      ],
+      "mrr": 0.0
+    },
+    {
+      "id": "TEST-076",
+      "query": "Our company produces cork board for thermal insulation. What standard applies?",
+      "section": "thermal insulation materials",
+      "expected": [
+        "IS 3307"
+      ],
+      "retrieved": [
+        "IS 11128",
+        "IS 3677",
+        "IS 9742"
+      ],
+      "mrr": 0.0
+    },
+    {
+      "id": "TEST-077",
+      "query": "What specification covers glass wool for thermal insulation?",
+      "section": "thermal insulation materials",
+      "expected": [
+        "IS 9842"
+      ],
+      "retrieved": [
+        "IS 8183",
+        "IS 3677",
+        "IS 3308"
+      ],
+      "mrr": 0.0
+    },
+    {
+      "id": "TEST-079",
+      "query": "What standard covers mild steel filler rods for gas welding?",
+      "section": "welding electrodes wires",
+      "expected": [
+        "IS 4948"
+      ],
+      "retrieved": [
+        "IS 6560",
+        "IS 1278",
+        "IS 5898"
+      ],
+      "mrr": 0.0
+    },
+    {
+      "id": "TEST-080",
+      "query": "What standard covers industrial bolts for structural applications?",
+      "section": "threaded fasteners rivets",
+      "expected": [
+        "IS 2016"
+      ],
+      "retrieved": [
+        "IS 3757",
+        "IS 6639",
+        "IS 6610"
+      ],
+      "mrr": 0.0
+    },
+    {
+      "id": "TEST-081",
+      "query": "I need specifications for self drilling screws for steel framing. Which standard...",
+      "section": "threaded fasteners rivets",
+      "expected": [
+        "IS 10238"
+      ],
+      "retrieved": [
+        "IS 1363 (Part 1)",
+        "IS 1364 (Part 2)",
+        "IS 1363 (Part 2)"
+      ],
+      "mrr": 0.0
+    },
+    {
+      "id": "TEST-082",
+      "query": "Our company manufactures float glass for building applications. What standard ap...",
+      "section": "glass",
+      "expected": [
+        "IS 2835"
+      ],
+      "retrieved": [
+        "IS 2553 (Part 1)",
+        "IS 9762",
+        "IS 9758"
+      ],
+      "mrr": 0.0
+    },
+    {
+      "id": "TEST-084",
+      "query": "I need specifications for vinyl floor tiles. Which standard?",
+      "section": "floor wall roof coverings finishes",
+      "expected": [
+        "IS 3462"
+      ],
+      "retrieved": [
+        "IS 653",
+        "IS 1478",
+        "IS 1128"
+      ],
+      "mrr": 0.0
+    },
+    {
+      "id": "TEST-087",
+      "query": "I need specifications for polymer modified cementitious waterproofing mortar. Wh...",
+      "section": "waterproofing damp proofing",
+      "expected": [
+        "IS 13356"
+      ],
+      "retrieved": [
+        "IS 2645",
+        "IS 7193",
+        "IS 8043"
+      ],
+      "mrr": 0.0
+    },
+    {
+      "id": "TEST-088",
+      "query": "What standard covers PVC conduits for electrical installations?",
+      "section": "plastics",
+      "expected": [
+        "IS 9537 (Part 3)"
+      ],
+      "retrieved": [
+        "IS 9537 (Part 1)",
+        "IS 9537 (Part II)",
+        "IS 9537 (Part 4)"
+      ],
+      "mrr": 0.0
+    },
+    {
+      "id": "TEST-089",
+      "query": "I need specifications for polyethylene water storage tanks. Which standard?",
+      "section": "plastics",
+      "expected": [
+        "IS 12709"
+      ],
+      "retrieved": [
+        "IS 12701",
+        "IS 8008 (Part 1)",
+        "IS 8360 (Part 1)"
+      ],
+      "mrr": 0.0
+    },
+    {
+      "id": "TEST-090",
+      "query": "Our company manufactures sanitaryware. What standard covers the requirements?",
+      "section": "sanitary appliances water fittings",
+      "expected": [
+        "IS 772"
+      ],
+      "retrieved": [
+        "IS 2556 (Part 1)",
+        "IS 771 (Part 1)",
+        "IS 771 (Part 2)"
+      ],
+      "mrr": 0.0
+    },
+    {
+      "id": "TEST-091",
+      "query": "What standard applies to ball valves for water supply?",
+      "section": "sanitary appliances water fittings",
+      "expected": [
+        "IS 1700"
+      ],
+      "retrieved": [
+        "IS 13049",
+        "IS 1701",
+        "IS 12234"
+      ],
+      "mrr": 0.0
+    },
+    {
+      "id": "TEST-095",
+      "query": "What specification covers anhydrite flooring gypsum?",
+      "section": "gypsum building materials",
+      "expected": [
+        "IS 2849"
+      ],
+      "retrieved": [
+        "IS 1478",
+        "IS 2547 (Part 2)",
+        "IS 13317"
+      ],
+      "mrr": 0.0
+    },
+    {
+      "id": "TEST-096",
+      "query": "I need specifications for monohydraulic lime for external plastering. Which stan...",
+      "section": "building limes",
+      "expected": [
+        "IS 3182"
+      ],
+      "retrieved": [
+        "IS 3068",
+        "IS 4762",
+        "IS 2686"
+      ],
+      "mrr": 0.0
+    },
+    {
+      "id": "TEST-097",
+      "query": "What standard covers stone for railway ballast?",
+      "section": "stones",
+      "expected": [
+        "IS 9394"
+      ],
+      "retrieved": [
+        "IS 3620",
+        "IS 10388",
+        "IS 6579"
+      ],
+      "mrr": 0.0
+    },
+    {
+      "id": "TEST-098",
+      "query": "I need specifications for collapsible gates for buildings. Which standard?",
+      "section": "doors windows shutters",
+      "expected": [
+        "IS 5930"
+      ],
+      "retrieved": [
+        "IS 10521",
+        "IS 2849",
+        "IS 13349"
+      ],
+      "mrr": 0.0
+    },
+    {
+      "id": "TEST-099",
+      "query": "What standard covers rolling shutters for warehouses?",
+      "section": "doors windows shutters",
+      "expected": [
+        "IS 6315"
+      ],
+      "retrieved": [
+        "IS 6248",
+        "IS 12896",
+        "IS 10451"
+      ],
+      "mrr": 0.0
+    },
+    {
+      "id": "TEST-100",
+      "query": "Our company produces hinges for doors. What standard covers the requirements?",
+      "section": "builders hardware",
+      "expected": [
+        "IS 205"
+      ],
+      "retrieved": [
+        "IS 206",
+        "IS 453",
+        "IS 12817"
+      ],
+      "mrr": 0.0
+    }
+  ],
+  "section_misses": {
+    "2": 3,
+    "3": 2,
+    "4": 1,
+    "5": 2,
+    "6": 4,
+    "7": 2,
+    "8": 5,
+    "9": 2,
+    "10": 4,
+    "11": 2,
+    "12": 2,
+    "13": 3,
+    "14": 2,
+    "16": 2,
+    "17": 2,
+    "19": 3,
+    "20": 1,
+    "21": 2,
+    "22": 1,
+    "23": 4,
+    "24": 5,
+    "25": 2,
+    "26": 2,
+    "27": 1,
+    "1": 1,
+    "15": 1,
+    "18": 1
+  }
+}

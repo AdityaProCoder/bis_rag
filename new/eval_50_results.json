@@ -1,0 +1,652 @@
+[
+  {
+    "id": "EVAL50-01",
+    "query": "what standard covers mineral fiber hydraulic binder cable conduits and troughs?",
+    "expected_standards": [
+      "IS 8870"
+    ],
+    "retrieved_standards": [
+      "IS 8870",
+      "IS 3419",
+      "IS 11925"
+    ],
+    "latency_seconds": 7.8
+  },
+  {
+    "id": "EVAL50-02",
+    "query": "What standard covers fasteners  threaded steel fasteners  step bolt for steel structures?",
+    "expected_standards": [
+      "IS 10238"
+    ],
+    "retrieved_standards": [
+      "IS 10238",
+      "IS 12427",
+      "IS 6113"
+    ],
+    "latency_seconds": 0.51
+  },
+  {
+    "id": "EVAL50-03",
+    "query": "What standard covers fabricated pvc fitting for potable w ater supplies part 13 specific requirements for 11 o bends?",
+    "expected_standards": [
+      "IS 10124 (Part Part 13)"
+    ],
+    "retrieved_standards": [
+      "IS 10124 (Part Part 13)",
+      "IS 10124 (Part 11)",
+      "IS 10124 (Part 12)"
+    ],
+    "latency_seconds": 0.52
+  },
+  {
+    "id": "EVAL50-04",
+    "query": "What is the BIS standard for electrodes manual arc?",
+    "expected_standards": [
+      "IS 1395"
+    ],
+    "retrieved_standards": [
+      "IS 1395",
+      "IS 5511",
+      "IS 814"
+    ],
+    "latency_seconds": 0.44
+  },
+  {
+    "id": "EVAL50-05",
+    "query": "BIS standard for tiles combined with blocks?",
+    "expected_standards": [
+      "IS 13753"
+    ],
+    "retrieved_standards": [
+      "IS 1130",
+      "IS 1128",
+      "IS 3115"
+    ],
+    "latency_seconds": 0.38
+  },
+  {
+    "id": "EVAL50-06",
+    "query": "what standard covers gypsum building plaster part 2 premixed lightweight plasters?",
+    "expected_standards": [
+      "IS 2547 (Part Part 2)"
+    ],
+    "retrieved_standards": [
+      "IS 2547 (Part Part 2)",
+      "IS 2547 (Part 1)",
+      "IS 2095 (Part 3)"
+    ],
+    "latency_seconds": 0.35
+  },
+  {
+    "id": "EVAL50-07",
+    "query": "BIS standard for flooring combined with unplasticized?",
+    "expected_standards": [
+      "IS 3462"
+    ],
+    "retrieved_standards": [
+      "IS 3462",
+      "IS 12818",
+      "IS 809"
+    ],
+    "latency_seconds": 0.37
+  },
+  {
+    "id": "EVAL50-08",
+    "query": "what standard covers preformed rigid polyurethane  pur and polyisocyanurate ?",
+    "expected_standards": [
+      "IS 12436"
+    ],
+    "retrieved_standards": [
+      "IS 12436",
+      "IS 3419",
+      "IS 2508"
+    ],
+    "latency_seconds": 0.2
+  },
+  {
+    "id": "EVAL50-09",
+    "query": "What standard covers pvc insulated cable for working volta ges up to and including 1100 volts?",
+    "expected_standards": [
+      "IS 694"
+    ],
+    "retrieved_standards": [
+      "IS 694",
+      "IS 7098 (Part 1)",
+      "IS 9968 (Part 1)"
+    ],
+    "latency_seconds": 0.61
+  },
+  {
+    "id": "EVAL50-10",
+    "query": "I need the BIS code for concrete products applications.",
+    "expected_standards": [
+      "IS 13753"
+    ],
+    "retrieved_standards": [
+      "IS 14871",
+      "IS 383",
+      "IS 9893"
+    ],
+    "latency_seconds": 0.41
+  },
+  {
+    "id": "EVAL50-11",
+    "query": "What standard covers dust pressed ceramic tiles with wa ter absorption of e group b iii?",
+    "expected_standards": [
+      "IS 13753"
+    ],
+    "retrieved_standards": [
+      "IS 13753",
+      "IS 13756",
+      "IS 13755"
+    ],
+    "latency_seconds": 0.53
+  },
+  {
+    "id": "EVAL50-12",
+    "query": "What BIS standard applies to materials used for other?",
+    "expected_standards": [
+      "IS 5374"
+    ],
+    "retrieved_standards": [
+      "IS 9537 (Part 5)",
+      "IS 14772",
+      "IS 13026"
+    ],
+    "latency_seconds": 0.38
+  },
+  {
+    "id": "EVAL50-13",
+    "query": "BIS standard for vitreous combined with diaphragm?",
+    "expected_standards": [
+      "IS 2556 (Part Part 1)"
+    ],
+    "retrieved_standards": [
+      "IS 2556 (Part 14)",
+      "IS 2556 (Part Part 1)",
+      "IS 2556 (Part 4)"
+    ],
+    "latency_seconds": 0.1
+  },
+  {
+    "id": "EVAL50-14",
+    "query": "BIS standard for requirements combined with test?",
+    "expected_standards": [
+      "IS 10124 (Part Part 2)"
+    ],
+    "retrieved_standards": [
+      "IS 2556 (Part 14)",
+      "IS 771 (Part 2)",
+      "IS 2556 (Part 2)"
+    ],
+    "latency_seconds": 0.27
+  },
+  {
+    "id": "EVAL50-15",
+    "query": "What is the BIS standard for two parts polysulphide?",
+    "expected_standards": [
+      "IS 12118 (Part Part 1)"
+    ],
+    "retrieved_standards": [
+      "IS 12118 (Part Part 1)",
+      "IS 11433 (Part 1)",
+      "IS 14443"
+    ],
+    "latency_seconds": 0.4
+  },
+  {
+    "id": "EVAL50-16",
+    "query": "What is the BIS standard for coal tar percent?",
+    "expected_standards": [
+      "IS 212"
+    ],
+    "retrieved_standards": [
+      "IS 212",
+      "IS 216",
+      "IS 9912"
+    ],
+    "latency_seconds": 0.39
+  },
+  {
+    "id": "EVAL50-17",
+    "query": "BIS standard for mild combined with washers?",
+    "expected_standards": [
+      "IS 280"
+    ],
+    "retrieved_standards": [
+      "IS 8033",
+      "IS 5374",
+      "IS 5369"
+    ],
+    "latency_seconds": 0.09
+  },
+  {
+    "id": "EVAL50-18",
+    "query": "What BIS standard applies to materials used for structural?",
+    "expected_standards": [
+      "IS 3757"
+    ],
+    "retrieved_standards": [
+      "IS 10701",
+      "IS 9537 (Part 5)",
+      "IS 3629"
+    ],
+    "latency_seconds": 0.38
+  },
+  {
+    "id": "EVAL50-19",
+    "query": "What standard covers rectangular pressed steel tanks?",
+    "expected_standards": [
+      "IS 804"
+    ],
+    "retrieved_standards": [
+      "IS 804",
+      "IS 1732",
+      "IS 1726"
+    ],
+    "latency_seconds": 0.4
+  },
+  {
+    "id": "EVAL50-20",
+    "query": "BIS standard for tanks combined with tubes?",
+    "expected_standards": [
+      "IS 804"
+    ],
+    "retrieved_standards": [
+      "IS 1239 (Part 1)",
+      "IS 804",
+      "IS 1239 (Part 2)"
+    ],
+    "latency_seconds": 0.45
+  },
+  {
+    "id": "EVAL50-21",
+    "query": "What is the BIS standard for silicone based repellents?",
+    "expected_standards": [
+      "IS 12027"
+    ],
+    "retrieved_standards": [
+      "IS 12027",
+      "IS 9912",
+      "IS 8363"
+    ],
+    "latency_seconds": 0.38
+  },
+  {
+    "id": "EVAL50-22",
+    "query": "What is the BIS standard for sash aluminium windows?",
+    "expected_standards": [
+      "IS 1949"
+    ],
+    "retrieved_standards": [
+      "IS 1949",
+      "IS 1361",
+      "IS 1948"
+    ],
+    "latency_seconds": 0.43
+  },
+  {
+    "id": "EVAL50-23",
+    "query": "what standard covers ceramic unglazed glass-like acid resisting tiles?",
+    "expected_standards": [
+      "IS 4457"
+    ],
+    "retrieved_standards": [
+      "IS 4457",
+      "IS 4860",
+      "IS 9510"
+    ],
+    "latency_seconds": 0.42
+  },
+  {
+    "id": "EVAL50-24",
+    "query": "What is the BIS standard for use temperatures type?",
+    "expected_standards": [
+      "IS 7509"
+    ],
+    "retrieved_standards": [
+      "IS 7509",
+      "IS 3419",
+      "IS 11308"
+    ],
+    "latency_seconds": 0.38
+  },
+  {
+    "id": "EVAL50-25",
+    "query": "Which Indian Standard governs concrete in construction?",
+    "expected_standards": [
+      "IS 1784"
+    ],
+    "retrieved_standards": [
+      "IS 9893",
+      "IS 14201",
+      "IS 12440"
+    ],
+    "latency_seconds": 0.2
+  },
+  {
+    "id": "EVAL50-26",
+    "query": "Show me the standard for pipes fittings.",
+    "expected_standards": [
+      "IS 4984"
+    ],
+    "retrieved_standards": [
+      "IS 11925",
+      "IS 10124 (Part 1)",
+      "IS 1230"
+    ],
+    "latency_seconds": 0.76
+  },
+  {
+    "id": "EVAL50-27",
+    "query": "Show me the standard for roofing sheets.",
+    "expected_standards": [
+      "IS 638"
+    ],
+    "retrieved_standards": [
+      "IS 12583",
+      "IS 10388",
+      "IS 15476"
+    ],
+    "latency_seconds": 0.58
+  },
+  {
+    "id": "EVAL50-28",
+    "query": "What standard covers wrought aluminium and aluminium alloy sheet and strip for general engineering purposes?",
+    "expected_standards": [
+      "IS 737"
+    ],
+    "retrieved_standards": [
+      "IS 737",
+      "IS 736",
+      "IS 738"
+    ],
+    "latency_seconds": 0.51
+  },
+  {
+    "id": "EVAL50-29",
+    "query": "Show me the standard for aluminium.",
+    "expected_standards": [
+      "IS 737"
+    ],
+    "retrieved_standards": [
+      "IS 5384",
+      "IS 736",
+      "IS 3921"
+    ],
+    "latency_seconds": 0.34
+  },
+  {
+    "id": "EVAL50-30",
+    "query": "BIS standard for water combined with plug?",
+    "expected_standards": [
+      "IS 12027"
+    ],
+    "retrieved_standards": [
+      "IS 3004",
+      "IS 6538",
+      "IS 3311"
+    ],
+    "latency_seconds": 0.5
+  },
+  {
+    "id": "EVAL50-31",
+    "query": "what standard covers flat transparent sheet glass?",
+    "expected_standards": [
+      "IS 2835"
+    ],
+    "retrieved_standards": [
+      "IS 2835",
+      "IS 14862",
+      "IS 12866"
+    ],
+    "latency_seconds": 0.41
+  },
+  {
+    "id": "EVAL50-32",
+    "query": "BIS standard for gypsum combined with use?",
+    "expected_standards": [
+      "IS 2547 (Part Part 2)"
+    ],
+    "retrieved_standards": [
+      "IS 2095 (Part 3)",
+      "IS 8272",
+      "IS 2547 (Part Part 2)"
+    ],
+    "latency_seconds": 0.36
+  },
+  {
+    "id": "EVAL50-33",
+    "query": "what standard covers high strength structural bolts?",
+    "expected_standards": [
+      "IS 3757"
+    ],
+    "retrieved_standards": [
+      "IS 3757",
+      "IS 6623",
+      "IS 6639"
+    ],
+    "latency_seconds": 0.46
+  },
+  {
+    "id": "EVAL50-34",
+    "query": "What is the BIS standard for glazed stoneware taper?",
+    "expected_standards": [
+      "IS 651"
+    ],
+    "retrieved_standards": [
+      "IS 651",
+      "IS 3006",
+      "IS 771 (Part 1)"
+    ],
+    "latency_seconds": 0.48
+  },
+  {
+    "id": "EVAL50-35",
+    "query": "Show me the standard for roofing sheets.",
+    "expected_standards": [
+      "IS 2835"
+    ],
+    "retrieved_standards": [
+      "IS 12583",
+      "IS 10388",
+      "IS 15476"
+    ],
+    "latency_seconds": 0.4
+  },
+  {
+    "id": "EVAL50-36",
+    "query": "what standard covers dimension for wrought aluminum and aluminum alloys wire?",
+    "expected_standards": [
+      "IS 2525"
+    ],
+    "retrieved_standards": [
+      "IS 2525",
+      "IS 2677",
+      "IS 2676"
+    ],
+    "latency_seconds": 0.41
+  },
+  {
+    "id": "EVAL50-37",
+    "query": "Show me the standard for bitumen.",
+    "expected_standards": [
+      "IS 8374"
+    ],
+    "retrieved_standards": [
+      "IS 13026",
+      "IS 3384",
+      "IS 12583"
+    ],
+    "latency_seconds": 0.37
+  },
+  {
+    "id": "EVAL50-38",
+    "query": "What standard covers fabricated pvc fittings for potable water supplies part 6 specific requirements for flanged tail pieces with mettallic flanges?",
+    "expected_standards": [
+      "IS 10124 (Part Part 6)"
+    ],
+    "retrieved_standards": [
+      "IS 10124 (Part Part 6)",
+      "IS 10124 (Part 4)",
+      "IS 7834 (Part 6)"
+    ],
+    "latency_seconds": 0.29
+  },
+  {
+    "id": "EVAL50-39",
+    "query": "What is the BIS standard for structural nuts strength?",
+    "expected_standards": [
+      "IS 6623"
+    ],
+    "retrieved_standards": [
+      "IS 6623",
+      "IS 6610",
+      "IS 3757"
+    ],
+    "latency_seconds": 0.45
+  },
+  {
+    "id": "EVAL50-40",
+    "query": "What standard covers injection moulded pvc soc ket fittings with solvent cement joints for water supplies part specific requirements for 90 0 elbows?",
+    "expected_standards": [
+      "IS 7834 (Part Part 3)"
+    ],
+    "retrieved_standards": [
+      "IS 7834 (Part Part 3)",
+      "IS 7834 (Part 5)",
+      "IS 7834 (Part 4)"
+    ],
+    "latency_seconds": 0.28
+  },
+  {
+    "id": "EVAL50-41",
+    "query": "What is the BIS standard for enamelled flat rim?",
+    "expected_standards": [
+      "IS 8718"
+    ],
+    "retrieved_standards": [
+      "IS 8718",
+      "IS 772",
+      "IS 3489"
+    ],
+    "latency_seconds": 0.09
+  },
+  {
+    "id": "EVAL50-42",
+    "query": "what standard covers fasteners  threaded reinforcement bars fasteners  step bolt for reinforcement bars structures?",
+    "expected_standards": [
+      "IS 10238"
+    ],
+    "retrieved_standards": [
+      "IS 10238",
+      "IS 12427",
+      "IS 432 (Part 1)"
+    ],
+    "latency_seconds": 0.56
+  },
+  {
+    "id": "EVAL50-43",
+    "query": "What standard covers preformed rigid polyurethane  pur and polyisocyanurate ?",
+    "expected_standards": [
+      "IS 12436"
+    ],
+    "retrieved_standards": [
+      "IS 12436",
+      "IS 3419",
+      "IS 2508"
+    ],
+    "latency_seconds": 0.45
+  },
+  {
+    "id": "EVAL50-44",
+    "query": "What standard covers masonry cement?",
+    "expected_standards": [
+      "IS 3466"
+    ],
+    "retrieved_standards": [
+      "IS 3466",
+      "IS 14862",
+      "IS 12440"
+    ],
+    "latency_seconds": 0.39
+  },
+  {
+    "id": "EVAL50-45",
+    "query": "what standard covers unsintered polytetrafluoroethylene  ptfe tape for threads sealing applications?",
+    "expected_standards": [
+      "IS 14643"
+    ],
+    "retrieved_standards": [
+      "IS 14643",
+      "IS 8008 (Part 3)",
+      "IS 10292"
+    ],
+    "latency_seconds": 0.51
+  },
+  {
+    "id": "EVAL50-46",
+    "query": "BIS standard for steel combined with tee?",
+    "expected_standards": [
+      "IS 10238"
+    ],
+    "retrieved_standards": [
+      "IS 1173",
+      "IS 206",
+      "IS 205"
+    ],
+    "latency_seconds": 0.42
+  },
+  {
+    "id": "EVAL50-47",
+    "query": "Show me the standard for cement.",
+    "expected_standards": [
+      "IS 7834 (Part Part 3)"
+    ],
+    "retrieved_standards": [
+      "IS 3466",
+      "IS 8042",
+      "IS 8112"
+    ],
+    "latency_seconds": 0.09
+  },
+  {
+    "id": "EVAL50-48",
+    "query": "BIS standard for minimum combined with diaphragm?",
+    "expected_standards": [
+      "IS 12701"
+    ],
+    "retrieved_standards": [
+      "IS 13049",
+      "IS 12234",
+      "IS 779"
+    ],
+    "latency_seconds": 0.46
+  },
+  {
+    "id": "EVAL50-49",
+    "query": "What is the BIS standard for area reducing alves?",
+    "expected_standards": [
+      "IS 9739"
+    ],
+    "retrieved_standards": [
+      "IS 9739",
+      "IS 5312 (Part 2)",
+      "IS 14846"
+    ],
+    "latency_seconds": 0.47
+  },
+  {
+    "id": "EVAL50-50",
+    "query": "what standard covers sol vent hydraulic binder for use with unplasticized pol yvinyl chloride plastic pipe and fittings?",
+    "expected_standards": [
+      "IS 14182"
+    ],
+    "retrieved_standards": [
+      "IS 14182",
+      "IS 14735",
+      "IS 10124 (Part 1)"
+    ],
+    "latency_seconds": 0.57
+  }
+]

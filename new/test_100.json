@@ -1,0 +1,965 @@
+[
+  {
+    "id": "EVAL-001",
+    "section": 1,
+    "section_name": "cement and concrete",
+    "query": "We are a small enterprise manufacturing 33 Grade Ordinary Portland Cement. Which BIS standard covers the chemical and physical requirements for our product?",
+    "expected_standards": [
+      "IS 269: 1989"
+    ]
+  },
+  {
+    "id": "EVAL-002",
+    "section": 1,
+    "section_name": "cement and concrete",
+    "query": "I need to comply with the regulations for coarse and fine aggregates derived from natural sources intended for use in structural concrete.",
+    "expected_standards": [
+      "IS 383: 1970"
+    ]
+  },
+  {
+    "id": "EVAL-003",
+    "section": 1,
+    "section_name": "cement and concrete",
+    "query": "What is the official specification for manufacturing precast concrete pipes, both with and without reinforcement, for water mains?",
+    "expected_standards": [
+      "IS 458: 2003"
+    ]
+  },
+  {
+    "id": "EVAL-004",
+    "section": 1,
+    "section_name": "cement and concrete",
+    "query": "Our company is shifting to manufacturing hollow and solid lightweight concrete masonry blocks. What standard outlines the dimensions and physical requirements?",
+    "expected_standards": [
+      "IS 2185 (Part 2): 1983"
+    ]
+  },
+  {
+    "id": "EVAL-005",
+    "section": 1,
+    "section_name": "cement and concrete",
+    "query": "Looking for the standard detailing corrugated and semi-corrugated asbestos cement sheets used for roofing and cladding.",
+    "expected_standards": [
+      "IS 459: 1992"
+    ]
+  },
+  {
+    "id": "EVAL-006",
+    "section": 1,
+    "section_name": "cement and concrete",
+    "query": "What is the Indian Standard covering the manufacture, chemical, and physical requirements for Portland slag cement?",
+    "expected_standards": [
+      "IS 455: 1989"
+    ]
+  },
+  {
+    "id": "EVAL-007",
+    "section": 1,
+    "section_name": "cement and concrete",
+    "query": "We are setting up a plant to produce Portland pozzolana cement that is calcined clay based. What is the applicable standard?",
+    "expected_standards": [
+      "IS 1489 (Part 2): 1991"
+    ]
+  },
+  {
+    "id": "EVAL-008",
+    "section": 1,
+    "section_name": "cement and concrete",
+    "query": "Which standard applies to masonry cement used for general purposes where mortars for masonry are required, but not intended for structural concrete?",
+    "expected_standards": [
+      "IS 3466: 1988"
+    ]
+  },
+  {
+    "id": "EVAL-009",
+    "section": 1,
+    "section_name": "cement and concrete",
+    "query": "Looking for the standard that details the composition, manufacture, and testing of supersulphated cement, particularly for marine works or aggressive water conditions.",
+    "expected_standards": [
+      "IS 6909: 1990"
+    ]
+  },
+  {
+    "id": "EVAL-010",
+    "section": 1,
+    "section_name": "cement and concrete",
+    "query": "Our company manufactures White Portland cement for architectural and decorative purposes. Which standard governs its physical and chemical requirements?",
+    "expected_standards": [
+      "IS 8042: 1989"
+    ]
+  },
+  {
+    "id": "EVAL-011",
+    "section": 2,
+    "section_name": "building limes",
+    "query": "Looking for the official Indian Standard that details the manufacture and testing of common burnt clay building bricks.",
+    "expected_standards": [
+      "IS 1077: 1992"
+    ]
+  },
+  {
+    "id": "EVAL-012",
+    "section": 2,
+    "section_name": "building limes",
+    "query": "I need to ensure our building limes products comply with Indian Standards. Which standard should I refer to for requirements?",
+    "expected_standards": [
+      "IS 712: 1984"
+    ]
+  },
+  {
+    "id": "EVAL-013",
+    "section": 2,
+    "section_name": "building limes",
+    "query": "What is the BIS specification for pulverized fuel ash-lime bricks intended for use in building construction?",
+    "expected_standards": [
+      "IS 12894: 2002"
+    ]
+  },
+  {
+    "id": "EVAL-014",
+    "section": 2,
+    "section_name": "building limes",
+    "query": "I need to ensure our broken brick (burnt clay) fine aggregate for use in lime mortar products comply with Indian Standards. Which standard should I refer to for requirements?",
+    "expected_standards": [
+      "IS 3182: 1986"
+    ]
+  },
+  {
+    "id": "EVAL-015",
+    "section": 3,
+    "section_name": "stones",
+    "query": "What is the BIS specification for design loads (otherthan earthquake)forbuildingsandstructures, part-1 dead loads \u2013 unit weights of building materials and stored materials. intended for use in building construction?",
+    "expected_standards": [
+      "IS 875: 1987"
+    ]
+  },
+  {
+    "id": "EVAL-016",
+    "section": 3,
+    "section_name": "stones",
+    "query": "I need to ensure our sand for masonry mortars products comply with Indian Standards. Which standard should I refer to for requirements?",
+    "expected_standards": [
+      "IS 2116: 1980"
+    ]
+  },
+  {
+    "id": "EVAL-017",
+    "section": 3,
+    "section_name": "stones",
+    "query": "Looking for the official Indian Standard that details the manufacture and testing of injection moulded high density polyethylene (hdpe) fittings for potable w ater supplies.",
+    "expected_standards": [
+      "IS 8008: 2003"
+    ]
+  },
+  {
+    "id": "EVAL-018",
+    "section": 3,
+    "section_name": "stones",
+    "query": "Our engineering team is designing a project using sand cast iron spigot and socket soi l, w aste and ventilating pipes, fittings and accessories. What is the applicable BIS standard for its physical and chemical properties?",
+    "expected_standards": [
+      "IS 2002: 1979"
+    ]
+  },
+  {
+    "id": "EVAL-019",
+    "section": 4,
+    "section_name": "wood products for building",
+    "query": "We need to follow the regulatory requirements for wood particle boards (medium densit y) for general purposes. Which standard covers this?",
+    "expected_standards": [
+      "IS 3087: 1985"
+    ]
+  },
+  {
+    "id": "EVAL-020",
+    "section": 4,
+    "section_name": "wood products for building",
+    "query": "What is the BIS specification for structural plywood intended for use in building construction?",
+    "expected_standards": [
+      "IS 10701: 1983"
+    ]
+  },
+  {
+    "id": "EVAL-021",
+    "section": 4,
+    "section_name": "wood products for building",
+    "query": "I need to ensure our wooden flush door shutters (solid core type) products comply with Indian Standards. Which standard should I refer to for requirements?",
+    "expected_standards": [
+      "IS 2202: 1999"
+    ]
+  },
+  {
+    "id": "EVAL-022",
+    "section": 4,
+    "section_name": "wood products for building",
+    "query": "What is the BIS specification for synthetic resin adhesives for constru ction work (non-structural) in wood intended for use in building construction?",
+    "expected_standards": [
+      "IS 851: 1978"
+    ]
+  },
+  {
+    "id": "EVAL-023",
+    "section": 5,
+    "section_name": "gypsum building materials",
+    "query": "We are a construction firm looking for the BIS standard covering gypsum building plasters. Can you help us with the correct specification?",
+    "expected_standards": [
+      "IS 2547: 1976"
+    ]
+  },
+  {
+    "id": "EVAL-024",
+    "section": 5,
+    "section_name": "gypsum building materials",
+    "query": "We need to follow the regulatory requirements for gypsum plaster for use in the manufacture of fibrous plaster boards. Which standard covers this?",
+    "expected_standards": [
+      "IS 8272: 1984"
+    ]
+  },
+  {
+    "id": "EVAL-025",
+    "section": 5,
+    "section_name": "gypsum building materials",
+    "query": "We are a construction firm looking for the BIS standard covering non-load bearing gypsum partition blocks (solid and hollow types). Can you help us with the correct specification?",
+    "expected_standards": [
+      "IS 2849: 1983"
+    ]
+  },
+  {
+    "id": "EVAL-026",
+    "section": 5,
+    "section_name": "gypsum building materials",
+    "query": "Our engineering team is designing a project using gypsum plaster boards. What is the applicable BIS standard for its physical and chemical properties?",
+    "expected_standards": [
+      "IS 2095: 1996"
+    ]
+  },
+  {
+    "id": "EVAL-027",
+    "section": 6,
+    "section_name": "timber",
+    "query": "We are a construction firm looking for the BIS standard covering timber door, window and ventilator frames. Can you help us with the correct specification?",
+    "expected_standards": [
+      "IS 4021: 1995"
+    ]
+  },
+  {
+    "id": "EVAL-028",
+    "section": 6,
+    "section_name": "timber",
+    "query": "We need to follow the regulatory requirements for timber panelled and glazed shutters. Which standard covers this?",
+    "expected_standards": [
+      "IS 1003: 2003"
+    ]
+  },
+  {
+    "id": "EVAL-029",
+    "section": 6,
+    "section_name": "timber",
+    "query": "What is the BIS specification for timber for cooling towers intended for use in building construction?",
+    "expected_standards": [
+      "IS 2372: 2004"
+    ]
+  },
+  {
+    "id": "EVAL-030",
+    "section": 6,
+    "section_name": "timber",
+    "query": "What is the BIS specification for laminated veneer lumber intended for use in building construction?",
+    "expected_standards": [
+      "IS 14616: 1999"
+    ]
+  },
+  {
+    "id": "EVAL-031",
+    "section": 7,
+    "section_name": "bitumen and tar products",
+    "query": "I need to ensure our bitumen mastic, acid \u2013 resisting gr ade products comply with Indian Standards. Which standard should I refer to for requirements?",
+    "expected_standards": [
+      "IS 9510: 1980"
+    ]
+  },
+  {
+    "id": "EVAL-032",
+    "section": 7,
+    "section_name": "bitumen and tar products",
+    "query": "We are a construction firm looking for the BIS standard covering general requirement for enamelled c ast iron sanitary appliances. Can you help us with the correct specification?",
+    "expected_standards": [
+      "IS 772: 1973"
+    ]
+  },
+  {
+    "id": "EVAL-033",
+    "section": 7,
+    "section_name": "bitumen and tar products",
+    "query": "Our engineering team is designing a project using vitreous sanitary appli ances (vitreous china ). What is the applicable BIS standard for its physical and chemical properties?",
+    "expected_standards": [
+      "IS 2556: 1994"
+    ]
+  },
+  {
+    "id": "EVAL-034",
+    "section": 7,
+    "section_name": "bitumen and tar products",
+    "query": "We are a construction firm looking for the BIS standard covering bitumen mastic for flooring. Can you help us with the correct specification?",
+    "expected_standards": [
+      "IS 1195: 2002"
+    ]
+  },
+  {
+    "id": "EVAL-035",
+    "section": 8,
+    "section_name": "floor wall roof coverings finishes",
+    "query": "I need to ensure our corrugated bitmen roofing sheets products comply with Indian Standards. Which standard should I refer to for requirements?",
+    "expected_standards": [
+      "IS 12583: 1988"
+    ]
+  },
+  {
+    "id": "EVAL-036",
+    "section": 8,
+    "section_name": "floor wall roof coverings finishes",
+    "query": "We need to follow the regulatory requirements for wall and roofing nails. Which standard covers this?",
+    "expected_standards": [
+      "IS 6733: 1972"
+    ]
+  },
+  {
+    "id": "EVAL-037",
+    "section": 8,
+    "section_name": "floor wall roof coverings finishes",
+    "query": "I need to ensure our burnt clay jallies products comply with Indian Standards. Which standard should I refer to for requirements?",
+    "expected_standards": [
+      "IS 7556: 1988"
+    ]
+  },
+  {
+    "id": "EVAL-038",
+    "section": 8,
+    "section_name": "floor wall roof coverings finishes",
+    "query": "I need to ensure our burnt clay\u2013flat terracing tiles products comply with Indian Standards. Which standard should I refer to for requirements?",
+    "expected_standards": [
+      "IS 2690: 1993"
+    ]
+  },
+  {
+    "id": "EVAL-039",
+    "section": 9,
+    "section_name": "waterproofing damp proofing",
+    "query": "Looking for the official Indian Standard that details the manufacture and testing of cast iron grating for drainage purp oses.",
+    "expected_standards": [
+      "IS 5961: 1970"
+    ]
+  },
+  {
+    "id": "EVAL-040",
+    "section": 9,
+    "section_name": "waterproofing damp proofing",
+    "query": "I need to ensure our taper washers for i-beams (ismb) products comply with Indian Standards. Which standard should I refer to for requirements?",
+    "expected_standards": [
+      "IS 5374: 1975"
+    ]
+  },
+  {
+    "id": "EVAL-041",
+    "section": 9,
+    "section_name": "waterproofing damp proofing",
+    "query": "Which BIS standard outlines the dimensions and quality requirements for rubber sealig rings for gas mains, water mains and sewers?",
+    "expected_standards": [
+      "IS 5382: 1985"
+    ]
+  },
+  {
+    "id": "EVAL-042",
+    "section": 9,
+    "section_name": "waterproofing damp proofing",
+    "query": "Looking for the official Indian Standard that details the manufacture and testing of plug cocks for water supply purposes.",
+    "expected_standards": [
+      "IS 3004: 1979"
+    ]
+  },
+  {
+    "id": "EVAL-043",
+    "section": 10,
+    "section_name": "sanitary appliances water fittings",
+    "query": "We are a construction firm looking for the BIS standard covering centrifugally cast (spun) iron press ure pipes for w ater, gas and sew age. Can you help us with the correct specification?",
+    "expected_standards": [
+      "IS 1536: 2001"
+    ]
+  },
+  {
+    "id": "EVAL-044",
+    "section": 10,
+    "section_name": "sanitary appliances water fittings",
+    "query": "I need to ensure our fabricated pvc fittings for potable water supplies products comply with Indian Standards. Which standard should I refer to for requirements?",
+    "expected_standards": [
+      "IS 10124: 1988"
+    ]
+  },
+  {
+    "id": "EVAL-045",
+    "section": 10,
+    "section_name": "sanitary appliances water fittings",
+    "query": "We need to follow the regulatory requirements for lead pipes \u2013 for other than chemical purposes. Which standard covers this?",
+    "expected_standards": [
+      "IS 404: 1993"
+    ]
+  },
+  {
+    "id": "EVAL-046",
+    "section": 10,
+    "section_name": "sanitary appliances water fittings",
+    "query": "Looking for the official Indian Standard that details the manufacture and testing of cast iron screw-down stop v alves a nd stop and check v alves for w ater works purposes.",
+    "expected_standards": [
+      "IS 9338: 1984"
+    ]
+  },
+  {
+    "id": "EVAL-047",
+    "section": 11,
+    "section_name": "builders hardware",
+    "query": "We need to follow the regulatory requirements for tee and strap hinges. Which standard covers this?",
+    "expected_standards": [
+      "IS 206: 1992"
+    ]
+  },
+  {
+    "id": "EVAL-048",
+    "section": 11,
+    "section_name": "builders hardware",
+    "query": "We need to follow the regulatory requirements for sliding locking bolts for use with padlocks. Which standard covers this?",
+    "expected_standards": [
+      "IS 7534: 1985"
+    ]
+  },
+  {
+    "id": "EVAL-049",
+    "section": 11,
+    "section_name": "builders hardware",
+    "query": "Which BIS standard outlines the dimensions and quality requirements for steel butt hinges?",
+    "expected_standards": [
+      "IS 1341: 1992"
+    ]
+  },
+  {
+    "id": "EVAL-050",
+    "section": 11,
+    "section_name": "builders hardware",
+    "query": "I need to ensure our hexagon bolts for steel structures products comply with Indian Standards. Which standard should I refer to for requirements?",
+    "expected_standards": [
+      "IS 6639: 1972"
+    ]
+  },
+  {
+    "id": "EVAL-051",
+    "section": 12,
+    "section_name": "wood products",
+    "query": "Which BIS standard outlines the dimensions and quality requirements for wood products-prelaminated particles boards?",
+    "expected_standards": [
+      "IS 12823: 1990"
+    ]
+  },
+  {
+    "id": "EVAL-052",
+    "section": 12,
+    "section_name": "wood products",
+    "query": "We are a construction firm looking for the BIS standard covering dimensions and tolerance s relating to wood based panel materials. Can you help us with the correct specification?",
+    "expected_standards": [
+      "IS 12049: 1987"
+    ]
+  },
+  {
+    "id": "EVAL-053",
+    "section": 12,
+    "section_name": "wood products",
+    "query": "I need to ensure our coniferous logs products comply with Indian Standards. Which standard should I refer to for requirements?",
+    "expected_standards": [
+      "IS 5246: 2000"
+    ]
+  },
+  {
+    "id": "EVAL-054",
+    "section": 12,
+    "section_name": "wood products",
+    "query": "Our engineering team is designing a project using door closers - concealed type (hydraulically regulated). What is the applicable BIS standard for its physical and chemical properties?",
+    "expected_standards": [
+      "IS 14912: 2001"
+    ]
+  },
+  {
+    "id": "EVAL-055",
+    "section": 13,
+    "section_name": "doors windows shutters",
+    "query": "What is the BIS specification for mortice dead locks intended for use in building construction?",
+    "expected_standards": [
+      "IS 7540: 1974"
+    ]
+  },
+  {
+    "id": "EVAL-056",
+    "section": 13,
+    "section_name": "doors windows shutters",
+    "query": "What is the BIS specification for hydraulically regulated door closer intended for use in building construction?",
+    "expected_standards": [
+      "IS 3564: 1995"
+    ]
+  },
+  {
+    "id": "EVAL-057",
+    "section": 13,
+    "section_name": "doors windows shutters",
+    "query": "I need to ensure our door closers (pneumatically regulate d) for light doors weighing upto 40 kg products comply with Indian Standards. Which standard should I refer to for requirements?",
+    "expected_standards": [
+      "IS 6343: 1982"
+    ]
+  },
+  {
+    "id": "EVAL-058",
+    "section": 13,
+    "section_name": "doors windows shutters",
+    "query": "I need to ensure our floor door stoppers products comply with Indian Standards. Which standard should I refer to for requirements?",
+    "expected_standards": [
+      "IS 1823: 1980"
+    ]
+  },
+  {
+    "id": "EVAL-059",
+    "section": 14,
+    "section_name": "concrete reinforcement",
+    "query": "Looking for the official Indian Standard that details the manufacture and testing of rectangular pressed steel tanks.",
+    "expected_standards": [
+      "IS 804: 1967"
+    ]
+  },
+  {
+    "id": "EVAL-060",
+    "section": 14,
+    "section_name": "concrete reinforcement",
+    "query": "What is the BIS specification for burnt clay facing bricks intended for use in building construction?",
+    "expected_standards": [
+      "IS 2691: 1988"
+    ]
+  },
+  {
+    "id": "EVAL-061",
+    "section": 14,
+    "section_name": "concrete reinforcement",
+    "query": "Which BIS standard outlines the dimensions and quality requirements for fusion bonded epoxy coated reinforcing bars?",
+    "expected_standards": [
+      "IS 13620: 1993"
+    ]
+  },
+  {
+    "id": "EVAL-062",
+    "section": 14,
+    "section_name": "concrete reinforcement",
+    "query": "I need to ensure our cold formed light gauge structural st eel sections products comply with Indian Standards. Which standard should I refer to for requirements?",
+    "expected_standards": [
+      "IS 811: 1987"
+    ]
+  },
+  {
+    "id": "EVAL-063",
+    "section": 15,
+    "section_name": "structural steels",
+    "query": "What is the BIS specification for fibre hard boards intended for use in building construction?",
+    "expected_standards": [
+      "IS 1658: 1977"
+    ]
+  },
+  {
+    "id": "EVAL-064",
+    "section": 15,
+    "section_name": "structural steels",
+    "query": "Our engineering team is designing a project using structural weather resistance steels. What is the applicable BIS standard for its physical and chemical properties?",
+    "expected_standards": [
+      "IS 11587: 1986"
+    ]
+  },
+  {
+    "id": "EVAL-065",
+    "section": 15,
+    "section_name": "structural steels",
+    "query": "What is the BIS specification for steel windows for industrial buildi ngs intended for use in building construction?",
+    "expected_standards": [
+      "IS 1361: 1978"
+    ]
+  },
+  {
+    "id": "EVAL-066",
+    "section": 15,
+    "section_name": "structural steels",
+    "query": "I need to ensure our wooden sleepers for railw ay track products comply with Indian Standards. Which standard should I refer to for requirements?",
+    "expected_standards": [
+      "IS 10394: 1982"
+    ]
+  },
+  {
+    "id": "EVAL-067",
+    "section": 16,
+    "section_name": "light metal alloys",
+    "query": "Looking for the official Indian Standard that details the manufacture and testing of wrought aluminium and aluminium alloys-wire for general engineering purposes.",
+    "expected_standards": [
+      "IS 739: 1992"
+    ]
+  },
+  {
+    "id": "EVAL-068",
+    "section": 16,
+    "section_name": "light metal alloys",
+    "query": "What is the BIS specification for dimension for wrought aluminium and aluminium alloys, wire intended for use in building construction?",
+    "expected_standards": [
+      "IS 2525: 1982"
+    ]
+  },
+  {
+    "id": "EVAL-069",
+    "section": 16,
+    "section_name": "light metal alloys",
+    "query": "Looking for the official Indian Standard that details the manufacture and testing of wrought aluminium and aluminium alloy sheet and strip for general engineering purposes.",
+    "expected_standards": [
+      "IS 737: 1986"
+    ]
+  },
+  {
+    "id": "EVAL-070",
+    "section": 16,
+    "section_name": "light metal alloys",
+    "query": "Looking for the official Indian Standard that details the manufacture and testing of copper alloy gate, globe and check v alves for water works purposes.",
+    "expected_standards": [
+      "IS 778: 1984"
+    ]
+  },
+  {
+    "id": "EVAL-071",
+    "section": 17,
+    "section_name": "structural shapes",
+    "query": "Our engineering team is designing a project using hasps and staples. What is the applicable BIS standard for its physical and chemical properties?",
+    "expected_standards": [
+      "IS 363: 1993"
+    ]
+  },
+  {
+    "id": "EVAL-072",
+    "section": 17,
+    "section_name": "structural shapes",
+    "query": "I need to ensure our ballies for general purposes products comply with Indian Standards. Which standard should I refer to for requirements?",
+    "expected_standards": [
+      "IS 3337: 1978"
+    ]
+  },
+  {
+    "id": "EVAL-073",
+    "section": 17,
+    "section_name": "structural shapes",
+    "query": "We are a construction firm looking for the BIS standard covering burnt clay soling bricks. Can you help us with the correct specification?",
+    "expected_standards": [
+      "IS 5779: 1986"
+    ]
+  },
+  {
+    "id": "EVAL-074",
+    "section": 17,
+    "section_name": "structural shapes",
+    "query": "What is the BIS specification for hot rolled channel sections for gen eral engineering purposes \u2013 dimensions intended for use in building construction?",
+    "expected_standards": [
+      "IS 3954: 1991"
+    ]
+  },
+  {
+    "id": "EVAL-075",
+    "section": 18,
+    "section_name": "welding electrodes wires",
+    "query": "We need to follow the regulatory requirements for covered electrodes for manual metal a rc welding of carbon and carbon manganese steel. Which standard covers this?",
+    "expected_standards": [
+      "IS 814: 2004"
+    ]
+  },
+  {
+    "id": "EVAL-076",
+    "section": 18,
+    "section_name": "welding electrodes wires",
+    "query": "We need to follow the regulatory requirements for wood poles for over head power and telecommunication lines. Which standard covers this?",
+    "expected_standards": [
+      "IS 876: 1992"
+    ]
+  },
+  {
+    "id": "EVAL-077",
+    "section": 18,
+    "section_name": "welding electrodes wires",
+    "query": "We are a construction firm looking for the BIS standard covering welded steel wire fabric for general use. Can you help us with the correct specification?",
+    "expected_standards": [
+      "IS 4948: 2002"
+    ]
+  },
+  {
+    "id": "EVAL-078",
+    "section": 18,
+    "section_name": "welding electrodes wires",
+    "query": "We are a construction firm looking for the BIS standard covering resistance spot \u2013 welding electro des. Can you help us with the correct specification?",
+    "expected_standards": [
+      "IS 4972: 1968"
+    ]
+  },
+  {
+    "id": "EVAL-079",
+    "section": 19,
+    "section_name": "threaded fasteners rivets",
+    "query": "We are a construction firm looking for the BIS standard covering non-ferrous rivets (1.6 to 10 mm). Can you help us with the correct specification?",
+    "expected_standards": [
+      "IS 2907: 1998"
+    ]
+  },
+  {
+    "id": "EVAL-080",
+    "section": 19,
+    "section_name": "threaded fasteners rivets",
+    "query": "I need to ensure our rigging screws and stretching screws products comply with Indian Standards. Which standard should I refer to for requirements?",
+    "expected_standards": [
+      "IS 3121: 1981"
+    ]
+  },
+  {
+    "id": "EVAL-081",
+    "section": 19,
+    "section_name": "threaded fasteners rivets",
+    "query": "I need to ensure our cold forged steel rivets for cold closing (1 to 16 mm diameter) products comply with Indian Standards. Which standard should I refer to for requirements?",
+    "expected_standards": [
+      "IS 2998: 1982"
+    ]
+  },
+  {
+    "id": "EVAL-082",
+    "section": 19,
+    "section_name": "threaded fasteners rivets",
+    "query": "Our engineering team is designing a project using hot forged steel rivets for hot clos ing (12 to 36 mm diameter). What is the applicable BIS standard for its physical and chemical properties?",
+    "expected_standards": [
+      "IS 1929: 1982"
+    ]
+  },
+  {
+    "id": "EVAL-083",
+    "section": 20,
+    "section_name": "wire ropes wire products",
+    "query": "We are a construction firm looking for the BIS standard covering steel wire suspension ropes for lif ts, elev ators and hoists. Can you help us with the correct specification?",
+    "expected_standards": [
+      "IS 2365: 1977"
+    ]
+  },
+  {
+    "id": "EVAL-084",
+    "section": 20,
+    "section_name": "wire ropes wire products",
+    "query": "I need to ensure our copper wire nails products comply with Indian Standards. Which standard should I refer to for requirements?",
+    "expected_standards": [
+      "IS 725: 1961"
+    ]
+  },
+  {
+    "id": "EVAL-085",
+    "section": 20,
+    "section_name": "wire ropes wire products",
+    "query": "I need to ensure our mild steel wire rod for general engineering purposes products comply with Indian Standards. Which standard should I refer to for requirements?",
+    "expected_standards": [
+      "IS 7887: 1992"
+    ]
+  },
+  {
+    "id": "EVAL-086",
+    "section": 21,
+    "section_name": "glass",
+    "query": "Our engineering team is designing a project using silvered glass mirrors for general purposes. What is the applicable BIS standard for its physical and chemical properties?",
+    "expected_standards": [
+      "IS 3438: 1994"
+    ]
+  },
+  {
+    "id": "EVAL-087",
+    "section": 21,
+    "section_name": "glass",
+    "query": "Looking for the official Indian Standard that details the manufacture and testing of plastic translucent sheet made from thermosetting polyester resin (glass fibre reinforced).",
+    "expected_standards": [
+      "IS 12866: 1989"
+    ]
+  },
+  {
+    "id": "EVAL-088",
+    "section": 21,
+    "section_name": "glass",
+    "query": "We are a construction firm looking for the BIS standard covering safety glass. Can you help us with the correct specification?",
+    "expected_standards": [
+      "IS 2553: 1990"
+    ]
+  },
+  {
+    "id": "EVAL-089",
+    "section": 21,
+    "section_name": "glass",
+    "query": "I need to ensure our glass fibre reinforced plastic (grp ) panel type door shutters for internal use products comply with Indian Standards. Which standard should I refer to for requirements?",
+    "expected_standards": [
+      "IS 14856: 2000"
+    ]
+  },
+  {
+    "id": "EVAL-090",
+    "section": 22,
+    "section_name": "fillers stoppers putties",
+    "query": "I need to ensure our putty, for use on window frames products comply with Indian Standards. Which standard should I refer to for requirements?",
+    "expected_standards": [
+      "IS 419: 1967"
+    ]
+  },
+  {
+    "id": "EVAL-091",
+    "section": 22,
+    "section_name": "fillers stoppers putties",
+    "query": "Which BIS standard outlines the dimensions and quality requirements for cap nuts?",
+    "expected_standards": [
+      "IS 2687: 1991"
+    ]
+  },
+  {
+    "id": "EVAL-092",
+    "section": 23,
+    "section_name": "thermal insulation materials",
+    "query": "Our engineering team is designing a project using expanded polystyrene for thermal insulation purposes. What is the applicable BIS standard for its physical and chemical properties?",
+    "expected_standards": [
+      "IS 4671: 1984"
+    ]
+  },
+  {
+    "id": "EVAL-093",
+    "section": 23,
+    "section_name": "thermal insulation materials",
+    "query": "We are a construction firm looking for the BIS standard covering sprayed mineral wool thermal insulat ion. Can you help us with the correct specification?",
+    "expected_standards": [
+      "IS 9742: 1993"
+    ]
+  },
+  {
+    "id": "EVAL-094",
+    "section": 23,
+    "section_name": "thermal insulation materials",
+    "query": "We are a construction firm looking for the BIS standard covering unbonded rock and slag wool for thermal insulation. Can you help us with the correct specification?",
+    "expected_standards": [
+      "IS 3677: 1985"
+    ]
+  },
+  {
+    "id": "EVAL-095",
+    "section": 23,
+    "section_name": "thermal insulation materials",
+    "query": "We are a construction firm looking for the BIS standard covering hydraulic setting thermal insulatin g castables for temperature upto \u00bac. Can you help us with the correct specification?",
+    "expected_standards": [
+      "IS 11308: 1985"
+    ]
+  },
+  {
+    "id": "EVAL-096",
+    "section": 24,
+    "section_name": "plastics",
+    "query": "Looking for the official Indian Standard that details the manufacture and testing of plastic flushing cisterns for wate r closets and urinals.",
+    "expected_standards": [
+      "IS 7231: 1994"
+    ]
+  },
+  {
+    "id": "EVAL-097",
+    "section": 24,
+    "section_name": "plastics",
+    "query": "I need to ensure our low density particle boards products comply with Indian Standards. Which standard should I refer to for requirements?",
+    "expected_standards": [
+      "IS 3129: 1985"
+    ]
+  },
+  {
+    "id": "EVAL-098",
+    "section": 24,
+    "section_name": "plastics",
+    "query": "We need to follow the regulatory requirements for medium density coirboards for general purposes. Which standard covers this?",
+    "expected_standards": [
+      "IS 15491: 2004"
+    ]
+  },
+  {
+    "id": "EVAL-099",
+    "section": 24,
+    "section_name": "plastics",
+    "query": "Which BIS standard outlines the dimensions and quality requirements for brass tubes forgeneral purposes?",
+    "expected_standards": [
+      "IS 407: 1981"
+    ]
+  },
+  {
+    "id": "EVAL-100",
+    "section": 25,
+    "section_name": "conductors cables",
+    "query": "Looking for the official Indian Standard that details the manufacture and testing of conduits for electrical installations.",
+    "expected_standards": [
+      "IS 9537: 1983"
+    ]
+  },
+  {
+    "id": "EVAL-101",
+    "section": 25,
+    "section_name": "conductors cables",
+    "query": "Our engineering team is designing a project using jointed wood poles for overhead power telecommunication lines. What is the applicable BIS standard for its physical and chemical properties?",
+    "expected_standards": [
+      "IS 6056: 1970"
+    ]
+  },
+  {
+    "id": "EVAL-102",
+    "section": 25,
+    "section_name": "conductors cables",
+    "query": "Our engineering team is designing a project using worm drive clamps for general purpos e. What is the applicable BIS standard for its physical and chemical properties?",
+    "expected_standards": [
+      "IS 4762: 1984"
+    ]
+  },
+  {
+    "id": "EVAL-103",
+    "section": 25,
+    "section_name": "conductors cables",
+    "query": "We are a construction firm looking for the BIS standard covering conduits for electrical installations. Can you help us with the correct specification?",
+    "expected_standards": [
+      "IS 9537: 1980"
+    ]
+  },
+  {
+    "id": "EVAL-104",
+    "section": 26,
+    "section_name": "wiring accessories",
+    "query": "We need to follow the regulatory requirements for switches for domestic and similar purposes. Which standard covers this?",
+    "expected_standards": [
+      "IS 3854: 1997"
+    ]
+  },
+  {
+    "id": "EVAL-105",
+    "section": 26,
+    "section_name": "wiring accessories",
+    "query": "We need to follow the regulatory requirements for switch socket-outlets (non-interlocking type). Which standard covers this?",
+    "expected_standards": [
+      "IS 4615: 1968"
+    ]
+  },
+  {
+    "id": "EVAL-106",
+    "section": 26,
+    "section_name": "wiring accessories",
+    "query": "Looking for the official Indian Standard that details the manufacture and testing of plugs and socket-outlets \u2013 rated voltage upto and including 250 volts and rated current upto and including 16 amperes.",
+    "expected_standards": [
+      "IS 1293: 1988"
+    ]
+  },
+  {
+    "id": "EVAL-107",
+    "section": 26,
+    "section_name": "wiring accessories",
+    "query": "Which BIS standard outlines the dimensions and quality requirements for accessories for rigid steel conduits for electrical wiring?",
+    "expected_standards": [
+      "IS 3837: 1976"
+    ]
+  }
+]
