@@ -410,7 +410,7 @@ function renderResults(data) {
     const standards = data.retrieved || [];
     const rationale = data.rationale || "";
     const latency = Number(data.latency_seconds || 0);
-    const adjustedLatency = (latency / 5).toFixed(2);
+    const realLatency = latency.toFixed(2);
 
     if (standards.length === 0) {
         resultsList.innerHTML = '<div class="empty-state">No standards found. Try broadening your description.</div>';
@@ -424,13 +424,13 @@ function renderResults(data) {
                     <div class="summary-kicker">AI Summary</div>
                     <h3 class="summary-title">Best BIS matches for your query</h3>
                 </div>
-                <div class="summary-latency">Achieved latency ${adjustedLatency}s</div>
+                <div class="summary-latency">Achieved latency ${realLatency}s</div>
             </div>
             <div class="summary-body">
                 <p class="summary-text">${rationale}</p>
                 <div class="summary-label">Recommended standards</div>
                 <div class="summary-standards">
-                    ${standards.slice(0, 5).map(std => `<span class="summary-chip">${std}</span>`).join("")}
+                    ${standards.slice(0, 5).map((std, index) => `<span class="summary-chip${index === 0 ? ' summary-chip-best' : ''}">${std}</span>`).join("")}
                 </div>
             </div>
         </div>
