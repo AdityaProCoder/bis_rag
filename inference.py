@@ -1,31 +1,39 @@
 """
 Standalone BIS Hackathon Inference Script
-Merged from precision_eval_v2.py for plug-and-play submission.
+Deterministic, leakage-free ranking with part/family disambiguation.
 """
+import argparse
 import json
-import time
-import re
+import os
 import pickle
-import faiss
-import numpy as np
-from pathlib import Path
-from sentence_transformers import SentenceTransformer
+import re
+import time
+import urllib.error
 import urllib.request
 from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor, as_completed
-import argparse
+from pathlib import Path
+from threading import Lock
+
+import faiss
+import numpy as np
+from sentence_transformers import SentenceTransformer
 
 # =============================================================================
 # CONFIGURATION
 # =============================================================================
-LM_BASE_URL = "http://127.0.0.1:1234"
-LM_API_KEY = "lmstudio"
-DEFAULT_MODEL = "google/gemma-4-e2b"
 DATA_DIR = Path(__file__).parent / "data"
+LM_BASE_URL = os.getenv("LM_BASE_URL", "http://127.0.0.1:1234")
+LM_API_KEY = os.getenv("LM_API_KEY", "lmstudio")
+LM_MODEL = os.getenv("LM_MODEL", "google/gemma-4-e2b")
 
 try:
     import torch
-    if torch.cuda.is_available():
+
+    if os.getenv("BIS_FORCE_CPU", "0") == "1":
+        EMBED_DEVICE = "cpu"
+        print("[*] BIS_FORCE_CPU=1, using CPU")
+    elif torch.cuda.is_available():
         EMBED_DEVICE = "cuda"
         print(f"[*] Using CUDA: {torch.cuda.get_device_name(0)}")
     else:
@@ -35,54 +43,153 @@ except Exception:
     EMBED_DEVICE = "cpu"
     print("[*] CUDA check failed, using CPU")
 
-TOP_DENSE = 20
-TOP_BM25 = 20
-FUSION_K = 15
-RRF_K = 10
-PARAPHRASE_TOP_DENSE = 50
-RERANK_K = 5
-OUTPUT_K = 5  # Return exactly 5 standards
-LLM_TEMPERATURE = 0.0
-LLM_MAX_TOKENS = 32
+TOP_DENSE = 25
+TOP_BM25 = 25
+PARAPHRASE_TOP_DENSE = 40
+FUSION_K = 18
+FUSION_K_FALLBACK = 30
+RRF_K_DENSE = 12
+RRF_K_BM25 = 8
+OUTPUT_K = 5
 
-MATERIAL_TYPES = [
-    'portland', 'slag', 'pozzolana', 'masonry', 'white', 'super sulphated',
-    'ordinary', 'rapid', 'low heat', 'hydrophobic', 'sulphate resisting',
-    'puzzolana', 'fly ash', 'aggregate', 'cement', 'concrete', 'brick',
-    'lime', 'gypsum', 'plaster', 'mortar', 'timber', 'wood', 'steel',
-    'aluminium', 'aluminum', 'copper', 'zinc', 'glass', 'plastic', 'pvc', 'cpvc',
-    'bitumen', 'tar', 'asphalt', 'felt', 'sheet', 'pipe', 'fiting', 'valve',
-    'malleable', 'cast iron', 'grani', 'slate', 'stone', 'terrazzo'
-]
+LOW_CONFIDENCE_MARGIN = 10.0
+BIS_DEBUG = os.getenv("BIS_DEBUG", "0") == "1"
+
+MATERIAL_TYPES = {
+    "portland",
+    "slag",
+    "pozzolana",
+    "masonry",
+    "white",
+    "supersulphated",
+    "ordinary",
+    "rapid",
+    "hydrophobic",
+    "sulphate",
+    "aggregate",
+    "cement",
+    "concrete",
+    "brick",
+    "lime",
+    "gypsum",
+    "plaster",
+    "mortar",
+    "timber",
+    "wood",
+    "steel",
+    "aluminium",
+    "aluminum",
+    "copper",
+    "zinc",
+    "glass",
+    "plastic",
+    "pvc",
+    "cpvc",
+    "bitumen",
+    "tar",
+    "asphalt",
+    "sheet",
+    "pipe",
+    "fitting",
+    "fittings",
+    "valve",
+    "cast",
+    "granite",
+    "slate",
+    "stone",
+    "sanitary",
+}
 
 PRODUCT_TYPE_KEYWORDS = {
-    'pressure': ['pressure', 'pressurized'],
-    'drainage': ['drainage', 'drain', 'sewer', 'waste'],
-    'structural': ['structural', 'structure', 'load'],
-    'hollow': ['hollow'],
-    'solid': ['solid'],
-    'flush': ['flush'],
-    'slotted': ['slotted'],
-    'raised': ['raised'],
-    'countersunk': ['countersunk'],
-    'plate': ['plate'],
-    'rod': ['rod', 'bar'],
-    'bolt': ['bolt'],
-    'nut': ['nut'],
-    'cap': ['cap'],
-    'screw': ['screw'],
-    'staple': ['staple'],
-    'hasp': ['hasp'],
-    'pipe': ['pipe', 'piping', 'tube'],
-    'fittings': ['fitting', 'fittings'],
-    'granite': ['granite'],
-    'slate': ['slate'],
+    "pressure": ["pressure", "pressurized"],
+    "drainage": ["drainage", "drain", "sewer", "waste"],
+    "structural": ["structural", "structure", "load"],
+    "hollow": ["hollow"],
+    "solid": ["solid"],
+    "flush": ["flush"],
+    "slotted": ["slotted"],
+    "raised": ["raised"],
+    "countersunk": ["countersunk"],
+    "plate": ["plate"],
+    "rod": ["rod", "bar"],
+    "bolt": ["bolt"],
+    "nut": ["nut"],
+    "cap": ["cap"],
+    "screw": ["screw"],
+    "staple": ["staple"],
+    "hasp": ["hasp"],
+    "pipe": ["pipe", "piping", "tube"],
+    "fittings": ["fitting", "fittings"],
+    "sanitary": ["sanitary", "vitreous", "lavatory", "closet", "urinal"],
+    "granite": ["granite"],
+    "slate": ["slate"],
+}
+
+MUTUALLY_EXCLUSIVE_TYPES = {
+    "plate": {"rod", "pipe", "fittings", "bolt", "nut", "screw"},
+    "rod": {"plate", "pipe", "fittings"},
+    "pipe": {"plate", "rod", "bolt", "nut"},
+    "fittings": {"plate", "rod"},
+    "bolt": {"nut", "screw", "plate", "pipe"},
+    "nut": {"bolt", "screw", "plate", "pipe"},
+    "screw": {"bolt", "nut", "plate"},
+    "sanitary": {"plate", "rod", "bolt", "nut"},
+}
+
+STOPWORDS = {
+    "the",
+    "a",
+    "an",
+    "is",
+    "are",
+    "was",
+    "were",
+    "for",
+    "and",
+    "or",
+    "with",
+    "from",
+    "our",
+    "we",
+    "i",
+    "need",
+    "want",
+    "looking",
+    "what",
+    "which",
+    "that",
+    "this",
+    "their",
+    "have",
+    "has",
+    "had",
+    "using",
+    "latest",
+    "applicable",
+    "official",
+    "standard",
+    "specification",
+    "requirements",
 }
 
 # =============================================================================
 # UTILITIES
 # =============================================================================
 _index_store = {}
+_lm_available = None
+_lm_probe_lock = Lock()
+_log_lock = Lock()
+
+
+def log(message):
+    with _log_lock:
+        print(f"[{time.strftime('%H:%M:%S')}] {message}", flush=True)
+
+
+def debug(msg):
+    if BIS_DEBUG:
+        print(f"[debug] {msg}")
+
 
 def standard_key(std):
     explicit = std.get("_key")
@@ -92,117 +199,151 @@ def standard_key(std):
     part = std.get("part")
     if part:
         part_clean = re.sub(r"\s+", " ", str(part).strip().upper())
-        base = f"{base} (Part {part_clean})"
+        base = f"{base} (PART {part_clean})"
     return base
 
-def norm_id(s):
-    base = str(s).split(":")[0].strip()
-    return re.sub(r"\s+", " ", base).upper()
 
-def norm_full(s):
-    base = str(s).split(":")[0].strip()
-    part_m = re.search(r"\(PART[^)]+\)", str(s))
-    part = part_m.group(0) if part_m else ""
-    return re.sub(r"\s+", " ", f"{base} {part}").strip().upper()
+def _compact(value: str) -> str:
+    return re.sub(r"[^A-Z0-9]+", "", str(value).upper())
+
 
 def _loose_standard_key(value: str) -> str:
     text = str(value).upper().replace("PART PART", "PART")
     text = re.sub(r":\s*\d{4}", "", text)
     text = re.sub(r"\s*\(?\s*PART[^)]*\)?", "", text)
-    return re.sub(r"[^A-Z0-9]+", "", text)
+    return _compact(text)
+
+
+def canonical_part(value) -> str:
+    if value is None:
+        return ""
+    text = str(value).strip().upper()
+    if not text:
+        return ""
+    text = re.sub(r"^\s*PART\s*", "", text)
+    text = re.sub(r"\s+", " ", text).strip()
+    roman = {
+        "I": "1",
+        "II": "2",
+        "III": "3",
+        "IV": "4",
+        "V": "5",
+        "VI": "6",
+        "VII": "7",
+        "VIII": "8",
+        "IX": "9",
+        "X": "10",
+    }
+    if text in roman:
+        return roman[text]
+    m = re.search(r"^(\d+)\b", text)
+    if m and "/" not in text and "SEC" not in text:
+        return m.group(1)
+    return text
+
 
 def format_standard_with_year(candidate_id, standards_db):
     s = standards_db.get(candidate_id)
     if not s:
         return candidate_id
     sid = re.sub(r"\s+", " ", str(s.get("id", "")).strip())
-    part = re.sub(r"\s+", " ", str(s.get("part", "") or "").strip())
+    part = canonical_part(s.get("part", "") or "")
     year = re.sub(r"\s+", " ", str(s.get("year", "") or "").strip())
     out = sid
     if part:
-        out += f" ({part})"
+        out += f" (Part {part})"
     if year:
         out += f": {year}"
     return out.strip()
 
-def _find_expected_in_whitelist(query, whitelist, standards_db):
+
+def format_standard_base_with_year(candidate_id, standards_db):
+    s = standards_db.get(candidate_id)
+    if not s:
+        return candidate_id
+    sid = re.sub(r"\s+", " ", str(s.get("id", "")).strip())
+    year = re.sub(r"\s+", " ", str(s.get("year", "") or "").strip())
+    out = sid
+    if year:
+        out += f": {year}"
+    return out.strip()
+
+
+def extract_keywords(text):
+    words = re.findall(r"\b[a-z]{4,}\b", text.lower())
+    return set(w for w in words if w not in STOPWORDS)
+
+
+def get_ngrams(text, n=2):
+    words = re.findall(r"\b[a-z0-9]+\b", text.lower())
+    return {" ".join(words[i : i + n]) for i in range(len(words) - n + 1)} if len(words) >= n else set()
+
+
+def extract_product_type_keywords(query):
     query_lower = query.lower()
-    query_keywords = extract_keywords(query)
-    query_types = extract_product_type_keywords(query_lower)
-    best_match = None
-    best_score = 0
-    best_title_match = 0
-    best_type_match = 0
-    for cid in whitelist:
-        if cid not in standards_db:
-            continue
-        s = standards_db[cid]
-        title = s.get('title', '').lower()
-        content = s.get('content', '')[:200].lower()
-        full_text = f"{title} {content}"
-        title_keywords = set(re.findall(r'\b[a-z]{4,}\b', title))
-        content_keywords = set(re.findall(r'\b[a-z]{4,}\b', full_text))
-        title_match = len(query_keywords & title_keywords)
-        content_match = len(query_keywords & content_keywords) // 2
-        type_match = sum(1 for qt in query_types if qt in title)
-        score = title_match + content_match + type_match * 2
-        if score > best_score or (score == best_score and (title_match > best_title_match or type_match > best_type_match)):
-            best_score = score
-            best_title_match = title_match
-            best_type_match = type_match
-            best_match = cid
-    if best_score >= 3 or best_title_match >= 2:
-        return best_match
-    return None
+    found = set()
+    for ptype, keywords in PRODUCT_TYPE_KEYWORDS.items():
+        if any(kw in query_lower for kw in keywords):
+            found.add(ptype)
+    return found
 
-def apply_year_mapping(retrieved_list, expected_list):
-    if not expected_list:
-        return retrieved_list
-    exp_base = _loose_standard_key(expected_list[0])
-    exp_full = expected_list[0]
-    return [exp_full if _loose_standard_key(s) == exp_base else s for s in retrieved_list]
 
-def _has_part_marker(value: str) -> bool:
-    return bool(re.search(r"\bPART\b", str(value), re.IGNORECASE))
+def parse_query_signals(query):
+    q = query.lower()
+    part_match = re.search(r"\bpart\s*[-:() ]*([ivx]+|\d+)\b", q, re.IGNORECASE)
+    part = canonical_part(part_match.group(1)) if part_match else ""
+    is_numbers = re.findall(r"\bis\s*[-:]?\s*(\d{2,6})\b", q, re.IGNORECASE)
+    keywords = extract_keywords(query)
+    bigrams = get_ngrams(query, 2)
+    product_types = extract_product_type_keywords(query)
+    materials = {m for m in MATERIAL_TYPES if m in q}
+    return {
+        "part": part,
+        "is_numbers": set(is_numbers),
+        "keywords": keywords,
+        "bigrams": bigrams,
+        "product_types": product_types,
+        "materials": materials,
+    }
 
-def promote_base_standard_if_needed(query, retrieved):
-    if not retrieved:
-        return retrieved
-    if _has_part_marker(query):
-        return retrieved
-    top = retrieved[0]
-    if not _has_part_marker(top):
-        return retrieved
-    query_lower = query.lower()
-    product_indicators = [
-        'hollow', 'solid', 'lightweight', 'concrete', 'masonry', 'blocks',
-        'calcined', 'clay', 'based', 'fly', 'ash', 'slag', 'pozzolana',
-        'mortar', 'cement', 'brick', 'tile', 'pipe', 'sheet', 'panel'
-    ]
-    matches = sum(1 for word in product_indicators if word in query_lower)
-    if matches >= 3:
-        return retrieved
-    base_candidate = re.sub(r"\s*\(?\s*PART[^)]*\)?", "", str(top), flags=re.IGNORECASE)
-    base_candidate = re.sub(r"\s+", " ", base_candidate).strip()
-    if not base_candidate:
-        return retrieved
-    promoted = [base_candidate]
-    for item in retrieved:
-        if item != base_candidate:
-            promoted.append(item)
-    return promoted[:len(retrieved)]
+
+def candidate_signals(cand):
+    title = cand.get("title", "")
+    content = cand.get("content", "")[:600]
+    text = f"{title} {content}".lower()
+    sid = str(cand.get("id", "")).strip()
+    sid_num = re.sub(r"[^0-9]", "", sid)
+    part = canonical_part(cand.get("part", "") or "")
+    return {
+        "sid": sid,
+        "sid_num": sid_num,
+        "part": part,
+        "title": title.lower(),
+        "text": text,
+        "keywords": extract_keywords(text),
+        "bigrams": get_ngrams(text, 2),
+        "product_types": extract_product_type_keywords(text),
+        "materials": {m for m in MATERIAL_TYPES if m in text},
+    }
+
 
 def load_indexes():
     global _index_store
     if _index_store:
         return _index_store
+
+    log(f"Loading retrieval indexes from {DATA_DIR} ...")
     faiss_idx = faiss.read_index(str(DATA_DIR / "faiss_index.bin"))
+    log("FAISS index loaded.")
     with open(DATA_DIR / "bm25_index.pkl", "rb") as f:
         bm25_data = pickle.load(f)
+    log("BM25 index loaded.")
     with open(DATA_DIR / "whitelist.txt", "r", encoding="utf-8") as f:
         whitelist = {l.strip(): True for l in f if l.strip()}
-    cfg = json.load(open(DATA_DIR / "embedding_config.json"))
+    log(f"Whitelist loaded ({len(whitelist)} entries).")
+    cfg = json.load(open(DATA_DIR / "embedding_config.json", "r", encoding="utf-8"))
     model = SentenceTransformer(cfg["model_name"], device=EMBED_DEVICE)
+    log(f"Embedding model ready: {cfg['model_name']} on {EMBED_DEVICE}.")
     _index_store = {
         "faiss": faiss_idx,
         "bm25": bm25_data["bm25"],
@@ -212,272 +353,50 @@ def load_indexes():
     }
     return _index_store
 
+
 def g(key):
     return _index_store[key]
 
-# =============================================================================
-# RETRIEVAL
-# =============================================================================
-def retrieve_dense(query, k=20):
-    model = g("model")
-    idx = g("faiss")
-    standards = g("standards")
-    qe = np.array(model.encode([query], normalize_embeddings=True), dtype=np.float32)
-    D, I = idx.search(qe, k)
-    return [(standard_key(standards[i]), float(D[0][j])) for j, i in enumerate(I[0]) if 0 <= i < len(standards)]
 
-def retrieve_bm25(query, k=20):
-    bm = g("bm25")
-    standards = g("standards")
-    scores = bm.get_scores(query.lower().split())
-    top_idx = np.argsort(scores)[::-1][:k]
-    return [(standard_key(standards[i]), float(scores[i])) for i in top_idx if i < len(standards) and scores[i] > 0]
+def lm_studio_available():
+    global _lm_available
+    if _lm_available is not None:
+        return _lm_available
 
-# =============================================================================
-# FUSION
-# =============================================================================
-def fuse_results(dense_results, bm25_results):
-    score_map = {}
-    for rank, (doc_id, score) in enumerate(dense_results, 1):
-        score_map[doc_id] = score_map.get(doc_id, 0) + 1.0 / (RRF_K + rank)
-    BM25_WEIGHT = 5
-    for rank, (doc_id, score) in enumerate(bm25_results, 1):
-        score_map[doc_id] = score_map.get(doc_id, 0) + 1.0 / (BM25_WEIGHT + rank)
-    return sorted(score_map.items(), key=lambda x: x[1], reverse=True)
+    with _lm_probe_lock:
+        if _lm_available is not None:
+            return _lm_available
 
-# =============================================================================
-# PARAPHRASE
-# =============================================================================
-def generate_paraphrase(query):
-    payload = {
-        "model": DEFAULT_MODEL,
-        "max_tokens": 48,
-        "temperature": 0.4,
-        "system": "You are a technical assistant for BIS standards lookup.",
-        "messages": [{"role": "user", "content": f"Rewrite the query using precise BIS technical terminology. Return ONE short sentence only.\n\nQuery: {query}\n\nRewritten:"}]
-    }
-    req = urllib.request.Request(
-        f"{LM_BASE_URL}/v1/messages",
-        data=json.dumps(payload).encode("utf-8"),
-        headers={"Content-Type": "application/json", "x-api-key": LM_API_KEY},
-        method="POST",
-    )
-    try:
-        with urllib.request.urlopen(req, timeout=30) as resp:
-            response = json.loads(resp.read().decode("utf-8"))
-            text = response.get("content", [{}])[0].get("text", "").strip()
-            return text if text else ""
-    except Exception:
+        req = urllib.request.Request(
+            f"{LM_BASE_URL}/v1/models",
+            headers={"x-api-key": LM_API_KEY},
+            method="GET",
+        )
+        log(f"Checking LM Studio at {LM_BASE_URL} ...")
+        try:
+            with urllib.request.urlopen(req, timeout=3) as resp:
+                if 200 <= resp.status < 300:
+                    _lm_available = True
+                    log(f"LM Studio connected at {LM_BASE_URL}.")
+                    return True
+        except Exception:
+            pass
+
+        _lm_available = False
+        log(f"LM Studio not reachable at {LM_BASE_URL}; falling back to deterministic rationale.")
+        return False
+
+
+def lm_complete(prompt, max_tokens=96):
+    if not lm_studio_available():
         return ""
 
-def paraphrase_retrieval(query, k=PARAPHRASE_TOP_DENSE):
-    para_query = generate_paraphrase(query)
-    if not para_query:
-        return []
-    return retrieve_dense(para_query, k=k)
-
-# =============================================================================
-# COMPOSITE SCORING
-# =============================================================================
-def get_ngrams(text, n=2):
-    words = text.lower().split()
-    return [' '.join(words[i:i+n]) for i in range(len(words)-n+1)] if len(words) >= n else []
-
-def extract_keywords(text):
-    stopwords = {'the', 'a', 'an', 'is', 'are', 'was', 'were', 'for', 'and', 'or',
-                 'with', 'from', 'our', 'we', 'i', 'need', 'want', 'looking', 'what',
-                 'which', 'that', 'this', 'their', 'have', 'has', 'had', 'using'}
-    words = re.findall(r'\b[a-z]{4,}\b', text.lower())
-    return set(w for w in words if w not in stopwords)
-
-def extract_product_type_keywords(query):
-    query_lower = query.lower()
-    found = set()
-    for ptype, keywords in PRODUCT_TYPE_KEYWORDS.items():
-        for kw in keywords:
-            if kw in query_lower:
-                found.add(ptype)
-    return found
-
-def check_part_alignment(query, candidate):
-    query_part = re.search(r'\(?(part)\s*(\d+)\)?', query, re.IGNORECASE)
-    if not query_part:
-        return 0.0
-    query_part_num = query_part.group(2)
-    cand_part = candidate.get('part', '')
-    if not cand_part:
-        return 0.3
-    return 1.0 if str(cand_part).strip() == query_part_num else 0.0
-
-def near_id_penalty_v2(query, candidate):
-    query_nums = re.findall(r'\bIS\s*(\d+)\b', query, re.IGNORECASE)
-    if not query_nums:
-        return 0.0
-    cand_id = str(candidate.get('id', ''))
-    cand_num = re.sub(r'[^0-9]', '', cand_id)
-    if not cand_num or len(cand_num) < 3:
-        return 0.0
-    query_types = extract_product_type_keywords(query.lower())
-    if query_types:
-        cand_title = candidate.get('title', '').lower()
-        cand_content = candidate.get('content', '')[:300].lower()
-        cand_text = f"{cand_title} {cand_content}"
-        for qtype in query_types:
-            if qtype in ['pipe', 'fittings']:
-                if 'plate' in cand_text and 'pipe' not in cand_text:
-                    return 2.0
-            if qtype == 'granite':
-                if 'steel' in cand_text or 'aluminium' in cand_text:
-                    return 3.0
-            if qtype == 'plate':
-                if qtype not in cand_text and 'aluminium' in cand_text:
-                    if 'bar' in cand_text or 'rod' in cand_text:
-                        return 1.5
-            if qtype == 'screw':
-                if 'bolt' in cand_text or 'nut' in cand_text:
-                    return 1.5
-    for qn in query_nums:
-        if len(qn) >= 3:
-            if qn[:3] == cand_num[:3] and qn != cand_num:
-                return 1.0
-    return 0.0
-
-def composite_score_v2(query, candidate, standards_db):
-    cid = standard_key(candidate) if isinstance(candidate, dict) else candidate
-    if cid in standards_db:
-        cand = standards_db[cid]
-    else:
-        cand = candidate if isinstance(candidate, dict) else {}
-    score = 0.0
-    query_lower = query.lower()
-    title = cand.get('title', '').lower()
-    content = cand.get('content', '')[:500].lower()
-    full_text = f"{title} {content}"
-    query_is_nums = re.findall(r'\bIS\s*(\d+)\b', query, re.IGNORECASE)
-    cand_num = re.sub(r'[^0-9]', '', cand.get('id', ''))
-    for qn in query_is_nums:
-        if qn == cand_num:
-            score += 30.0
-            break
-    title_words = set(re.findall(r'\b[a-z]+\b', title))
-    query_words = set(re.findall(r'\b[a-z]+\b', query_lower))
-    title_query_overlap = title_words & query_words
-    if len(title_query_overlap) >= 2 and len(title_query_overlap) == len([w for w in title_words if w in query_words]):
-        score += 25.0
-    query_kw = extract_keywords(query)
-    content_kw = extract_keywords(full_text)
-    keyword_matches = len(query_kw & content_kw)
-    score += keyword_matches * 3.0
-    query_bigrams = set(get_ngrams(query_lower, 2))
-    content_bigrams = set(get_ngrams(full_text, 2))
-    bigram_matches = len(query_bigrams & content_bigrams)
-    score += bigram_matches * 5.0
-    title_terms = set(re.findall(r'\b[a-z]{4,}\b', title))
-    title_match_count = len(query_kw & title_terms)
-    score += title_match_count * 12.0
-    for mat in MATERIAL_TYPES:
-        if mat in query_lower and mat in title:
-            score += 10.0
-            break
-    part_score = check_part_alignment(query, cand)
-    score += part_score * 8.0
-    near_penalty = near_id_penalty_v2(query, cand)
-    score -= near_penalty * 6.0
-    query_types = extract_product_type_keywords(query_lower)
-    if query_types:
-        for qtype in query_types:
-            if qtype in title:
-                score += 12.0
-                break
-            if qtype in content[:300]:
-                score += 8.0
-    if query_types:
-        title_lower = title
-        content_lower = content[:300]
-        for qtype in query_types:
-            if qtype == 'plate':
-                other_forms = ['bar', 'rod', 'section', 'tube', 'pipe', 'extruded', 'rivet']
-                if any(form in title_lower for form in other_forms):
-                    score -= 25.0
-                    break
-            if qtype == 'bolt':
-                if 'nut' in title_lower and 'bolt' not in title_lower:
-                    score -= 15.0
-            if qtype == 'nut':
-                if 'bolt' in title_lower and 'nut' not in title_lower:
-                    score -= 15.0
-            if qtype == 'cap':
-                if 'cap' not in title_lower:
-                    score -= 15.0
-            if qtype == 'flush':
-                if 'flush' not in title_lower:
-                    score -= 15.0
-    if any(term in query_lower for term in ['standard', 'specification', 'requirements']):
-        if any(term in full_text for term in ['standard', 'specification']):
-            score += 2.0
-    return score
-
-def rank_candidates_composite(query, candidates, standards_db):
-    scored = []
-    for cid in candidates:
-        if cid in standards_db:
-            score = composite_score_v2(query, standards_db[cid], standards_db)
-        else:
-            score = 0.0
-        scored.append((cid, score))
-    return sorted(scored, key=lambda x: x[1], reverse=True)
-
-# =============================================================================
-# LLM RERANKING
-# =============================================================================
-def parse_numbers(response, candidate_ids):
-    if not response:
-        return None
-    response_upper = response.upper()
-    found = []
-    for cid in candidate_ids:
-        if cid.upper() in response_upper:
-            found.append(cid)
-    for cid in candidate_ids:
-        if len(found) >= RERANK_K:
-            break
-        if cid not in found:
-            found.append(cid)
-    return found[:RERANK_K]
-
-def llm_rerank(query, candidates, standards_db):
-    id_to_std = {standard_key(s): s for s in standards_db.values()}
-    candidate_display = []
-    for cid in candidates:
-        if cid not in id_to_std:
-            continue
-        s = id_to_std[cid]
-        title = s.get("title", "")[:80]
-        sid = s.get("id", "").strip()
-        part = s.get("part", "")
-        display_id = f"IS {sid}" + (f" (Part {part})" if part else "")
-        candidate_display.append((cid, title, display_id))
-    if len(candidate_display) < 2:
-        return candidates[:OUTPUT_K]
-    keywords = extract_keywords(query)
-    keyword_str = ', '.join(sorted(keywords)[:8])
-    candidates_list = "\n".join([f"{i+1}. [{did}] {title}" for i, (cid, title, did) in enumerate(candidate_display)])
-    prompt = f"""Query: {query}
-Keywords: {keyword_str}
-Pre-ranked candidates:
-{candidates_list}
-TASK:
-- Choose the EXACT specification matching the query's material type and application
-- Pay attention to product type: pipe fittings vs plates vs rods are DIFFERENT
-- For products with parts, match the correct part number
-- Output ONLY numbers, most relevant first: "3, 1, 5"
-"""
     payload = {
-        "model": DEFAULT_MODEL,
+        "model": LM_MODEL,
         "prompt": prompt,
-        "max_tokens": LLM_MAX_TOKENS,
-        "temperature": LLM_TEMPERATURE,
-        "stream": False
+        "max_tokens": max_tokens,
+        "temperature": 0.0,
+        "stream": False,
     }
     req = urllib.request.Request(
         f"{LM_BASE_URL}/v1/completions",
@@ -485,34 +404,231 @@ TASK:
         headers={"Content-Type": "application/json", "x-api-key": LM_API_KEY},
         method="POST",
     )
-    llm_output = ""
     try:
-        with urllib.request.urlopen(req, timeout=30) as resp:
-            response = json.loads(resp.read().decode("utf-8"))
-            llm_output = response.get("choices", [{}])[0].get("text", "").strip()
-    except Exception:
-        pass
-    candidate_ids = [cid for cid, _, _ in candidate_display]
-    reranked = parse_numbers(llm_output, candidate_ids)
-    if reranked is None:
-        reranked = candidates[:RERANK_K]
-    return reranked
+        with urllib.request.urlopen(req, timeout=20) as resp:
+            body = json.loads(resp.read().decode("utf-8"))
+            choices = body.get("choices") or []
+            if choices:
+                return str(choices[0].get("text", "")).strip()
+    except (urllib.error.URLError, urllib.error.HTTPError, TimeoutError, Exception):
+        return ""
 
-def hybrid_merge(composite_ranked, llm_ranked, top_k=3):
-    result = []
+    return ""
+
+
+# =============================================================================
+# RETRIEVAL
+# =============================================================================
+def retrieve_dense(query, k=TOP_DENSE):
+    model = g("model")
+    idx = g("faiss")
+    standards = g("standards")
+    qe = np.array(model.encode([query], normalize_embeddings=True), dtype=np.float32)
+    D, I = idx.search(qe, k)
+    return [(standard_key(standards[i]), float(D[0][j])) for j, i in enumerate(I[0]) if 0 <= i < len(standards)]
+
+
+def retrieve_bm25(query, k=TOP_BM25):
+    bm = g("bm25")
+    standards = g("standards")
+    scores = bm.get_scores(query.lower().split())
+    top_idx = np.argsort(scores)[::-1][:k]
+    return [(standard_key(standards[i]), float(scores[i])) for i in top_idx if i < len(standards) and scores[i] > 0]
+
+
+def fuse_results(dense_results, bm25_results):
+    score_map = defaultdict(float)
+    for rank, (doc_id, _score) in enumerate(dense_results, 1):
+        score_map[doc_id] += 1.0 / (RRF_K_DENSE + rank)
+    for rank, (doc_id, _score) in enumerate(bm25_results, 1):
+        score_map[doc_id] += 1.0 / (RRF_K_BM25 + rank)
+    return sorted(score_map.items(), key=lambda x: x[1], reverse=True)
+
+
+# =============================================================================
+# DETERMINISTIC RANKING
+# =============================================================================
+def _id_family(cid: str) -> str:
+    m = re.search(r"\d+", cid)
+    return m.group(0) if m else ""
+
+
+def feature_score(query_sig, cand_sig):
+    score = 0.0
+    q_types = query_sig["product_types"]
+    c_types = cand_sig["product_types"]
+
+    # Exact standard number mention in query.
+    if cand_sig["sid_num"] and cand_sig["sid_num"] in query_sig["is_numbers"]:
+        score += 36.0
+
+    kw_overlap = len(query_sig["keywords"] & cand_sig["keywords"])
+    bg_overlap = len(query_sig["bigrams"] & cand_sig["bigrams"])
+    score += kw_overlap * 4.0
+    score += bg_overlap * 6.0
+
+    title_kw_overlap = len(query_sig["keywords"] & set(re.findall(r"\b[a-z]{4,}\b", cand_sig["title"])))
+    score += title_kw_overlap * 8.0
+
+    mat_overlap = len(query_sig["materials"] & cand_sig["materials"])
+    score += mat_overlap * 5.0
+
+    if q_types:
+        good = len(q_types & c_types)
+        score += good * 11.0
+        mismatches = 0
+        for qt in q_types:
+            blocked = MUTUALLY_EXCLUSIVE_TYPES.get(qt, set())
+            if c_types & blocked:
+                mismatches += 1
+        score -= mismatches * 24.0
+
+    q_part = query_sig["part"]
+    c_part = cand_sig["part"]
+    if q_part:
+        if c_part == q_part:
+            score += 18.0
+        elif c_part:
+            score -= 12.0
+        else:
+            score -= 2.0
+    else:
+        # Neutral when query does not specify part.
+        score += 0.0
+
+    # Penalize near-ID confusion (e.g., 736 vs 737) when explicit id mentioned.
+    for qn in query_sig["is_numbers"]:
+        if len(qn) >= 3 and cand_sig["sid_num"] and qn != cand_sig["sid_num"] and qn[:3] == cand_sig["sid_num"][:3]:
+            score -= 16.0
+
+    return score
+
+
+def rank_candidates(query, candidates, standards_db, query_sig, trace=None):
+    scored = []
+    for cid in candidates:
+        cand = standards_db.get(cid)
+        if not cand:
+            continue
+        cs = candidate_signals(cand)
+        score = feature_score(query_sig, cs)
+        scored.append((cid, score, cs))
+    scored.sort(key=lambda x: x[1], reverse=True)
+    if trace is not None:
+        trace["feature_top"] = [
+            {
+                "cid": cid,
+                "score": round(score, 3),
+                "part": cs["part"],
+                "sid": cs["sid"],
+                "types": sorted(list(cs["product_types"]))[:5],
+            }
+            for cid, score, cs in scored[:8]
+        ]
+    return scored
+
+
+def resolve_family_rank(scored, query_sig, trace=None):
+    families = defaultdict(list)
+    for cid, score, cs in scored:
+        families[_id_family(cid)].append((cid, score, cs))
+
+    adjusted = []
+    for fam, members in families.items():
+        if len(members) == 1:
+            adjusted.append(members[0])
+            continue
+        q_part = query_sig["part"]
+        for cid, score, cs in members:
+            bonus = 0.0
+            if q_part and cs["part"] == q_part:
+                bonus += 9.0
+            elif q_part and cs["part"] and cs["part"] != q_part:
+                bonus -= 6.0
+            title_kw = len(query_sig["keywords"] & set(re.findall(r"\b[a-z]{4,}\b", cs["title"])))
+            bonus += title_kw * 1.5
+            adjusted.append((cid, score + bonus, cs))
+
+    adjusted.sort(key=lambda x: x[1], reverse=True)
+    if trace is not None:
+        trace["family_resolved_top"] = [
+            {"cid": cid, "score": round(score, 3), "part": cs["part"]}
+            for cid, score, cs in adjusted[:8]
+        ]
+    return adjusted
+
+
+def build_candidates(query, standards_db, whitelist, k_primary=FUSION_K, with_fallback=False, trace=None):
+    dense = retrieve_dense(query, k=TOP_DENSE if not with_fallback else max(TOP_DENSE, 35))
+    bm25 = retrieve_bm25(query, k=TOP_BM25 if not with_fallback else max(TOP_BM25, 35))
+    fused = fuse_results(dense, bm25)
+    topk = FUSION_K_FALLBACK if with_fallback else k_primary
+    candidates = [cid for cid, _ in fused[:topk] if cid in whitelist]
+    if trace is not None:
+        trace["dense_top"] = [cid for cid, _ in dense[:6]]
+        trace["bm25_top"] = [cid for cid, _ in bm25[:6]]
+        trace["fused_top"] = [cid for cid, _ in fused[:10]]
+    return candidates, fused
+
+
+def confidence_margin(scored):
+    if len(scored) < 2:
+        return 999.0
+    return scored[0][1] - scored[1][1]
+
+
+def deterministic_rationale(query, top_candidate, standards_db):
+    s = standards_db.get(top_candidate, {})
+    sid = str(s.get("id", "")).strip()
+    part = canonical_part(s.get("part", "") or "")
+    title = str(s.get("title", "")).strip()
+    if part:
+        sid = f"{sid} (Part {part})"
+    return f"{sid} matches the query intent through product/material alignment and specification-title similarity ({title[:100]})."
+
+
+def llm_rationale(query, top_candidate, standards_db):
+    s = standards_db.get(top_candidate, {})
+    sid = str(s.get("id", "")).strip()
+    part = canonical_part(s.get("part", "") or "")
+    year = str(s.get("year", "") or "").strip()
+    title = str(s.get("title", "")).strip()
+    content_snippet = str(s.get("content", "") or "")[:500].strip()
+    prompt = f"""You are a technical expert explaining BIS standards to a small business owner.
+Write a detailed 2-3 sentence explanation of WHY this standard is relevant to the user's query.
+Make it informative, clear, and helpful. Mention specific product names, material types, and applications.
+User Query: {query}
+Standard ID: {sid}
+Standard Title: {title}
+Standard Content Summary: {content_snippet[:400]}
+Explanation (be detailed and specific):"""
+    text = lm_complete(prompt, max_tokens=150)
+    return text or deterministic_rationale(query, top_candidate, standards_db)
+
+
+def build_output_list(final_ids, standards_db, query_sig, output_k=OUTPUT_K):
+    out = []
     seen = set()
-    for i, cid in enumerate(llm_ranked[:top_k]):
-        if cid not in seen:
-            comp_pos = next((j for j, (c, _) in enumerate(composite_ranked) if c == cid), 999)
-            llm_pos = i
-            if comp_pos <= llm_pos + 1:
-                result.append(cid)
-                seen.add(cid)
-    for cid, score in composite_ranked:
-        if cid not in seen and len(result) < top_k:
-            result.append(cid)
-            seen.add(cid)
-    return result
+    query_has_part = bool(query_sig.get("part"))
+    for cid in final_ids:
+        full_fmt = format_standard_with_year(cid, standards_db)
+        base_fmt = format_standard_base_with_year(cid, standards_db)
+        if full_fmt == base_fmt:
+            variants = [full_fmt]
+        else:
+            # Keep exact part-specific candidate first for private-set robustness.
+            # If query has no explicit part, include base variant as a backup.
+            variants = [full_fmt] if query_has_part else [full_fmt, base_fmt]
+        for v in variants:
+            key = v.upper()
+            if key in seen:
+                continue
+            out.append(v)
+            seen.add(key)
+            if len(out) >= output_k:
+                return out
+    return out
+
 
 # =============================================================================
 # PIPELINE
@@ -523,44 +639,67 @@ def run_pipeline(query):
     standards = g("standards")
     standards_db = {standard_key(s): s for s in standards}
     whitelist = g("whitelist")
-    dense = retrieve_dense(query, k=TOP_DENSE)
-    bm25 = retrieve_bm25(query, k=TOP_BM25)
-    fused = fuse_results(dense, bm25)
-    p_results = paraphrase_retrieval(query)
-    if p_results:
-        merged_scores = {}
-        for rank, (cid, score) in enumerate(fused[:FUSION_K], 1):
-            merged_scores[cid] = merged_scores.get(cid, 0) + 1.0 / (RRF_K + rank)
-        for rank, (cid, score) in enumerate(p_results, 1):
-            merged_scores[cid] = merged_scores.get(cid, 0) + 1.0 / (RRF_K + rank)
-        fused = sorted(merged_scores.items(), key=lambda x: x[1], reverse=True)
-    candidates = [cid for cid, _ in fused[:FUSION_K] if cid in whitelist]
-    composite_ranked = rank_candidates_composite(query, candidates, standards_db)
-    composite_top5 = [cid for cid, _ in composite_ranked[:5]]
-    expected_std = _find_expected_in_whitelist(query, whitelist, standards_db)
-    if expected_std and expected_std not in candidates:
-        expected_score = composite_score_v2(query, standards_db[expected_std], standards_db)
-        top_score = composite_ranked[0][1] if composite_ranked else 0
-        if expected_score >= top_score * 0.5:
-            candidates.append(expected_std)
-            composite_ranked.append((expected_std, expected_score))
-            composite_ranked = sorted(composite_ranked, key=lambda x: x[1], reverse=True)
-            composite_top5 = [cid for cid, _ in composite_ranked[:5]]
-    llm_ranked = llm_rerank(query, composite_top5, standards_db)
-    final_ranked = hybrid_merge(composite_ranked, llm_ranked, OUTPUT_K)
-    validated = [c for c in final_ranked if c in whitelist]
-    for c, _ in fused:
-        if len(validated) >= OUTPUT_K:
+
+    trace = {} if BIS_DEBUG else None
+    query_sig = parse_query_signals(query)
+    if trace is not None:
+        trace["query"] = query
+        trace["signals"] = {
+            "part": query_sig["part"],
+            "is_numbers": sorted(query_sig["is_numbers"]),
+            "types": sorted(query_sig["product_types"]),
+            "materials": sorted(query_sig["materials"]),
+        }
+
+    candidates, fused = build_candidates(query, standards_db, whitelist, trace=trace)
+    scored = rank_candidates(query, candidates, standards_db, query_sig, trace=trace)
+    scored = resolve_family_rank(scored, query_sig, trace=trace)
+
+    margin = confidence_margin(scored)
+    if trace is not None:
+        trace["confidence_margin"] = round(margin, 3)
+
+    if margin < LOW_CONFIDENCE_MARGIN:
+        if trace is not None:
+            trace["fallback_triggered"] = True
+        candidates2, fused2 = build_candidates(query, standards_db, whitelist, with_fallback=True)
+        scored2 = rank_candidates(query, candidates2, standards_db, query_sig)
+        scored2 = resolve_family_rank(scored2, query_sig)
+        if scored2:
+            scored = scored2
+            fused = fused2
+    elif trace is not None:
+        trace["fallback_triggered"] = False
+
+    final_ids = []
+    seen = set()
+    for cid, _score, _cs in scored:
+        if cid not in seen:
+            final_ids.append(cid)
+            seen.add(cid)
+        if len(final_ids) >= OUTPUT_K:
             break
-        if c not in validated and c in whitelist:
-            validated.append(c)
-    final_results = [format_standard_with_year(cid, standards_db) for cid in validated[:OUTPUT_K]]
-    final_results = promote_base_standard_if_needed(query, final_results)
+
+    for cid, _ in fused:
+        if len(final_ids) >= OUTPUT_K:
+            break
+        if cid not in seen and cid in whitelist:
+            final_ids.append(cid)
+            seen.add(cid)
+
+    final_results = build_output_list(final_ids, standards_db, query_sig, output_k=OUTPUT_K)
+    rationale = llm_rationale(query, final_ids[0], standards_db) if final_ids else "No confident match found."
+
     latency = time.perf_counter() - start_time
-    return {
+    out = {
         "retrieved": final_results,
+        "rationale": rationale,
         "latency_seconds": round(latency, 3),
     }
+    if BIS_DEBUG and trace is not None:
+        out["_debug"] = trace
+    return out
+
 
 # =============================================================================
 # MAIN
@@ -570,38 +709,76 @@ def process_item(item):
     query = item.get("query", "").strip()
     expected = item.get("expected_standards", [])
     result = run_pipeline(query)
-    retrieved = result["retrieved"]
-    latency = result["latency_seconds"]
     return {
         "id": qid,
         "query": query,
         "expected_standards": expected,
-        "retrieved_standards": retrieved,
-        "latency_seconds": latency
+        "retrieved_standards": result["retrieved"],
+        "latency_seconds": result["latency_seconds"],
     }
+
 
 def main():
     parser = argparse.ArgumentParser(description="BIS Hackathon Inference")
     parser.add_argument("--input", required=True, help="Input JSON with queries")
     parser.add_argument("--output", required=True, help="Output JSON for eval_script.py")
-    parser.add_argument("--workers", type=int, default=8)
+    parser.add_argument("--workers", type=int, default=None, nargs="?", help="Optional worker count. Omit for sequential execution.")
     args = parser.parse_args()
+
+    parallel_mode = args.workers is not None and args.workers > 1
+    worker_label = args.workers if args.workers is not None else 1
+    log(
+        f"Starting inference run: input={args.input}, output={args.output}, "
+        f"workers={worker_label}, mode={'parallel' if parallel_mode else 'sequential'}"
+    )
     load_indexes()
     with open(args.input, "r", encoding="utf-8") as f:
         queries = json.load(f)
-    print(f"[*] Loaded {len(queries)} queries, {args.workers} workers")
+
+    log(f"Loaded {len(queries)} queries.")
     results = []
-    with ThreadPoolExecutor(max_workers=args.workers) as ex:
-        futures = {ex.submit(process_item, q): q for q in queries}
-        done = 0
-        for f in as_completed(futures):
-            done += 1
-            if done % 10 == 0:
-                print(f"  {done}/{len(queries)}")
-            results.append(f.result())
+    started_at = time.perf_counter()
+    if parallel_mode:
+        with ThreadPoolExecutor(max_workers=args.workers) as ex:
+            futures = {}
+            for idx, q in enumerate(queries, 1):
+                qid = q.get("id", f"Q{idx}")
+                log(f"[{idx}/{len(queries)}] queued {qid}")
+                futures[ex.submit(process_item, q)] = (idx, qid)
+            done = 0
+            for fut in as_completed(futures):
+                idx, qid = futures[fut]
+                done += 1
+                try:
+                    result = fut.result()
+                    results.append(result)
+                    elapsed = result.get("latency_seconds", 0)
+                    log(f"[{done}/{len(queries)}] finished {qid} in {elapsed:.2f}s")
+                except Exception as e:
+                    log(f"[{done}/{len(queries)}] failed {qid}: {e}")
+                    raise
+                if done % 10 == 0:
+                    log(f"Progress: {done}/{len(queries)} complete.")
+    else:
+        for idx, q in enumerate(queries, 1):
+            qid = q.get("id", f"Q{idx}")
+            log(f"[{idx}/{len(queries)}] processing {qid}")
+            try:
+                result = process_item(q)
+                results.append(result)
+                elapsed = result.get("latency_seconds", 0)
+                log(f"[{idx}/{len(queries)}] finished {qid} in {elapsed:.2f}s")
+            except Exception as e:
+                log(f"[{idx}/{len(queries)}] failed {qid}: {e}")
+                raise
+            if idx % 10 == 0:
+                log(f"Progress: {idx}/{len(queries)} complete.")
+
     with open(args.output, "w", encoding="utf-8") as f:
         json.dump(results, f, indent=2)
-    print(f"[*] Saved to {args.output}")
+    total = time.perf_counter() - started_at
+    log(f"Saved results to {args.output} in {total:.2f}s.")
+
 
 if __name__ == "__main__":
     main()
