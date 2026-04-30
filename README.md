@@ -1,140 +1,93 @@
-# BIS Standards Recommendation Engine
+# BIS Standards Discovery
 
-A **production-ready RAG pipeline** that maps natural-language queries about Indian BIS construction standards to the correct IS codes. Achieves **100% Hit@3, MRR=1.0** across original and paraphrased queries with ~1 second latency.
+A production-ready RAG pipeline with an interactive dashboard that maps natural-language queries about Indian BIS construction standards to the correct IS codes. Achieves **MRR=0.920** with deterministic ranking and ~1.6 second latency.
 
 ---
 
 ## Project Overview
 
-### What This Does
-
 Given a query like:
 > *"What is the Indian Standard covering the manufacture, chemical, and physical requirements for Portland slag cement?"*
 
-It returns:
+It returns five recommended BIS standards ranked by relevance, plus an AI-generated rationale:
 ```json
-[
-  {
-    "id": "PUB-06",
-    "retrieved_standards": ["IS 455: 1989", "IS 1489 (Part 1)", "IS 6909"],
-    "latency_seconds": 1.05
-  }
-]
+{
+  "retrieved": ["IS 455: 1989", "IS 269: 1989", "IS 1489 (Part 1): 1991", "IS 8043: 1991", "IS 1489 (Part 2): 1991"],
+  "rationale": "IS 455 is the standard for Portland slag cement, covering its manufacture and physical requirements for use in marine environments.",
+  "latency_seconds": 1.6
+}
 ```
+
+### Two Search Modes
+
+**Option 1 - AI Agent Search:**
+Direct natural-language query input with AI-powered ranking and rationale generation.
+
+**Option 2 - Guided Discovery:**
+Click-through category → keyword → standards workflow for structured browsing.
 
 ### Hackathon Performance
 
 | Metric | Result | Target |
 |--------|--------|--------|
-| Hit Rate @3 | **100%** | >80% |
-| MRR @5 | **1.0000** | >0.7 |
-| Avg Latency | **~1.0s** | <5s |
-| Robustness (paraphrases) | **1.0000** | — |
+| Hit Rate @3 | **90%** | >80% |
+| MRR @5 | **0.920** | >0.7 |
+| Avg Latency | **~1.6s** | <5s |
 
 ---
 
 ## Architecture
 
-### System Diagram
-
-```
-                           ┌─────────────────────────────┐
-                           │         USER QUERY           │
-                           │  "marine cement for harsh    │
-                           │   aquatic environments"      │
-                           └──────────────┬──────────────┘
-                                          │
-                    ┌────────────────────▼────────────────────┐
-                    │           CONCEPT LAYER                 │
-                    │  (deterministic pattern matching)        │
-                    │                                         │
-                    │  "marine" + "aggressive" → IS 6909       │
-                    │  (supersulphated cement, marine works)   │
-                    └────────────────────┬────────────────────┘
-                                         │
-                    ┌────────────────────▼────────────────────┐
-                    │      MULTI-QUERY RETRIEVAL               │
-                    │  ┌──────────────┐  ┌────────────────┐   │
-                    │  │ FAISS Dense  │  │ BM25 Sparse   │   │
-                    │  │ (BGE-M3)     │  │ (BM25Okapi)   │   │
-                    │  └──────┬───────┘  └───────┬────────┘   │
-                    │         │                   │            │
-                    │         └─────────┬─────────┘            │
-                    │              RRF FUSION                 │
-                    │         (reciprocal rank)               │
-                    └────────────────────┬────────────────────┘
-                                         │
-                    ┌────────────────────▼────────────────────┐
-                    │     PARAPHRASE FUSION                    │
-                    │  LLM rewrites query → re-retrieve       │
-                    │  → merge via RRF                         │
-                    └────────────────────┬────────────────────┘
-                                         │
-                    ┌────────────────────▼────────────────────┐
-                    │      LLM CONTENT-MATCH RANKER           │
-                    │  (replaces Flag cross-encoder)           │
-                    │                                         │
-                    │  1. Extract query keywords (LLM)        │
-                    │  2. Score candidates by keyword match   │
-                    │  3. Boost by concept hypothesis signal   │
-                    │  4. Tie-break by RRF order               │
-                    └────────────────────┬────────────────────┘
-                                         │
-                    ┌────────────────────▼────────────────────┐
-                    │       VALIDATION GATE                    │
-                    │  Whitelist filter (BIS corpus only)      │
-                    └────────────────────┬────────────────────┘
-                                         │
-                           ┌─────────────▼──────────────┐
-                           │   STRICT OUTPUT SCHEMA     │
-                           │  {"id", "retrieved_       │
-                           │   standards": [...],      │
-                           │   "latency_seconds": 1.05}│
-                           └───────────────────────────┘
+```mermaid
+flowchart TD
+    Q[User Query] --> R[Retrieval]
+    R --> D[Dense FAISS<br/>Embedding top-25]
+    R --> B[BM25 Sparse<br/>top-25]
+    D --> F[RRF Fusion]
+    B --> F
+    F --> S[Feature Scoring]
+    S --> FR[Family Resolution]
+    FR --> C{Confidence<br/>Margin >10?}
+    C -->|No| FB[Fallback<br/>Pool 30]
+    FB --> S
+    C -->|OK| O[Output Top-5]
+    O --> L[LLM Rationale<br/>Ollama]
 ```
 
-### Pipeline Stages (detailed)
+### Pipeline Stages
 
 ```
-Query: "binding material for harsh aquatic environments"
+Query: "Portland slag cement chemical requirements"
 │
-├─[1] CONCEPT HYPOTHESIS (deterministic, ~0ms)
-│   ├─ Normalize query text
-│   ├─ Match against 10 domain concept profiles
-│   │    (aliases=9pts, distinctive=5pts, abstract=3.5pts, context=1.2pts)
-│   ├─ If score ≥ 5.0 → generate hypothesis signal
-│   └─ IS 6909 (supersulphated cement) fires: score=7.3
+├─[1] PARSE QUERY SIGNALS
+│   ├─ Extract keywords, bigrams, product types
+│   ├─ Detect "part" mentions, IS numbers
+│   └─ Identify material types (Portland, slag, cement)
 │
 ├─[2] MULTI-QUERY RETRIEVAL
-│   ├─ Dense (FAISS BGE-M3, top-20)
-│   │    "binding material harsh aquatic environments" → embeddings
-│   ├─ Sparse (BM25Okapi, top-20)
-│   │    Token scores over corpus
-│   ├─ Graph expand (synonym + cross-ref boost +0.1)
-│   └─ RRF fusion (k=5) → ranked candidate pool (top-10)
+│   ├─ Dense (FAISS BGE-M3, top-25)
+│   ├─ Sparse (BM25, top-25)
+│   └─ RRF fusion → candidate pool
 │
-├─[3] PARAPHRASE FUSION
-│   ├─ LLM rewrites: "specific cementitious binder for seawater/marine"
-│   ├─ Re-encode paraphrase (FAISS top-30)
-│   ├─ Merge with step-2 pool via RRF
-│   ├─ Re-inject concept hypotheses (top-3)
-│   └─ Fallback: skip if LLM unavailable
+├─[3] FEATURE SCORING
+│   ├─ IS number exact match: +36
+│   ├─ Keyword/bigram overlap: weighted scoring
+│   ├─ Product type matching: +11 per match
+│   ├─ Mutual exclusivity penalties: -24 per mismatch
+│   └─ Part alignment bonus/penalty: +18/-12
 │
-├─[4] LLM CONTENT-MATCH RANKING
-│   ├─ LLM extracts: [BINDING, MATERIAL, MARINE, CEMENT, SPECIFICATIONS]
-│   ├─ For each candidate (title + 400 chars):
-│   │    keyword_hit     = count(bigrams in text)    × 1
-│   │    bigram_hit      = count(adjacent pairs)     × 2
-│   │    title_exact     = 1 if title in query       × 1
-│   │    concept_signal   = from step-1 hypothesis    × variable
-│   ├─ Final score = sum of above
-│   └─ Top-3 by score desc, tie-break RRF order
+├─[4] FAMILY RESOLUTION
+│   ├─ Group candidates by IS number family
+│   ├─ Boost correct part variant when query specifies part
+│   └─ Penalize wrong part variants
 │
-├─[5] VALIDATION GATE
-│   └─ Filter against whitelist.txt (only real BIS IS codes)
+├─[5] CONFIDENCE CHECK
+│   └─ If margin < 10 → fallback to larger candidate pool
 │
-└─[6] YEAR MAPPING (if expected_standards in input)
-    └─ Inject year suffix from ground truth → "IS 269" → "IS 269: 1989"
+└─[6] OUTPUT
+    ├─ Format standards with year (e.g., "IS 455: 1989")
+    ├─ Generate LLM rationale via Ollama
+    └─ Return top-5 results
 ```
 
 ---
@@ -143,243 +96,159 @@ Query: "binding material for harsh aquatic environments"
 
 ```
 bis_rag/
-├── inference.py              # ⭐ SUBMISSION ENTRY POINT (strict output schema)
-├── run_eval.py               # Local testing harness (scores then cleans output)
-├── stress_test.py            # Paraphrase robustness test (60 queries)
-├── build_index.py            # Index builder (run once if corpus changes)
-├── concept_layer.py          # Deterministic concept hypothesis engine
-├── bis_parser.py             # PDF parser for building sp21_standards.json
-│
-├── requirements.txt          # Pinned runtime dependencies
-├── README.md                 # This file
-│
-├── guidelines/
-│   ├── eval_script.py        # Official evaluation script (from hackathon)
-│   ├── public_test_set.json # 10 ground-truth test queries
-│   ├── sample_output.json    # Sample expected output format
-│   └── BIS Standards Recommendation Engine_ Hackathon.pdf
-│
-└── data/
-    ├── sp21_standards.json   # BIS standards corpus (~1.8MB, 150+ standards)
-    ├── faiss_index.bin       # Dense vector index (BGE-M3, 1024-dim)
-    ├── bm25_index.pkl        # BM25 sparse index
-    ├── graph_map.json        # Synonyms + cross-reference edges
-    ├── whitelist.txt         # Approved IS codes only (6,240 entries)
-    ├── embedding_config.json # Embedding model config
-    ├── metadata_store.json   # Per-standard metadata
-    ├── paraphrased_queries.json  # 50 paraphrased variants for stress test
-    └── sample_queries.json   # 5 simple test queries
+├── app.py                    # FastAPI dashboard
+├── inference.py              # ⭐ Submission entry point
+├── eval_script.py            # Official evaluator
+├── requirements.txt         # Dependencies
+├── uv.lock                   # Locked versions
+├── README.md
+├── src/
+│   ├── bis_parser.py         # PDF → sp21_standards.json
+│   ├── build_index.py        # Build FAISS + BM25 indexes
+│   └── data/
+│       ├── faiss_index.bin        # Dense vector index
+│       ├── bm25_index.pkl         # BM25 sparse index
+│       ├── whitelist.txt          # Approved IS codes (576 entries)
+│       ├── embedding_config.json  # Embedding model config
+│       ├── metadata_store.json    # IS code metadata
+│       ├── section_profiles.json # Category profiles
+│       ├── sp21_standards.json   # Source corpus
+│       ├── standard_to_section.json
+│       └── graph_map.json
+├── static/
+│   ├── css/style.css
+│   ├── js/script.js
+│   └── favicon.ico
+└── templates/
+    └── index.html
 ```
 
 ---
 
 ## Quick Start
 
-### 1. Setup Environment
+### 1. Install Dependencies
 
 ```bash
-# Using the project's virtual environment (already has all deps)
-# Activate it:
-.venv\Scripts\python.exe      # Windows
-# or: source .venv/bin/activate  # Linux/Mac
-
-# Or install deps fresh:
-pip install -r requirements.txt
+uv pip install -r requirements.txt
 ```
 
-### 2. Run Inference (Submission Mode)
+### 2. Start Ollama (Optional - for LLM rationale)
 
 ```bash
-# Clean strict output — no expected_standards, no extra fields
+ollama serve
+ollama pull qwen3.5:4b
+```
+
+### 3. Run Dashboard
+
+```bash
+python app.py
+# Open http://localhost:8000
+```
+
+### 4. Run Inference (Submission Mode)
+
+```bash
 python inference.py \
   --input guidelines/public_test_set.json \
-  --output results.json \
-  --device cpu
+  --output results.json
 ```
 
-**Output (`results.json`)** — strictly follows required schema:
-```json
-[
-  {
-    "id": "PUB-01",
-    "retrieved_standards": ["IS 269: 1989", "IS 8112", "IS 8042"],
-    "latency_seconds": 1.47
-  }
-]
-```
-
-### 3. Local Evaluation (with scoring)
+### 5. Evaluate
 
 ```bash
-# run_eval.py injects expected_standards for local scoring,
-# then removes them — output stays submission-clean
-python run_eval.py --device cpu
-```
-
-Output:
-```
-[*] Running inference (strict clean output)...
-[1/10] We are a small enterprise manufacturing... -> 3 results, 1.67s
-...
-[OK] 10/10 queries returned results (avg=1.04s)
-[*] Scoring with eval_script.py...
-========================================
-   BIS HACKATHON EVALUATION RESULTS
-========================================
-Total Queries Evaluated : 10
-Hit Rate @3             : 100.00%  (Target: >80%)
-MRR @5                  : 1.0000   (Target: >0.7)
-Avg Latency             : 1.04 sec  (Target: <5 seconds)
-========================================
-[*] Clean output saved to: data/submission_results.json
-```
-
-### 4. Rebuild Indexes (if corpus changes)
-
-```bash
-# Run ONCE after updating sp21_standards.json
-python build_index.py
-```
-
-### 5. Rebuild Corpus from PDF (optional)
-
-```bash
-# Re-parse SP 21 PDF into sp21_standards.json
-python bis_parser.py
+python eval_script.py --results results.json
 ```
 
 ---
 
-## Inference CLI Options
+## Environment Variables
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `LM_BASE_URL` | `http://localhost:11434` | Ollama endpoint |
+| `LM_API_KEY` | `ollama` | API key |
+| `LM_MODEL` | `qwen3.5:4b` | Model name (recommended: qwen3.5:4b) |
+| `BIS_FORCE_CPU` | `0` | Set to `1` to force CPU |
+
+### CPU/CUDA Behavior
+
+```
+BIS_FORCE_CPU=1  →  Force CPU (overrides CUDA)
+         ↓
+torch.cuda.is_available()?
+         ↓
+    Yes → Use CUDA for embeddings
+         ↓
+     No → CPU fallback
+```
+
+---
+
+## Feature Scoring Weights
+
+| Feature | Weight | Purpose |
+|---------|--------|---------|
+| IS number exact match | +36 | Direct mention in query |
+| Keyword overlap | +4/bigram | Semantic matching |
+| Bigram overlap | +6/bigram | Phrase matching |
+| Product type match | +11/match | Material classification |
+| Mutual exclusivity | -24/mismatch | Prevents wrong family |
+| Part alignment | +18/-12 | Correct Part variant |
+| Near-ID penalty | -16 | e.g., 736 vs 737 |
+
+---
+
+## Rebuild Pipeline (If Corpus Changes)
+
+If you modify `src/data/sp21_standards.json`, rebuild the indexes:
 
 ```bash
-python inference.py --help
+# Parse PDF → sp21_standards.json
+python src/bis_parser.py --input SP21.pdf --output src/data/sp21_standards.json
 
---input INPUT      Path to input JSON (default: data/sample_queries.json)
---output OUTPUT    Path to output JSON (default: data/results.json)
---device DEVICE    Embedding device: cpu, cuda, auto (default: auto)
---debug            Enable verbose debug output (timing, candidates, scores)
---rationale        Include per-standard rationale explanations
---no-rerank        Disable LLM ranking (faster but less accurate)
-```
-
-**Input formats accepted:**
-```json
-// Format A: list of strings
-["sand for construction", "ordinary portland cement 33 grade"]
-
-// Format B: list of objects with id + query
-[{"id": "Q1", "query": "sand for construction"}]
-
-// Format C: hackathon format (expected_standards used for year mapping only)
-[{"id": "PUB-01", "query": "...", "expected_standards": ["IS 269: 1989"]}]
+# Build FAISS + BM25 indexes
+python src/build_index.py
 ```
 
 ---
 
-## Key Design Decisions
+## Reproducibility
 
-### Why no Flag cross-encoder?
-
-Flag reranking was replaced with **LLM Content-Match ranking** because:
-- Flag requires GPU for acceptable latency
-- LLM (Gemma via LM Studio) achieves equivalent accuracy on CPU
-- Keyword/bigram matching on extracted terms + concept signals is deterministic and fast
-
-### Why the concept layer?
-
-The dense (FAISS) and sparse (BM25) retrievers rely on **vocabulary overlap**. A query like *"specific binder used in harsh aquatic environments"* has zero lexical overlap with "IS 6909 supersulphated cement", so retrieval fails. The concept layer bridges this gap with deterministic pattern matching on domain abstractions.
-
-### Why paraphrase fusion?
-
-The LLM rewrite of a query surfaces candidates that the original phrasing missed. Merging both retrieval sets via RRF ensures the original ranking is preserved while adding paraphrase coverage.
-
----
-
-## The 10 Concept Profiles
-
-Each standard that is frequently queried abstractly has a profile:
-
-| Standard | Key Concept | Abstract Trigger Phrases |
-|----------|-------------|--------------------------|
-| IS 269 | 33-grade OPC | "binding material", "small enterprise" |
-| IS 383 | Aggregates | "natural sources", "concrete materials" |
-| IS 455 | Portland slag | "blast furnace", "industrial byproduct" |
-| IS 458 | Precast pipes | "water mains", "potable water" |
-| IS 1489 (Part 2) | Pozzolana cement | "calcined clay", "PPC" |
-| IS 3466 | Masonry cement | "non-structural", "mortar" |
-| IS 6909 | Supersulphated cement | "marine", "aggressive water", "harsh environments" |
-| IS 8042 | White cement | "architectural", "decorative", "whiteness" |
-| IS 2185 (Part 2) | Lightweight blocks | "hollow and solid", "masonry units" |
-| IS 459 | Asbestos sheets | "corrugated", "roofing", "cladding" |
-
----
-
-## Performance Breakdown
-
-### Where Time Goes (~1.0s total)
-
-```
-Step 1  Multi-query retrieval   ~100ms   (FAISS + BM25 + graph expand)
-Step 2  Paraphrase + fusion     ~600ms   (LLM rewrite + re-encode + merge)
-Step 3  LLM keyword extraction  ~100ms   (LLM call)
-Step 4  Content-match scoring   ~150ms   (keyword comparison loop)
-Step 5  Validation + output     ~50ms
-─────────────────────────────────────────
-Total                       ~1.0s
-```
-
-### Why Paraphrase Fusion is Worth It
-
-```
-Without paraphrase fusion:
-  Paraphrased Hit@3 = 70%   (34/50 correct)
-  Paraphrased MRR   = 0.597
-
-With paraphrase fusion:
-  Paraphrased Hit@3 = 100%  (50/50 correct)  ← +30pp
-  Paraphrased MRR   = 1.000                   ← +0.40
-
-Cost: +0.4s latency (still well under 5s target)
-```
-
----
-
-## Submission Checklist
-
-Before submitting, verify:
-
-```bash
-# 1. Output schema is strictly clean
-python inference.py --input guidelines/public_test_set.json --output results.json --device cpu
-
-# 2. Local eval scores 100%/1.0
-python run_eval.py --device cpu
-
-# 3. Stress test is robust
-python stress_test.py
-
-# 4. No crashes on CPU
-python inference.py --input data/sample_queries.json --device cpu
-```
+- Deterministic ranking (no random operations)
+- LLM rationale optional (falls back to template if Ollama unavailable)
+- CPU-only reproducible on any machine
+- CUDA auto-detected if available
 
 ---
 
 ## Dependencies
 
-All dependencies are pinned in `requirements.txt`. Key packages:
-
 | Package | Version | Purpose |
 |---------|---------|---------|
-| torch | 2.6.0 | CUDA/CPU tensor support |
+| torch | 2.6.0 | CUDA detection, tensor ops |
 | sentence-transformers | 2.7.0 | BGE-M3 embeddings |
 | faiss-cpu | 1.13.2 | Dense vector search |
-| rank-bm25 | 0.2.2 | Sparse keyword search |
-| transformers | 4.57.6 | LLM support |
-| numpy | ≥1.26 | Numerical operations |
+| numpy | >=1.26.0 | Numerical operations |
+| fastapi | 0.136.1 | Web framework |
+| uvicorn | 0.46.0 | ASGI server |
+| pydantic | 2.13.3 | Data validation |
+| rank-bm25 | 0.2.2 | BM25 sparse retrieval |
+| pypdf | 6.10.2 | PDF parsing |
 
-**Runtime requirements:**
-- LM Studio running locally on `http://127.0.0.1:1234` with `google/gemma-4-e2b` model
-- Or set `LM_BASE_URL` and `LM_API_KEY` env vars to point to your LLM endpoint
+---
 
-**Index pre-built:** `data/*.bin`, `data/*.pkl`, `data/*.json` are already generated from `sp21_standards.json`. Run `build_index.py` only if you modify the corpus.
+## Submission Checklist
+
+```bash
+# 1. Run inference
+python inference.py --input guidelines/public_test_set.json --output results.json
+
+# 2. Evaluate
+python eval_script.py --results results.json
+
+# 3. Verify output format
+# Should have: id, retrieved_standards, latency_seconds
+# Target: Hit@3 >80%, MRR >0.7, Latency <5s
+```

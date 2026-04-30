@@ -22,10 +22,10 @@ from sentence_transformers import SentenceTransformer
 # =============================================================================
 # CONFIGURATION
 # =============================================================================
-DATA_DIR = Path(__file__).parent / "data"
-LM_BASE_URL = os.getenv("LM_BASE_URL", "http://127.0.0.1:1234")
-LM_API_KEY = os.getenv("LM_API_KEY", "lmstudio")
-LM_MODEL = os.getenv("LM_MODEL", "google/gemma-4-e2b")
+DATA_DIR = Path(__file__).parent / "src" / "data"
+LM_BASE_URL = os.getenv("LM_BASE_URL", "http://localhost:11434")
+LM_API_KEY = os.getenv("LM_API_KEY", "ollama")
+LM_MODEL = os.getenv("LM_MODEL", "qwen3.5:4b")
 
 try:
     import torch
@@ -358,39 +358,76 @@ def g(key):
     return _index_store[key]
 
 
-def lm_studio_available():
-    global _lm_available
-    if _lm_available is not None:
-        return _lm_available
+def is_ollama_endpoint():
+    """Detect if we're using Ollama (localhost:11434) vs LM Studio/OpenAI-compatible."""
+    return "11434" in LM_BASE_URL
 
+
+def lm_probe():
+    """Check if LLM endpoint is available. Returns True if accessible."""
+    global _lm_available
+    
     with _lm_probe_lock:
         if _lm_available is not None:
             return _lm_available
-
-        req = urllib.request.Request(
-            f"{LM_BASE_URL}/v1/models",
-            headers={"x-api-key": LM_API_KEY},
-            method="GET",
-        )
-        log(f"Checking LM Studio at {LM_BASE_URL} ...")
+        
+        if is_ollama_endpoint():
+            req = urllib.request.Request(
+                f"{LM_BASE_URL}/api/tags",
+                headers={"Content-Type": "application/json"},
+                method="GET",
+            )
+            log(f"Checking Ollama at {LM_BASE_URL} ...")
+        else:
+            req = urllib.request.Request(
+                f"{LM_BASE_URL}/v1/models",
+                headers={"x-api-key": LM_API_KEY},
+                method="GET",
+            )
+            log(f"Checking LM Studio at {LM_BASE_URL} ...")
+        
         try:
             with urllib.request.urlopen(req, timeout=3) as resp:
                 if 200 <= resp.status < 300:
                     _lm_available = True
-                    log(f"LM Studio connected at {LM_BASE_URL}.")
+                    log(f"LLM endpoint connected at {LM_BASE_URL}.")
                     return True
         except Exception:
             pass
 
         _lm_available = False
-        log(f"LM Studio not reachable at {LM_BASE_URL}; falling back to deterministic rationale.")
+        log(f"LLM endpoint not reachable at {LM_BASE_URL}; falling back to deterministic rationale.")
         return False
 
 
-def lm_complete(prompt, max_tokens=96):
-    if not lm_studio_available():
+def lm_complete_ollama(prompt, max_tokens=96):
+    """Ollama API call using /api/generate endpoint."""
+    payload = {
+        "model": LM_MODEL,
+        "prompt": prompt,
+        "stream": False,
+        "options": {"num_predict": max_tokens, "temperature": 0.0}
+    }
+    req = urllib.request.Request(
+        f"{LM_BASE_URL}/api/generate",
+        data=json.dumps(payload).encode("utf-8"),
+        headers={"Content-Type": "application/json"},
+        method="POST",
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=20) as resp:
+            body = json.loads(resp.read().decode("utf-8"))
+            result = str(body.get("response", "")).strip()
+            if result:
+                log(f"LLM rationale: {result[:80]}...")
+            return result
+    except Exception as e:
+        log(f"LLM call failed: {e}")
         return ""
 
+
+def lm_complete_lmstudio(prompt, max_tokens=96):
+    """LM Studio / OpenAI-compatible API call using /v1/completions."""
     payload = {
         "model": LM_MODEL,
         "prompt": prompt,
@@ -410,10 +447,19 @@ def lm_complete(prompt, max_tokens=96):
             choices = body.get("choices") or []
             if choices:
                 return str(choices[0].get("text", "")).strip()
-    except (urllib.error.URLError, urllib.error.HTTPError, TimeoutError, Exception):
+    except Exception:
         return ""
-
     return ""
+
+
+def lm_complete(prompt, max_tokens=96):
+    if not lm_probe():
+        return ""
+    
+    if is_ollama_endpoint():
+        return lm_complete_ollama(prompt, max_tokens)
+    else:
+        return lm_complete_lmstudio(prompt, max_tokens)
 
 
 # =============================================================================
