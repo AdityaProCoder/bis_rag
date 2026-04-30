@@ -1,0 +1,1102 @@
+{
+  "1": {
+    "id": 1,
+    "name": "cement and concrete",
+    "sub_domains": [
+      {
+        "name": "fittings",
+        "standards": [
+          "IS 1626 (Part 2)",
+          "IS 1626",
+          "IS 14182"
+        ]
+      },
+      {
+        "name": "portland",
+        "standards": [
+          "IS 269",
+          "IS 455",
+          "IS 1489 (Part 1)",
+          "IS 1489 (Part 2)",
+          "IS 8042",
+          "IS 12269",
+          "IS 12330"
+        ]
+      },
+      {
+        "name": "asbestos",
+        "standards": [
+          "IS 1626 (Part 2)",
+          "IS 1626",
+          "IS 2096",
+          "IS 8870",
+          "IS 9627",
+          "IS 13000",
+          "IS 12987"
+        ]
+      }
+    ],
+    "core_standards": [
+      "IS 383",
+      "IS 269",
+      "IS 455",
+      "IS 1489 (Part 1)",
+      "IS 1489 (Part 2)",
+      "IS 6452",
+      "IS 6909",
+      "IS 8042",
+      "IS 12269",
+      "IS 12330"
+    ]
+  },
+  "2": {
+    "id": 2,
+    "name": "building limes",
+    "sub_domains": [
+      {
+        "name": "lime",
+        "standards": [
+          "IS 712",
+          "IS 3115",
+          "IS 3182",
+          "IS 10772"
+        ]
+      },
+      {
+        "name": "based",
+        "standards": [
+          "IS 3115"
+        ]
+      },
+      {
+        "name": "blocks",
+        "standards": [
+          "IS 3115"
+        ]
+      }
+    ],
+    "core_standards": [
+      "IS 712",
+      "IS 3115",
+      "IS 3182",
+      "IS 10772",
+      "IS 13026"
+    ]
+  },
+  "3": {
+    "id": 3,
+    "name": "stones",
+    "sub_domains": [
+      {
+        "name": "masonry",
+        "standards": [
+          "IS 2116",
+          "IS 1127"
+        ]
+      },
+      {
+        "name": "building",
+        "standards": [
+          "IS 1127",
+          "IS 14223 (Part 1)"
+        ]
+      },
+      {
+        "name": "sand",
+        "standards": [
+          "IS 2116"
+        ]
+      }
+    ],
+    "core_standards": [
+      "IS 2116",
+      "IS 1127",
+      "IS 9394",
+      "IS 14223 (Part 1)"
+    ]
+  },
+  "4": {
+    "id": 4,
+    "name": "wood products for building",
+    "sub_domains": [
+      {
+        "name": "plywood",
+        "standards": [
+          "IS 1328",
+          "IS 4990",
+          "IS 5539",
+          "IS 13957"
+        ]
+      },
+      {
+        "name": "bamboo",
+        "standards": [
+          "IS 13958",
+          "IS 14588",
+          "IS 15476"
+        ]
+      },
+      {
+        "name": "glue",
+        "standards": [
+          "IS 849",
+          "IS 852"
+        ]
+      }
+    ],
+    "core_standards": [
+      "IS 3952",
+      "IS 7308",
+      "IS 218",
+      "IS 849",
+      "IS 851",
+      "IS 852",
+      "IS 1328",
+      "IS 4990",
+      "IS 5539",
+      "IS 13957"
+    ]
+  },
+  "5": {
+    "id": 5,
+    "name": "gypsum building materials",
+    "sub_domains": [
+      {
+        "name": "plaster",
+        "standards": [
+          "IS 2095 (Part 1)",
+          "IS 2095 (Part 3)",
+          "IS 2547 (Part 1)",
+          "IS 2547 (Part 2)",
+          "IS 8272"
+        ]
+      },
+      {
+        "name": "boards",
+        "standards": [
+          "IS 2095 (Part 1)",
+          "IS 2095 (Part 3)",
+          "IS 8272"
+        ]
+      },
+      {
+        "name": "part",
+        "standards": [
+          "IS 2095 (Part 1)",
+          "IS 2095 (Part 3)",
+          "IS 2547 (Part 1)",
+          "IS 2547 (Part 2)",
+          "IS 2849"
+        ]
+      }
+    ],
+    "core_standards": [
+      "IS 2095 (Part 1)",
+      "IS 2095 (Part 3)",
+      "IS 2547 (Part 1)",
+      "IS 2547 (Part 2)",
+      "IS 2849",
+      "IS 8272",
+      "IS 9197"
+    ]
+  },
+  "6": {
+    "id": 6,
+    "name": "timber",
+    "sub_domains": [
+      {
+        "name": "coniferous",
+        "standards": [
+          "IS 190",
+          "IS 1326"
+        ]
+      },
+      {
+        "name": "baulks",
+        "standards": [
+          "IS 190",
+          "IS 1326"
+        ]
+      },
+      {
+        "name": "classification",
+        "standards": [
+          "IS 399"
+        ]
+      }
+    ],
+    "core_standards": [
+      "IS 399",
+      "IS 190",
+      "IS 1326",
+      "IS 2372",
+      "IS 4891",
+      "IS 4895",
+      "IS 14616",
+      "IS 4021"
+    ]
+  },
+  "7": {
+    "id": 7,
+    "name": "bitumen and tar products",
+    "sub_domains": [
+      {
+        "name": "crude",
+        "standards": [
+          "IS 212",
+          "IS 454"
+        ]
+      },
+      {
+        "name": "coal",
+        "standards": [
+          "IS 212",
+          "IS 14695"
+        ]
+      },
+      {
+        "name": "ving",
+        "standards": [
+          "IS 73"
+        ]
+      }
+    ],
+    "core_standards": [
+      "IS 73",
+      "IS 212",
+      "IS 215",
+      "IS 454",
+      "IS 3117",
+      "IS 9510",
+      "IS 14695"
+    ]
+  },
+  "8": {
+    "id": 8,
+    "name": "floor wall roof coverings finishes",
+    "sub_domains": [
+      {
+        "name": "tiles",
+        "standards": [
+          "IS 1128",
+          "IS 1130",
+          "IS 3622",
+          "IS 6250",
+          "IS 654",
+          "IS 1464",
+          "IS 1478",
+          "IS 2690 (Part 1)",
+          "IS 2690 (Part 2)",
+          "IS 3367"
+        ]
+      },
+      {
+        "name": "clay",
+        "standards": [
+          "IS 7556",
+          "IS 654",
+          "IS 1464",
+          "IS 1478",
+          "IS 2690 (Part 1)",
+          "IS 2690 (Part 2)",
+          "IS 3367",
+          "IS 3951 (Part 1)",
+          "IS 3951 (Part 2)",
+          "IS 13317"
+        ]
+      },
+      {
+        "name": "roofing",
+        "standards": [
+          "IS 10388",
+          "IS 14241",
+          "IS 6250",
+          "IS 654",
+          "IS 13317",
+          "IS 12583"
+        ]
+      }
+    ],
+    "core_standards": [
+      "IS 6072",
+      "IS 6073",
+      "IS 10388",
+      "IS 14241",
+      "IS 1128",
+      "IS 1130",
+      "IS 3622",
+      "IS 6250",
+      "IS 7556",
+      "IS 654"
+    ]
+  },
+  "9": {
+    "id": 9,
+    "name": "waterproofing damp proofing",
+    "sub_domains": [
+      {
+        "name": "water",
+        "standards": [
+          "IS 13356",
+          "IS 1580",
+          "IS 2645",
+          "IS 3037",
+          "IS 3384",
+          "IS 12027",
+          "IS 5382",
+          "IS 3076",
+          "IS 4270",
+          "IS 1795"
+        ]
+      },
+      {
+        "name": "bitumen",
+        "standards": [
+          "IS 5317",
+          "IS 8374",
+          "IS 1322",
+          "IS 3037",
+          "IS 3384",
+          "IS 5871",
+          "IS 7193"
+        ]
+      },
+      {
+        "name": "pipes",
+        "standards": [
+          "IS 1592",
+          "IS 4350",
+          "IS 3076",
+          "IS 5504"
+        ]
+      }
+    ],
+    "core_standards": [
+      "IS 13356",
+      "IS 1592",
+      "IS 13008",
+      "IS 4350",
+      "IS 5317",
+      "IS 8374",
+      "IS 638",
+      "IS 1322",
+      "IS 1580",
+      "IS 2645"
+    ]
+  },
+  "10": {
+    "id": 10,
+    "name": "sanitary appliances water fittings",
+    "sub_domains": [
+      {
+        "name": "part",
+        "standards": [
+          "IS 1626 (Part 1)",
+          "IS 5219",
+          "IS 7834",
+          "IS 7834 (Part 2)",
+          "IS 7834 (Part 3)",
+          "IS 7834 (Part 4)",
+          "IS 7834 (Part 5)",
+          "IS 7834 (Part 6)",
+          "IS 7834 (Part 7)",
+          "IS 7834 (Part 8)"
+        ]
+      },
+      {
+        "name": "specific",
+        "standards": [
+          "IS 7834 (Part 2)",
+          "IS 7834 (Part 3)",
+          "IS 7834 (Part 4)",
+          "IS 7834 (Part 5)",
+          "IS 7834 (Part 6)",
+          "IS 7834 (Part 7)",
+          "IS 7834 (Part 8)",
+          "IS 8008 (Part 2)",
+          "IS 8008 (Part 3)",
+          "IS 8008 (Part 4)"
+        ]
+      },
+      {
+        "name": "supplies",
+        "standards": [
+          "IS 7834",
+          "IS 7834 (Part 2)",
+          "IS 7834 (Part 3)",
+          "IS 7834 (Part 4)",
+          "IS 7834 (Part 5)",
+          "IS 7834 (Part 6)",
+          "IS 7834 (Part 7)",
+          "IS 7834 (Part 8)",
+          "IS 8008 (Part 1)",
+          "IS 8008 (Part 2)"
+        ]
+      }
+    ],
+    "core_standards": [
+      "IS 1626 (Part 1)",
+      "IS 6908",
+      "IS 1834",
+      "IS 4885",
+      "IS 702",
+      "IS 782",
+      "IS 1700",
+      "IS 2963",
+      "IS 3489",
+      "IS 5219"
+    ]
+  },
+  "11": {
+    "id": 11,
+    "name": "builders hardware",
+    "sub_domains": [],
+    "core_standards": []
+  },
+  "12": {
+    "id": 12,
+    "name": "wood products",
+    "sub_domains": [
+      {
+        "name": "boards",
+        "standards": [
+          "IS 3478",
+          "IS 12823"
+        ]
+      },
+      {
+        "name": "coniferous",
+        "standards": [
+          "IS 5246"
+        ]
+      },
+      {
+        "name": "logs",
+        "standards": [
+          "IS 5246"
+        ]
+      }
+    ],
+    "core_standards": [
+      "IS 5246",
+      "IS 14912",
+      "IS 12049",
+      "IS 3478",
+      "IS 12823",
+      "IS 3513 (Part 2)"
+    ]
+  },
+  "13": {
+    "id": 13,
+    "name": "doors windows shutters",
+    "sub_domains": [
+      {
+        "name": "door",
+        "standards": [
+          "IS 12896",
+          "IS 208",
+          "IS 452",
+          "IS 1823",
+          "IS 2681",
+          "IS 3564",
+          "IS 4992",
+          "IS 6315",
+          "IS 6343",
+          "IS 7197"
+        ]
+      },
+      {
+        "name": "type",
+        "standards": [
+          "IS 452",
+          "IS 4992",
+          "IS 5930",
+          "IS 6607",
+          "IS 2191 (Part 1)",
+          "IS 2191 (Part 2)",
+          "IS 2202 (Part 1)",
+          "IS 2202 (Part 2)",
+          "IS 14856"
+        ]
+      },
+      {
+        "name": "part",
+        "standards": [
+          "IS 1003 (Part 1)",
+          "IS 1003 (Part 2)",
+          "IS 2191 (Part 1)",
+          "IS 2191 (Part 2)",
+          "IS 2202 (Part 1)",
+          "IS 2202 (Part 2)"
+        ]
+      }
+    ],
+    "core_standards": [
+      "IS 12896",
+      "IS 208",
+      "IS 452",
+      "IS 1823",
+      "IS 2681",
+      "IS 3564",
+      "IS 4992",
+      "IS 5930",
+      "IS 6315",
+      "IS 6343"
+    ]
+  },
+  "14": {
+    "id": 14,
+    "name": "concrete reinforcement",
+    "sub_domains": [
+      {
+        "name": "precast",
+        "standards": [
+          "IS 5751",
+          "IS 5820",
+          "IS 6523",
+          "IS 12440",
+          "IS 13990",
+          "IS 14201",
+          "IS 458"
+        ]
+      },
+      {
+        "name": "steel",
+        "standards": [
+          "IS 7322",
+          "IS 432 (Part II)",
+          "IS 1566",
+          "IS 1785 (Part I)"
+        ]
+      },
+      {
+        "name": "wire",
+        "standards": [
+          "IS 432 (Part II)",
+          "IS 1566",
+          "IS 1785 (Part I)",
+          "IS 1785 (Part 2)"
+        ]
+      }
+    ],
+    "core_standards": [
+      "IS 9142",
+      "IS 8041",
+      "IS 8043",
+      "IS 8112",
+      "IS 2185 (Part 2)",
+      "IS 4996",
+      "IS 5751",
+      "IS 5820",
+      "IS 6523",
+      "IS 12440"
+    ]
+  },
+  "15": {
+    "id": 15,
+    "name": "structural steels",
+    "sub_domains": [
+      {
+        "name": "steel",
+        "standards": [
+          "IS 804",
+          "IS 281",
+          "IS 1341",
+          "IS 10019",
+          "IS 1361",
+          "IS 4351",
+          "IS 7452",
+          "IS 10451",
+          "IS 280",
+          "IS 432 (Part 1)"
+        ]
+      },
+      {
+        "name": "part",
+        "standards": [
+          "IS 2185 (Part 1)",
+          "IS 2185 (Part 3)",
+          "IS 1838 (Part 2)",
+          "IS 11433 (Part 1)",
+          "IS 4832 (Part 1)",
+          "IS 4832 (Part 2)",
+          "IS 4832 (Part 3)",
+          "IS 204 (Part 1)",
+          "IS 204 (Part 2)",
+          "IS 432 (Part 1)"
+        ]
+      },
+      {
+        "name": "concrete",
+        "standards": [
+          "IS 2185 (Part 1)",
+          "IS 2185 (Part 3)",
+          "IS 7319",
+          "IS 1838 (Part 2)",
+          "IS 432 (Part 1)",
+          "IS 1786",
+          "IS 2090",
+          "IS 14268"
+        ]
+      }
+    ],
+    "core_standards": [
+      "IS 3466",
+      "IS 2185 (Part 1)",
+      "IS 2185 (Part 3)",
+      "IS 2098",
+      "IS 7319",
+      "IS 1838 (Part 2)",
+      "IS 11433 (Part 1)",
+      "IS 4139",
+      "IS 12894",
+      "IS 3316"
+    ]
+  },
+  "16": {
+    "id": 16,
+    "name": "light metal alloys",
+    "sub_domains": [
+      {
+        "name": "aluminium",
+        "standards": [
+          "IS 738",
+          "IS 2676",
+          "IS 3921",
+          "IS 6445"
+        ]
+      },
+      {
+        "name": "wrought",
+        "standards": [
+          "IS 738",
+          "IS 2676"
+        ]
+      },
+      {
+        "name": "lime",
+        "standards": [
+          "IS 4098"
+        ]
+      }
+    ],
+    "core_standards": [
+      "IS 4098",
+      "IS 3847",
+      "IS 738",
+      "IS 2676",
+      "IS 3921",
+      "IS 6445"
+    ]
+  },
+  "17": {
+    "id": 17,
+    "name": "structural shapes",
+    "sub_domains": [
+      {
+        "name": "head",
+        "standards": [
+          "IS 1363 (Part 2)",
+          "IS 1364 (Part 1)",
+          "IS 1364 (Part 2)",
+          "IS 1366"
+        ]
+      },
+      {
+        "name": "hexagon",
+        "standards": [
+          "IS 1363 (Part 2)",
+          "IS 1364 (Part 1)",
+          "IS 1364 (Part 2)"
+        ]
+      },
+      {
+        "name": "screws",
+        "standards": [
+          "IS 1363 (Part 2)",
+          "IS 1364 (Part 1)",
+          "IS 1364 (Part 2)",
+          "IS 1366"
+        ]
+      }
+    ],
+    "core_standards": [
+      "IS 12592",
+      "IS 14143",
+      "IS 5779",
+      "IS 6165",
+      "IS 3337",
+      "IS 3731",
+      "IS 2002",
+      "IS 363",
+      "IS 2209",
+      "IS 3843"
+    ]
+  },
+  "18": {
+    "id": 18,
+    "name": "welding electrodes wires",
+    "sub_domains": [
+      {
+        "name": "steel",
+        "standards": [
+          "IS 6286",
+          "IS 4948",
+          "IS 814",
+          "IS 1395",
+          "IS 6560",
+          "IS 7280",
+          "IS 8363",
+          "IS 278"
+        ]
+      },
+      {
+        "name": "alloy",
+        "standards": [
+          "IS 1395",
+          "IS 5897",
+          "IS 5898",
+          "IS 6560"
+        ]
+      },
+      {
+        "name": "wire",
+        "standards": [
+          "IS 4948",
+          "IS 5897",
+          "IS 7280",
+          "IS 8363",
+          "IS 278"
+        ]
+      }
+    ],
+    "core_standards": [
+      "IS 876",
+      "IS 6286",
+      "IS 4948",
+      "IS 814",
+      "IS 1395",
+      "IS 4972",
+      "IS 5511",
+      "IS 5897",
+      "IS 5898",
+      "IS 6560"
+    ]
+  },
+  "19": {
+    "id": 19,
+    "name": "threaded fasteners rivets",
+    "sub_domains": [
+      {
+        "name": "forged",
+        "standards": [
+          "IS 1929",
+          "IS 2998"
+        ]
+      },
+      {
+        "name": "steel",
+        "standards": [
+          "IS 1929",
+          "IS 2998"
+        ]
+      },
+      {
+        "name": "diameter",
+        "standards": [
+          "IS 1929",
+          "IS 2998"
+        ]
+      }
+    ],
+    "core_standards": [
+      "IS 1929",
+      "IS 2907",
+      "IS 2998",
+      "IS 3121"
+    ]
+  },
+  "20": {
+    "id": 20,
+    "name": "wire ropes wire products",
+    "sub_domains": [
+      {
+        "name": "steel",
+        "standards": [
+          "IS 7887",
+          "IS 2365"
+        ]
+      },
+      {
+        "name": "mild",
+        "standards": [
+          "IS 7887"
+        ]
+      },
+      {
+        "name": "engineering",
+        "standards": [
+          "IS 7887"
+        ]
+      }
+    ],
+    "core_standards": [
+      "IS 7887",
+      "IS 725",
+      "IS 2365"
+    ]
+  },
+  "21": {
+    "id": 21,
+    "name": "glass",
+    "sub_domains": [
+      {
+        "name": "safety",
+        "standards": [
+          "IS 2553 (Part 1)"
+        ]
+      },
+      {
+        "name": "part",
+        "standards": [
+          "IS 2553 (Part 1)"
+        ]
+      },
+      {
+        "name": "purpose",
+        "standards": [
+          "IS 2553 (Part 1)",
+          "IS 3438"
+        ]
+      }
+    ],
+    "core_standards": [
+      "IS 2553 (Part 1)",
+      "IS 2835",
+      "IS 3438",
+      "IS 5437"
+    ]
+  },
+  "22": {
+    "id": 22,
+    "name": "fillers stoppers putties",
+    "sub_domains": [
+      {
+        "name": "nuts",
+        "standards": [
+          "IS 2687"
+        ]
+      },
+      {
+        "name": "putty",
+        "standards": [
+          "IS 419"
+        ]
+      },
+      {
+        "name": "window",
+        "standards": [
+          "IS 419"
+        ]
+      }
+    ],
+    "core_standards": [
+      "IS 2687",
+      "IS 419"
+    ]
+  },
+  "23": {
+    "id": 23,
+    "name": "thermal insulation materials",
+    "sub_domains": [
+      {
+        "name": "fibre",
+        "standards": [
+          "IS 1838 (Part 1)",
+          "IS 12866",
+          "IS 14399 (Part 1 AND 2)",
+          "IS 3348",
+          "IS 12406"
+        ]
+      },
+      {
+        "name": "preformed",
+        "standards": [
+          "IS 1838 (Part 1)",
+          "IS 9428",
+          "IS 9842",
+          "IS 12436"
+        ]
+      },
+      {
+        "name": "iron",
+        "standards": [
+          "IS 9912",
+          "IS 6418",
+          "IS 13349"
+        ]
+      }
+    ],
+    "core_standards": [
+      "IS 1838 (Part 1)",
+      "IS 216",
+      "IS 9912",
+      "IS 12866",
+      "IS 809",
+      "IS 14399 (Part 1 AND 2)",
+      "IS 6418",
+      "IS 13349",
+      "IS 5509",
+      "IS 3308"
+    ]
+  },
+  "24": {
+    "id": 24,
+    "name": "plastics",
+    "sub_domains": [
+      {
+        "name": "pipes",
+        "standards": [
+          "IS 4984",
+          "IS 4985",
+          "IS 12709",
+          "IS 12818",
+          "IS 13592"
+        ]
+      },
+      {
+        "name": "density",
+        "standards": [
+          "IS 4984",
+          "IS 3129",
+          "IS 15491",
+          "IS 2508",
+          "IS 10889"
+        ]
+      },
+      {
+        "name": "water",
+        "standards": [
+          "IS 4985",
+          "IS 12709",
+          "IS 2548 (Part 1)",
+          "IS 2548 (Part 2)",
+          "IS 12234"
+        ]
+      }
+    ],
+    "core_standards": [
+      "IS 5758",
+      "IS 12118 (Part 1)",
+      "IS 4860",
+      "IS 407",
+      "IS 13382",
+      "IS 4984",
+      "IS 4985",
+      "IS 12709",
+      "IS 12818",
+      "IS 13592"
+    ]
+  },
+  "25": {
+    "id": 25,
+    "name": "conductors cables",
+    "sub_domains": [
+      {
+        "name": "insulated",
+        "standards": [
+          "IS 694",
+          "IS 1554 (Part 1)",
+          "IS 7098 (Part 1)",
+          "IS 9968 (Part 1)"
+        ]
+      },
+      {
+        "name": "working",
+        "standards": [
+          "IS 694",
+          "IS 1554 (Part 1)",
+          "IS 7098 (Part 1)",
+          "IS 9968 (Part 1)"
+        ]
+      },
+      {
+        "name": "including",
+        "standards": [
+          "IS 694",
+          "IS 1554 (Part 1)",
+          "IS 7098 (Part 1)",
+          "IS 9968 (Part 1)"
+        ]
+      }
+    ],
+    "core_standards": [
+      "IS 6056",
+      "IS 4762",
+      "IS 694",
+      "IS 1554 (Part 1)",
+      "IS 7098 (Part 1)",
+      "IS 9968 (Part 1)",
+      "IS 9537 (Part 1)"
+    ]
+  },
+  "26": {
+    "id": 26,
+    "name": "wiring accessories",
+    "sub_domains": [
+      {
+        "name": "hexagon",
+        "standards": [
+          "IS 1363 (Part 1)",
+          "IS 1363 (Part 3)",
+          "IS 1364 (Part 3)",
+          "IS 1364 (Part 4)",
+          "IS 1364 (Part 5)"
+        ]
+      },
+      {
+        "name": "nuts",
+        "standards": [
+          "IS 1363 (Part 1)",
+          "IS 1363 (Part 3)",
+          "IS 1364 (Part 3)",
+          "IS 1364 (Part 4)",
+          "IS 1364 (Part 5)",
+          "IS 3468"
+        ]
+      },
+      {
+        "name": "part",
+        "standards": [
+          "IS 1239 (Part 2)",
+          "IS 1363 (Part 1)",
+          "IS 1363 (Part 3)",
+          "IS 1364 (Part 3)",
+          "IS 1364 (Part 4)",
+          "IS 1364 (Part 5)",
+          "IS 9537 (Part II)",
+          "IS 9537 (Part 4)",
+          "IS 9537 (Part 5)"
+        ]
+      }
+    ],
+    "core_standards": [
+      "IS 775",
+      "IS 12820",
+      "IS 12988",
+      "IS 1239 (Part 2)",
+      "IS 3589",
+      "IS 778",
+      "IS 206",
+      "IS 3818",
+      "IS 4621",
+      "IS 739"
+    ]
+  },
+  "27": {
+    "id": 27,
+    "name": "general",
+    "sub_domains": [],
+    "core_standards": []
+  }
+}
