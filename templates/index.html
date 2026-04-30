@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BIS Standards Discovery Tool | MSME Compliance</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="glow-bg"></div>
+
+    <header>
+        <div class="container">
+            <h1 class="animate-text">BIS Standards <span>Discovery</span></h1>
+            <p class="subtitle">Practical compliance guidance for Indian MSMEs</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="top-grid">
+            <section class="glass-panel about-bis-section animate-text">
+                <div class="panel-header">
+                    <h2>Why BIS Compliance Matters?</h2>
+                </div>
+                <div class="about-content">
+                    <p><strong>BIS</strong> sets the standards that shape product quality, safety, and market confidence across India.</p>
+                    <ul class="about-list">
+                        <li><strong>Market access:</strong> The right standard helps products move smoothly into the market.</li>
+                        <li><strong>Consumer trust:</strong> BIS-backed products signal reliability and quality.</li>
+                        <li><strong>Quality control:</strong> Standards give your team a clear benchmark.</li>
+                        <li><strong>Risk reduction:</strong> Compliance reduces avoidable failures later.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section class="glass-panel search-section">
+                <div class="panel-header">
+                    <span class="step-badge">Option 1</span>
+                    <h2>AI Agent Search</h2>
+                </div>
+                <div class="search-container">
+                    <textarea id="query-input" placeholder="Describe your product in detail... e.g., High-strength Portland slag cement for marine environment"></textarea>
+                    <div class="examples-hint" id="examples-hint">
+                        Select a section in Option 1 to see useful search examples here
+                    </div>
+                    <button id="search-btn" class="primary-btn">
+                        <span class="btn-text">Search via AI Agent</span>
+                        <span class="loader" id="btn-loader"></span>
+                    </button>
+                </div>
+            </section>
+        </div>
+
+        <section class="glass-panel guided-section">
+            <div class="panel-header">
+                <span class="step-badge">Option 2</span>
+                <h2>Guided Discovery</h2>
+            </div>
+            <p class="section-note">Pick a material section, then pick a keyword to see the BIS codes for that topic.</p>
+            <div class="category-grid" id="category-grid"></div>
+
+            <div id="keywords-container" class="keywords-area" style="display: none;">
+                <div class="subsection-label">Keywords for this section</div>
+                <div id="keywords-list" class="keywords-list"></div>
+            </div>
+
+            <div id="guided-results-container" class="guided-results-area" style="display: none;">
+                <div class="subsection-label">BIS codes for the selected keyword</div>
+                <div id="guided-results-list" class="guided-results-list"></div>
+            </div>
+        </section>
+
+        <section id="results-section" class="results-container">
+            <h2 class="results-title">AI Search Recommendations</h2>
+            <div id="results-list">
+                <div class="empty-state">
+                    <p>Your recommendations will appear here after searching</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>Built for BIS Hackathon 2026 | Empowering Indian Industry</p>
+        </div>
+    </footer>
+
+    <script src="/static/js/script.js"></script>
+</body>
+</html>
