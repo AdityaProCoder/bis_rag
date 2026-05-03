@@ -25,7 +25,7 @@ from sentence_transformers import SentenceTransformer
 DATA_DIR = Path(__file__).parent / "src" / "data"
 LM_BASE_URL = os.getenv("LM_BASE_URL", "http://127.0.0.1:1234")
 LM_API_KEY = os.getenv("LM_API_KEY", "lmstudio")
-LM_MODEL = os.getenv("LM_MODEL", "qwen3.5:4b")
+LM_MODEL = os.getenv("LM_MODEL", "google/gemma-4-e2b")
 
 try:
     import torch

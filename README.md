@@ -1,6 +1,6 @@
 # BIS Standards Discovery
 
-A production-ready RAG pipeline with an interactive dashboard that maps natural-language queries about Indian BIS construction standards to the correct IS codes. Achieves **MRR=0.92+** with deterministic ranking and ~2.7 second latency.
+A production-ready RAG pipeline with an interactive dashboard that maps natural-language queries about Indian BIS construction standards to the correct IS codes. Achieves **MRR=0.92+** with deterministic ranking and **~1.1 second latency**.
 
 ---
 
@@ -14,7 +14,7 @@ It returns five recommended BIS standards ranked by relevance, plus an AI-genera
 {
   "retrieved": ["IS 455: 1989", "IS 269: 1989", "IS 1489 (Part 1): 1991", "IS 8043: 1991", "IS 1489 (Part 2): 1991"],
   "rationale": "IS 455 is the standard for Portland slag cement, covering its manufacture and physical requirements for use in marine environments.",
-  "latency_seconds": 2.7
+  "latency_seconds": 1.11
 }
 ```
 
@@ -32,7 +32,7 @@ Click-through category → keyword → standards workflow for structured browsin
 |--------|-------------------|---------------------|--------|
 | Hit Rate @3 | **90.00%** | **98.00%** | >80% |
 | MRR @5 | **0.9200** | **0.9390** | >0.7 |
-| Avg Latency | **2.71s** | **2.97s** | <5s |
+| Avg Latency | **1.11s** | **6.81s** | <5s |
 
 ---
 
@@ -177,7 +177,7 @@ python eval_script.py --results results.json
 |----------|---------|-------------|
 | `LM_BASE_URL` | `http://127.0.0.1:1234` | LM Studio endpoint (default) |
 | `LM_API_KEY` | `lmstudio` | API key |
-| `LM_MODEL` | `qwen3.5:4b` | Model name (recommended: qwen3.5:4b) |
+| `LM_MODEL` | `google/gemma-4-e2b` | Model name (recommended: google/gemma-4-e2b) |
 | `BIS_FORCE_CPU` | `0` | Set to `1` to force CPU |
 
 ### CPU/CUDA Behavior
@@ -220,7 +220,7 @@ torch.cuda.is_available()?
 |--------|--------|--------|
 | Hit Rate @3 | **90.00%** | >80% |
 | MRR @5 | **0.9200** | >0.7 |
-| Avg Latency | **2.71 sec** | <5s |
+| Avg Latency | **1.10 sec** | <5s |
 
 ### Extended Test Set (100 queries)
 Custom created dataset similar to `test/public_test_set.json` located at `test/test_100.json`.
@@ -229,7 +229,7 @@ Custom created dataset similar to `test/public_test_set.json` located at `test/t
 |--------|--------|--------|
 | Hit Rate @3 | **98.00%** | >80% |
 | MRR @5 | **0.9390** | >0.7 |
-| Avg Latency | **2.97 sec** | <5s |
+| Avg Latency | **1.10 sec** | <5s |
 
 ---
 
