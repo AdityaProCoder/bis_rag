@@ -1,5 +1,0 @@
-{
-  "model_name": "BAAI/bge-m3",
-  "dimension": 1024,
-  "device": "cuda"
-}

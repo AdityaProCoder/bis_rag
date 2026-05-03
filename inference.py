@@ -46,8 +46,8 @@ except Exception:
 TOP_DENSE = 25
 TOP_BM25 = 25
 PARAPHRASE_TOP_DENSE = 40
-FUSION_K = 18
-FUSION_K_FALLBACK = 30
+FUSION_K = 25
+FUSION_K_FALLBACK = 40
 RRF_K_DENSE = 12
 RRF_K_BM25 = 8
 OUTPUT_K = 5
@@ -514,7 +514,12 @@ def feature_score(query_sig, cand_sig):
     score += bg_overlap * 6.0
 
     title_kw_overlap = len(query_sig["keywords"] & set(re.findall(r"\b[a-z]{4,}\b", cand_sig["title"])))
-    score += title_kw_overlap * 8.0
+    score += title_kw_overlap * 9.0
+
+    # Content keyword overlap - helps match specific product terms in body text
+    content_keywords = set(re.findall(r"\b[a-z]{4,}\b", cand_sig["text"]))
+    content_kw_overlap = len(query_sig["keywords"] & content_keywords)
+    score += content_kw_overlap * 1.0
 
     mat_overlap = len(query_sig["materials"] & cand_sig["materials"])
     score += mat_overlap * 5.0
@@ -605,8 +610,8 @@ def resolve_family_rank(scored, query_sig, trace=None):
 
 
 def build_candidates(query, standards_db, whitelist, k_primary=FUSION_K, with_fallback=False, trace=None):
-    dense = retrieve_dense(query, k=TOP_DENSE if not with_fallback else max(TOP_DENSE, 35))
-    bm25 = retrieve_bm25(query, k=TOP_BM25 if not with_fallback else max(TOP_BM25, 35))
+    dense = retrieve_dense(query, k=TOP_DENSE if not with_fallback else max(TOP_DENSE, 40))
+    bm25 = retrieve_bm25(query, k=TOP_BM25 if not with_fallback else max(TOP_BM25, 40))
     fused = fuse_results(dense, bm25)
     topk = FUSION_K_FALLBACK if with_fallback else k_primary
     candidates = [cid for cid, _ in fused[:topk] if cid in whitelist]

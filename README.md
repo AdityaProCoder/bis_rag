@@ -1,6 +1,6 @@
 # BIS Standards Discovery
 
-A production-ready RAG pipeline with an interactive dashboard that maps natural-language queries about Indian BIS construction standards to the correct IS codes. Achieves **MRR=0.920** with deterministic ranking and ~1.6 second latency.
+A production-ready RAG pipeline with an interactive dashboard that maps natural-language queries about Indian BIS construction standards to the correct IS codes. Achieves **MRR=0.92+** with deterministic ranking and ~2.7 second latency.
 
 ---
 
@@ -14,7 +14,7 @@ It returns five recommended BIS standards ranked by relevance, plus an AI-genera
 {
   "retrieved": ["IS 455: 1989", "IS 269: 1989", "IS 1489 (Part 1): 1991", "IS 8043: 1991", "IS 1489 (Part 2): 1991"],
   "rationale": "IS 455 is the standard for Portland slag cement, covering its manufacture and physical requirements for use in marine environments.",
-  "latency_seconds": 1.6
+  "latency_seconds": 2.7
 }
 ```
 
@@ -28,11 +28,11 @@ Click-through category → keyword → standards workflow for structured browsin
 
 ### Hackathon Performance
 
-| Metric | Result | Target |
-|--------|--------|--------|
-| Hit Rate @3 | **90%** | >80% |
-| MRR @5 | **0.920** | >0.7 |
-| Avg Latency | **~1.6s** | <5s |
+| Metric | Public (10 queries) | Extended (100 queries) | Target |
+|--------|-------------------|---------------------|--------|
+| Hit Rate @3 | **90.00%** | **98.00%** | >80% |
+| MRR @5 | **0.9200** | **0.9390** | >0.7 |
+| Avg Latency | **2.71s** | **2.97s** | <5s |
 
 ---
 
@@ -199,12 +199,37 @@ torch.cuda.is_available()?
 | Feature | Weight | Purpose |
 |---------|--------|---------|
 | IS number exact match | +36 | Direct mention in query |
-| Keyword overlap | +4/bigram | Semantic matching |
+| Keyword overlap | +4/match | Semantic matching |
 | Bigram overlap | +6/bigram | Phrase matching |
+| Title keyword overlap | +9/match | Title-specific term matching |
+| Content keyword overlap | +1/match | Body text term matching |
+| Material overlap | +5/match | Material type matching |
 | Product type match | +11/match | Material classification |
 | Mutual exclusivity | -24/mismatch | Prevents wrong family |
-| Part alignment | +18/-12 | Correct Part variant |
+| Part alignment (correct) | +18 | Correct Part variant |
+| Part alignment (wrong) | -12 | Incorrect Part variant |
+| Part alignment (no part) | -2 | Missing Part when expected |
 | Near-ID penalty | -16 | e.g., 736 vs 737 |
+
+---
+
+## Performance Results
+
+### Public Test Set (10 queries)
+| Metric | Result | Target |
+|--------|--------|--------|
+| Hit Rate @3 | **90.00%** | >80% |
+| MRR @5 | **0.9200** | >0.7 |
+| Avg Latency | **2.71 sec** | <5s |
+
+### Extended Test Set (100 queries)
+Custom created dataset similar to `test/public_test_set.json` located at `test/test_100.json`.
+
+| Metric | Result | Target |
+|--------|--------|--------|
+| Hit Rate @3 | **98.00%** | >80% |
+| MRR @5 | **0.9390** | >0.7 |
+| Avg Latency | **2.97 sec** | <5s |
 
 ---
 

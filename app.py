@@ -44,7 +44,16 @@ async def read_root(request: Request):
 async def get_guided_data():
     try:
         # Resolve paths relative to project root
-        data_dir = os.path.join(os.path.dirname(__file__), "data")
+        base_dir = os.path.dirname(__file__)
+        data_candidates = [
+            os.path.join(base_dir, "src", "data"),
+            os.path.join(base_dir, "data"),
+        ]
+
+        data_dir = next((path for path in data_candidates if os.path.isdir(path)), None)
+        if not data_dir:
+            raise FileNotFoundError("Could not locate guided data directory")
+
         profiles_path = os.path.join(data_dir, "section_profiles.json")
         metadata_path = os.path.join(data_dir, "metadata_store.json")
         
