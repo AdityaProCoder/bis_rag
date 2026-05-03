@@ -133,11 +133,19 @@ bis_rag/
 uv pip install -r requirements.txt
 ```
 
-### 2. Start Ollama (Optional - for LLM rationale)
+### 2. Start LM Studio (Default - for LLM rationale)
 
+```bash
+# Ensure LM Studio is running at http://127.0.0.1:1234
+LM_BASE_URL=http://127.0.0.1:1234 LM_MODEL=qwen3.5:4b
+```
+
+**Option B - Ollama:**
 ```bash
 ollama serve
 ollama pull qwen3.5:4b
+# Then run with:
+# LM_BASE_URL=http://localhost:11434 LM_API_KEY=ollama python inference.py --input ...
 ```
 
 ### 3. Run Dashboard
@@ -167,8 +175,8 @@ python eval_script.py --results results.json
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `LM_BASE_URL` | `http://localhost:11434` | Ollama endpoint |
-| `LM_API_KEY` | `ollama` | API key |
+| `LM_BASE_URL` | `http://127.0.0.1:1234` | LM Studio endpoint (default) |
+| `LM_API_KEY` | `lmstudio` | API key |
 | `LM_MODEL` | `qwen3.5:4b` | Model name (recommended: qwen3.5:4b) |
 | `BIS_FORCE_CPU` | `0` | Set to `1` to force CPU |
 

@@ -23,8 +23,8 @@ from sentence_transformers import SentenceTransformer
 # CONFIGURATION
 # =============================================================================
 DATA_DIR = Path(__file__).parent / "src" / "data"
-LM_BASE_URL = os.getenv("LM_BASE_URL", "http://localhost:11434")
-LM_API_KEY = os.getenv("LM_API_KEY", "ollama")
+LM_BASE_URL = os.getenv("LM_BASE_URL", "http://127.0.0.1:1234")
+LM_API_KEY = os.getenv("LM_API_KEY", "lmstudio")
 LM_MODEL = os.getenv("LM_MODEL", "qwen3.5:4b")
 
 try:
