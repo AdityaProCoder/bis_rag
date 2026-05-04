@@ -32,7 +32,7 @@ Click-through category → keyword → standards workflow for structured browsin
 |--------|-------------------|---------------------|--------|
 | Hit Rate @3 | **90.00%** | **98.00%** | >80% |
 | MRR @5 | **0.9200** | **0.9390** | >0.7 |
-| Avg Latency | **1.11s** | **6.81s** | <5s |
+| Avg Latency | **1.11s** | **1.11s** | <5s |
 
 ---
 
@@ -51,7 +51,7 @@ flowchart TD
     C -->|No| FB[Fallback<br/>Pool 30]
     FB --> S
     C -->|OK| O[Output Top-5]
-    O --> L[LLM Rationale<br/>Ollama]
+    O --> L[LLM Rationale<br/>LM Studio]
 ```
 
 ### Pipeline Stages
@@ -86,7 +86,7 @@ Query: "Portland slag cement chemical requirements"
 │
 └─[6] OUTPUT
     ├─ Format standards with year (e.g., "IS 455: 1989")
-    ├─ Generate LLM rationale via Ollama
+    ├─ Generate LLM rationale via LM Studio
     └─ Return top-5 results
 ```
 
@@ -137,15 +137,14 @@ uv pip install -r requirements.txt
 
 ```bash
 # Ensure LM Studio is running at http://127.0.0.1:1234
-LM_BASE_URL=http://127.0.0.1:1234 LM_MODEL=qwen3.5:4b
+LM_BASE_URL=http://127.0.0.1:1234 LM_MODEL=gemma4:e:2b
 ```
 
-**Option B - Ollama:**
+**Option B - LM Studio:**
 ```bash
-ollama serve
-ollama pull qwen3.5:4b
+# Start LM Studio and ensure it is running at http://127.0.0.1:1234
 # Then run with:
-# LM_BASE_URL=http://localhost:11434 LM_API_KEY=ollama python inference.py --input ...
+# LM_BASE_URL=http://127.0.0.1:1234 LM_MODEL=gemma4:e:2b python inference.py --input ...
 ```
 
 ### 3. Run Dashboard
@@ -177,7 +176,7 @@ python eval_script.py --results results.json
 |----------|---------|-------------|
 | `LM_BASE_URL` | `http://127.0.0.1:1234` | LM Studio endpoint (default) |
 | `LM_API_KEY` | `lmstudio` | API key |
-| `LM_MODEL` | `google/gemma-4-e2b` | Model name (recommended: google/gemma-4-e2b) |
+| `LM_MODEL` | `gemma4:e:2b` | Model name (recommended: gemma4:e:2b) |
 | `BIS_FORCE_CPU` | `0` | Set to `1` to force CPU |
 
 ### CPU/CUDA Behavior
@@ -250,7 +249,7 @@ python src/build_index.py
 ## Reproducibility
 
 - Deterministic ranking (no random operations)
-- LLM rationale optional (falls back to template if Ollama unavailable)
+- LLM rationale optional (falls back to template if LM Studio unavailable)
 - CPU-only reproducible on any machine
 - CUDA auto-detected if available
 
