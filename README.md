@@ -1,6 +1,6 @@
 # BIS Standards Discovery
 
-A production-ready RAG pipeline with an interactive dashboard that maps natural-language queries about Indian BIS construction standards to the correct IS codes. Achieves **MRR=0.92+** with deterministic ranking and **~1.1 second latency**.
+A production-ready RAG pipeline with an interactive dashboard that maps natural-language queries about Indian BIS construction standards to the correct IS codes. Achieves **MRR=0.92+** with deterministic ranking and **~1.1 second latency** on public dataset.
 
 ---
 
@@ -33,6 +33,89 @@ Click-through category → keyword → standards workflow for structured browsin
 | Hit Rate @3 | **90.00%** | **98.00%** | >80% |
 | MRR @5 | **0.9200** | **0.9390** | >0.7 |
 | Avg Latency | **1.11s** | **1.11s** | <5s |
+
+---
+
+## Setup
+
+This project is designed to be easy  to reproduce on a standard consumer machine. The evaluation emphasizes retrieval quality and latency, so the setup below keeps the local inference stack simple, deterministic, and fast.
+
+### 1. Install LM Studio
+
+1. Download LM Studio for Windows from the official LM Studio site.
+2. Install it with the default options.
+3. Launch LM Studio once so it can finish initial setup and create its local model cache.
+
+### 2. Enable Developer Mode
+
+1. Open LM Studio.
+2. Go to the settings or developer area and enable Developer Mode if it is not already enabled.
+3. Open the Local Server or developer server panel so you can expose a compatible endpoint.
+
+### 3. Download the Model
+
+1. Search for the Gemma 4 2B model in LM Studio.
+2. Download the model used by this project: Gemma 4:2B.
+3. If LM Studio shows the repository-style model name, use `google/gemma-4-e2b` in the environment variable.
+
+### 4. Start the Local Endpoint
+
+1. In LM Studio go to developer menu and start the local server.
+2. Use port `1234` so the project can connect to `http://127.0.0.1:1234`.
+3. Keep the API key set to `lmstudio` unless you deliberately changed it in LM Studio.
+4. Verify the server by opening `http://127.0.0.1:1234/v1/models` in a browser or by running the inference script once.
+
+### 5. Set the Environment Variables
+
+Set these before running the app or submission script:
+
+```bash
+LM_BASE_URL=http://127.0.0.1:1234
+LM_API_KEY=lmstudio
+LM_MODEL=gemma4:e:2b
+```
+
+If your LM Studio installation exposes the model under the repository name, use this instead:
+
+```bash
+LM_MODEL=google/gemma-4-e2b
+```
+
+### 6. Install Project Dependencies
+
+```bash
+uv pip install -r requirements.txt
+```
+
+### 7. Run the Project Locally
+
+```bash
+python app.py
+```
+
+Open `http://localhost:8000` in your browser.
+
+### 8. Run Submission Mode
+
+```bash
+python inference.py --input guidelines/public_test_set.json --output results.json
+```
+
+### 9. Evaluate the Output
+
+```bash
+python eval_script.py --results results.json
+```
+
+### 10. What to Reproduce
+
+Keep the README and setup script aligned so judges can reproduce the environment once per team:
+
+1. The exact model name used in `LM_MODEL`.
+2. The local endpoint URL and port.
+3. Any dataset changes made before evaluation.
+4. The command used to run inference.
+5. The command used to run evaluation.
 
 ---
 
@@ -140,11 +223,11 @@ uv pip install -r requirements.txt
 LM_BASE_URL=http://127.0.0.1:1234 LM_MODEL=gemma4:e:2b
 ```
 
-**Option B - LM Studio:**
+**Option B - LM Studio local server:**
 ```bash
-# Start LM Studio and ensure it is running at http://127.0.0.1:1234
+# Start the LM Studio local server on port 1234
 # Then run with:
-# LM_BASE_URL=http://127.0.0.1:1234 LM_MODEL=gemma4:e:2b python inference.py --input ...
+# LM_BASE_URL=http://127.0.0.1:1234 LM_API_KEY=lmstudio LM_MODEL=gemma4:e:2b python inference.py --input ...
 ```
 
 ### 3. Run Dashboard
@@ -178,6 +261,16 @@ python eval_script.py --results results.json
 | `LM_API_KEY` | `lmstudio` | API key |
 | `LM_MODEL` | `gemma4:e:2b` | Model name (recommended: gemma4:e:2b) |
 | `BIS_FORCE_CPU` | `0` | Set to `1` to force CPU |
+
+### Local Endpoint Check
+
+If the endpoint is configured correctly, this should return the available models:
+
+```bash
+curl http://127.0.0.1:1234/v1/models
+```
+
+If you get a response, the project can use LM Studio for rationale generation.
 
 ### CPU/CUDA Behavior
 
@@ -243,6 +336,16 @@ python src/bis_parser.py --input SP21.pdf --output src/data/sp21_standards.json
 # Build FAISS + BM25 indexes
 python src/build_index.py
 ```
+
+### Optional Dataset Updates
+
+If you adjust the evaluation files or add new test cases, document the change in the README and keep the input/output format unchanged:
+
+1. `id`
+2. `retrieved_standards`
+3. `latency_seconds`
+
+The private evaluation set is undisclosed, so keep the retrieval stack robust and the local LLM lightweight enough to stay under the latency limit.
 
 ---
 
