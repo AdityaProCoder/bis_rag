@@ -548,39 +548,7 @@ The system automatically detects and uses CUDA if available, with no configurati
 
 ---
 
-## Final Verification Checklist
 
-Before submitting for evaluation, use this checklist to ensure everything is configured correctly:
-
-### Environment Preparation
-
-- [ ] LM Studio installed and running on `http://127.0.0.1:1234`
-- [ ] Gemma 4:2B model downloaded in LM Studio
-- [ ] Developer Mode enabled in LM Studio
-- [ ] Runtime values confirmed:
-  - [ ] `LM_BASE_URL=http://127.0.0.1:1234`
-  - [ ] `LM_API_KEY=lmstudio`
-  - [ ] `LM_MODEL=google/gemma-4-e2b`
-- [ ] Python dependencies installed: `uv pip install -r requirements.txt`
-- [ ] Local endpoint verified: `curl http://127.0.0.1:1234/v1/models`
-
-### Test Execution
-
-```bash
-# 1. Run batch inference on public test set
-python inference.py \
-  --input test/public_test_set.json \
-  --output results.json
-
-# 2. Check output file exists and is valid JSON
-cat results.json | python -m json.tool > /dev/null && echo "Valid JSON"
-
-# 3. Verify output format
-jq '.[0] | keys' results.json
-# Expected output: ["id", "latency_seconds", "rationale", "retrieved_standards"]
-
-# 4. Run official evaluation
-python eval_script.py --results results.json
 ```
 
 ### Expected Results
