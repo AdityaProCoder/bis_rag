@@ -107,16 +107,6 @@ python inference.py --input guidelines/public_test_set.json --output results.jso
 python eval_script.py --results results.json
 ```
 
-### 10. What to Reproduce
-
-Keep the README and setup script aligned so judges can reproduce the environment once per team:
-
-1. The exact model name used in `LM_MODEL`.
-2. The local endpoint URL and port.
-3. Any dataset changes made before evaluation.
-4. The command used to run inference.
-5. The command used to run evaluation.
-
 ---
 
 ## Architecture
