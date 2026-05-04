@@ -42,7 +42,7 @@ This project is designed to be easy  to reproduce on a standard consumer machine
 
 ### 1. Install LM Studio
 
-1. Download LM Studio for Windows from the official LM Studio site.
+1. Download LM Studio from the official LM Studio site(https://lmstudio.ai/).
 2. Install it with the default options.
 3. Launch LM Studio once so it can finish initial setup and create its local model cache.
 
