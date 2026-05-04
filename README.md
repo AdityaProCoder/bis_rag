@@ -61,9 +61,9 @@ Developer Mode exposes a local OpenAI-compatible API endpoint that allows extern
 
 The project uses Google's Gemma 4:2B model, a lightweight, efficient model optimized for local inference while maintaining good quality rationale generation.
 
-1. In LM Studio's model browser, search for "Gemma 4" or "google/gemma-4-e2b".
-2. Download the Gemma 4:2B model variant. The download may take several minutes depending on your internet connection (approximately 1.5-2 GB).
-3. Once downloaded, verify the model is listed in your local model library. The model name in LM Studio may appear as either `gemma4:e:2b` or `google/gemma-4-e2b` depending on your version; both formats are supported by this project.
+1. In LM Studio's model browser, search for "Gemma 4" or `google/gemma-4-e2b`.
+2. Download the Gemma 4:2B model variant. The download may take several minutes depending on your internet connection (approximately 4-5 GB).
+3. Verify that the loaded model ID matches what you see in LM Studio's `/v1/models` response. The code default is `google/gemma-4-e2b`, and this is the recommended value for `LM_MODEL`.
 
 ### Step 4: Launch and Configure the Local Inference Server
 
@@ -74,25 +74,22 @@ The local server exposes an OpenAI-compatible REST API endpoint on your machine,
 3. Confirm that the API authentication key is set to `lmstudio` (this is the default). Do not change this value unless you have deliberately modified LM Studio's configuration.
 4. Verify successful server startup by visiting `http://127.0.0.1:1234/v1/models` in your web browser. You should see a JSON response listing available models. Alternatively, you can verify by running the inference script, which will automatically confirm endpoint connectivity.
 
-### Step 5: Configure Environment Variables
+### Step 5: Configure Runtime Values
 
-Environment variables control how the project communicates with the LM Studio server. Set these variables in your shell or system environment before running the application.
+The inference script already contains production defaults:
+- `LM_BASE_URL=http://127.0.0.1:1234`
+- `LM_API_KEY=lmstudio`
+- `LM_MODEL=google/gemma-4-e2b`
 
-**Default configuration** (recommended):
-
-```bash
-LM_BASE_URL=http://127.0.0.1:1234
-LM_API_KEY=lmstudio
-LM_MODEL=gemma4:e:2b
-```
-
-**Alternative configuration** (if your LM Studio installation exposes the model under its repository identifier):
+Use environment variables when your LM Studio setup differs from these defaults:
 
 ```bash
-LM_MODEL=google/gemma-4-e2b
+export LM_BASE_URL=http://127.0.0.1:1234
+export LM_API_KEY=lmstudio
+export LM_MODEL=google/gemma-4-e2b
 ```
 
-Both model name formats are supported. The project will automatically detect and adapt to whichever format your LM Studio installation uses.
+Ensure the `LM_MODEL` value matches the model ID returned by `http://127.0.0.1:1234/v1/models`.
 
 ### Step 6: Install Python Project Dependencies
 
@@ -119,7 +116,7 @@ Once the application is running, open your web browser and navigate to `http://l
 Run the inference engine in batch processing mode to evaluate the system on a test dataset.
 
 ```bash
-python inference.py --input guidelines/public_test_set.json --output results.json
+python inference.py --input test/public_test_set.json --output results.json
 ```
 
 This command processes all queries from the input JSON file, performs retrieval, generates AI rationales, and writes results to the output file with the same structure.
@@ -245,45 +242,40 @@ bis_rag/
 
 ## Quick Start (For Experienced Users)
 
-If you have already completed the full environment setup above, use these commands to quickly run the system:
+If you have already completed the full environment setup above, use the commands below:
 
 ```bash
 # 1. Ensure dependencies are installed
 uv pip install -r requirements.txt
 
-# 2. Start LM Studio server on port 1234 (in another terminal)
-# Then set environment variables:
-export LM_BASE_URL=http://127.0.0.1:1234
-export LM_API_KEY=lmstudio
-export LM_MODEL=gemma4:e:2b
-
-# 3. Start the interactive dashboard
+# 2. Start the interactive dashboard
 python app.py
 # Access at http://localhost:8000
 
-# OR for batch evaluation:
-python inference.py --input guidelines/public_test_set.json --output results.json
+# OR for batch evaluation on the public set:
+python inference.py --input test/public_test_set.json --output results.json
 
-# 4. Evaluate results
+# 3. Evaluate results
 python eval_script.py --results results.json
 ```
+
+If your LM Studio host, key, or model ID differs, set `LM_BASE_URL`, `LM_API_KEY`, and `LM_MODEL` before running commands.
 
 ---
 
 ## Configuration Reference
 
-This section provides detailed information about all configurable parameters that control the system's behavior.
+The inference script includes default runtime values, and you can override them through environment variables when needed.
 
 ### Environment Variables
 
-The following environment variables control how the project connects to the LM Studio inference server and other runtime behaviors:
-
-| Variable | Default Value | Description | Impact |
+| Variable | Default Value | Usage | Impact |
 |----------|---------|-------------|--------|
-| `LM_BASE_URL` | `http://127.0.0.1:1234` | The network address and port where the LM Studio server is running. This URL must be accessible from the machine running the project. | Determines where inference requests are sent for rationale generation |
-| `LM_API_KEY` | `lmstudio` | Authentication credential used when connecting to the LM Studio OpenAI-compatible API endpoint. | Ensures secure communication with the local server |
-| `LM_MODEL` | `gemma4:e:2b` | The identifier of the language model to use for rationale generation. Can be either the simplified name or the full repository identifier. | Determines which model generates explanations for retrieved standards |
-| `BIS_FORCE_CPU` | `0` | Controls whether GPU acceleration is used (0 = auto-detect, 1 = force CPU-only). | Affects speed of embedding computation; GPU significantly faster when available |
+| `LM_BASE_URL` | `http://127.0.0.1:1234` | Set this if LM Studio is exposed on a different address/port | Determines where inference requests are sent for rationale generation |
+| `LM_API_KEY` | `lmstudio` | Set this if you changed the API key in LM Studio | Ensures communication with the local server |
+| `LM_MODEL` | `google/gemma-4-e2b` | Set this to the exact model ID returned by LM Studio `/v1/models` | Determines which model generates explanations for retrieved standards |
+| `BIS_FORCE_CPU` | `0` | Set to `1` when you want CPU-only execution | Disables GPU embedding execution |
+
 
 ### Endpoint Connectivity Verification
 
@@ -295,7 +287,7 @@ curl http://127.0.0.1:1234/v1/models
 
 Expected response (JSON format showing available models):
 ```json
-{"object": "list", "data": [{"id": "gemma4:e:2b", "object": "model"}]}
+{"object": "list", "data": [{"id": "google/gemma-4-e2b", "object": "model"}]}
 ```
 
 If you receive a successful response, the project can communicate with LM Studio and will generate AI-powered rationales for each query result.
@@ -482,12 +474,7 @@ To add custom evaluation queries:
    ```
 4. Document any dataset changes in this README for judge reference.
 
-### Private Test Set Considerations
 
-The hackathon organizers use an undisclosed private test set for final evaluation. To ensure robust performance:
-- Keep the retrieval pipeline flexible and general-purpose (avoid overfitting to specific queries).
-- Maintain latency performance (target: <5 seconds per query) to handle both small and large test sets.
-- Ensure the system gracefully handles edge cases and diverse query phrasings.
 
 ---
 
@@ -570,10 +557,10 @@ Before submitting for evaluation, use this checklist to ensure everything is con
 - [ ] LM Studio installed and running on `http://127.0.0.1:1234`
 - [ ] Gemma 4:2B model downloaded in LM Studio
 - [ ] Developer Mode enabled in LM Studio
-- [ ] Environment variables set:
+- [ ] Runtime values confirmed:
   - [ ] `LM_BASE_URL=http://127.0.0.1:1234`
   - [ ] `LM_API_KEY=lmstudio`
-  - [ ] `LM_MODEL=gemma4:e:2b`
+  - [ ] `LM_MODEL=google/gemma-4-e2b`
 - [ ] Python dependencies installed: `uv pip install -r requirements.txt`
 - [ ] Local endpoint verified: `curl http://127.0.0.1:1234/v1/models`
 
@@ -582,9 +569,8 @@ Before submitting for evaluation, use this checklist to ensure everything is con
 ```bash
 # 1. Run batch inference on public test set
 python inference.py \
-  --input guidelines/public_test_set.json \
-  --output results.json \
-  --verbose
+  --input test/public_test_set.json \
+  --output results.json
 
 # 2. Check output file exists and is valid JSON
 cat results.json | python -m json.tool > /dev/null && echo "Valid JSON"
@@ -611,14 +597,5 @@ If you see failures, common causes are:
 3. **Missing dependencies:** Run `uv pip install -r requirements.txt` again
 4. **GPU out of memory:** Set `BIS_FORCE_CPU=1` for CPU-only mode
 
-### Files Ready for Submission
 
-Ensure these files are present in the repository root:
-- [ ] `inference.py` (entry point)
-- [ ] `eval_script.py` (evaluator)
-- [ ] `requirements.txt` (dependencies)
-- [ ] `README.md` (this documentation)
-- [ ] `src/` directory with all source code
-- [ ] `src/data/` with pre-built indices
 
-**Your submission is ready once all checks pass!**
