@@ -766,6 +766,7 @@ def process_item(item):
         "expected_standards": expected,
         "retrieved_standards": result["retrieved"],
         "latency_seconds": result["latency_seconds"],
+        "rationale": result["rationale"],
     }
 
 
