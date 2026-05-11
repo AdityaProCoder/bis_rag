@@ -38,7 +38,7 @@ Click-through category → keyword → standards workflow for structured browsin
 
 ## Environment Setup and Installation Guide
 
-This project is designed for easy reproducibility on standard consumer hardware. The evaluation framework emphasizes retrieval accuracy and response latency, so the setup procedures below maintain simplicity, determinism, and performance. All steps are documented to ensure judges can seamlessly replicate the environment exactly as it was developed and tested.
+This project is designed for easy reproducibility on standard consumer hardware. The evaluation framework emphasizes retrieval accuracy and response latency, so the setup procedures below maintain simplicity, determinism, and performance. All steps are documented to ensure  seamless replication of the environment exactly as it was developed and tested.
 
 ### Step 1: Install LM Studio
 
