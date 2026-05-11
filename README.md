@@ -472,7 +472,7 @@ To add custom evaluation queries:
    ```bash
    python inference.py --input your_custom_queries.json --output your_results.json
    ```
-4. Document any dataset changes in this README for judge reference.
+
 
 
 
@@ -497,8 +497,8 @@ This project is designed to be fully reproducible across different machines and 
 - CPU-only execution is fully supported and produces bitwise-identical results.
 - The system has been tested and validated on both GPU and CPU-only configurations.
 
-**System Reproduction for Judges**
-- To exactly reproduce this environment, judges should follow the setup steps documented in the "Environment Setup and Installation Guide" section above.
+**System Reproduction**
+- To exactly reproduce this environment, follow the setup steps documented in the "Environment Setup and Installation Guide" section above.
 - All necessary configuration is specified through environment variables (no hidden configuration files required).
 - The setup process takes approximately 15-30 minutes depending on internet speed and hardware performance.
 
